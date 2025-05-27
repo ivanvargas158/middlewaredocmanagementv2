@@ -5,7 +5,7 @@ import os
 from typing import Any
 from datetime import datetime
 from app.services.blob_storage import save_file_blob_storage
-#from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
+from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
 from app.services.cosmos_db import get_container
 from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice
 #from app.services.template_manager import register_template,match_template 
