@@ -181,12 +181,14 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
 
     # Score each required field (presence and gibberish check)
     field_scores = {}
+    missing_fields = []   
     for field,pattern in required_fields.items():
         value = flat_fields.get(field)
         #score, reason = score_field(value, required=True)
         score, reason = score_field(value, pattern)
         field_scores[field] = (score, reason,value)
-
+        if reason=='Missing' or reason=='Gibberish/symbols detected': 
+            missing_fields.append(field)
     # Schema-level validation
     cross_issues = [] 
     cross_penalty = 0.0
@@ -212,9 +214,9 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
 
     return {
         "doc_type": doc_type,
-        "fields": field_scores,
-        "cross_field_issues": cross_issues,
         "doc_confidence": doc_confidence,
+        "missing_fields": missing_fields,
+        #"cross_field_issues": cross_issues,        
         "pass": pass_flag,
         "all_fields":flat_fields
     }
