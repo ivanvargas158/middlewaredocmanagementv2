@@ -42,9 +42,9 @@ def text_similarity(a: str, b: str) -> float:
     # Simple ratio, replace with more advanced NLP if needed 
     return SequenceMatcher(None, a, b).ratio()
 
-def match_template(document_bytes: bytes, result_ocr_text:str, min_similarity=0.7) -> Tuple[str|None, float] :
+def match_template(document_bytes: bytes, result_ocr_text:str, tenantId:int,min_similarity=0.7) -> Tuple[str|None, float] :
     try:        
-        list_templates_db: list[Tuple[str, ...]]  = get_templates()
+        list_templates_db: list[Tuple[str, ...]]  = get_templates(tenantId)
         fingerprint = create_hash(document_bytes) 
         
         # 1. Exact hash match   

@@ -30,7 +30,7 @@ def save_doc_type_template(document_id: str, doc_type: str, version: str,
             conn.close()
             
 @functools.cache
-def get_templates() -> List[Tuple[str, ...]]:
+def get_templates(tenantId:int) -> List[Tuple[str, ...]]:
     conn = None
     try:
         conn = psycopg2.connect(
@@ -41,8 +41,10 @@ def get_templates() -> List[Tuple[str, ...]]:
         )
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT id, doc_type, doc_text, doc_type_code FROM public.doc_type_template
-        """)
+            SELECT id, doc_type, doc_text, doc_type_code FROM public.doc_type_template where tenant_id = %s
+        """,
+          (tenantId,)
+        )
         rows = cursor.fetchall()  # Returns list of tuples
         cursor.close()
         return rows

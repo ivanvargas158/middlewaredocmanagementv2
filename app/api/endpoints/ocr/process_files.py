@@ -28,6 +28,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
     is_processed: bool = False
     doc_type: DocumentType = DocumentType.air_waybill
     content_ocr: Any = ""
+    tenantId:int = 1
     try:
         file_bytes = await  file.read()
         filename = file.filename
@@ -39,7 +40,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         ocrResult = process_mistral_ocr(file_bytes,content_type) 
 
         ocr_text = ocrResult['ocr_text']
-        doc_type_code,score = match_template(file_bytes,ocr_text)
+        doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
         doc_type = DocumentType(doc_type_code)        
@@ -101,6 +102,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),api_key: str = Dep
     is_processed: bool = False
     doc_type: DocumentType = DocumentType.abf_freight_invoice
     content_ocr: Any = ""
+    tenantId:int = 2
     try:
         file_bytes = await  file.read()
         filename = file.filename
@@ -112,7 +114,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),api_key: str = Dep
         ocrResult = process_azurevision_ocr(file_bytes) 
 
         ocr_text = ocrResult['ocr_text']
-        doc_type_code,score = match_template(file_bytes,ocr_text)
+        doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
         doc_type = DocumentType(doc_type_code)        
