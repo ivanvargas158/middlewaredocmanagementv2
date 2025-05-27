@@ -1,0 +1,65 @@
+{
+  "type": "object",
+  "properties": {
+    "carrier_scac": { "type": ["string", "null"] },
+    "invoice_number": { "type": "string" },
+    "pro_number": { "type": "string" },
+    "total_piece_count": { "type": "integer" },
+    "total_weight_lbs": { "type": "integer" },
+    "weight_lbs": { "type": "integer" },
+    "piece_count": { "type": "integer" },
+    "total_invoice_amount_usd": { "type": "number" },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "length_in": { "type": "number" },
+        "width_in": { "type": "number" },
+        "height_in": { "type": "number" }
+      },
+      "required": ["length_in", "width_in", "height_in"]
+    },
+    "class": { "type": "string" },
+    "pcf": { "type": "number" },
+    "nmfc_code": { "type": "string" },
+    "nmfc_sub": { "type": "string" },
+    "appointment_required": { "type": "boolean" },
+    "notify_party_present": { "type": "boolean" },
+    "accessorials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "in_rate": { "type": "boolean" },
+          "charge": { "type": ["number", "null"] }
+        },
+        "required": ["name", "in_rate", "charge"]
+      }
+    },
+    "reweigh_or_inspection_notes": { "type": "string" },
+    "ship_date": { "type": "string", "format": "date" },
+    "invoice_date": { "type": ["string", "null"], "format": "date" },
+    "invoice_due_date": { "type": "string", "format": "date" },
+    "reference_numbers": {
+      "type": "object",
+      "properties": {
+        "po_number": { "type": "string" },
+        "bill_of_lading_number": { "type": "string" }
+      },
+      "required": ["po_number", "bill_of_lading_number"]
+    },
+    "reasoning_notes": { "type": "string" }
+  },
+  "required": [
+    "invoice_number",
+    "pro_number",
+    "total_invoice_amount_usd",
+    "reference_numbers",
+    "ship_date",
+    "invoice_due_date",
+    "total_piece_count",
+    "total_weight_lbs",
+    "weight_lbs",
+    "piece_count"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "invoice_number": { "type": "string" },
+    "invoice_date": { "type": "string" },
+    "exporter": { "type": "string" },
+    "consignee": { "type": "string" },
+    "buyer_if_other_than_consignee": { "type": "string" },
+    "country_of_origin": { "type": "string" },
+    "country_of_destination": { "type": "string" },
+    "terms_of_payment": { "type": "string" },
+    "currency": { "type": "string" },
+    "total_invoice_value": { "type": "number" },
+    "description_of_goods": { "type": "string" },
+    "quantity": { "type": "integer  " },
+    "unit_price": { "type": "string" },
+    "gross_weight": { "type": "string" },
+    "net_weight": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "signature_and_stamp": { "type": "string" }
+  },
+  "required": [
+    "invoice_number",
+    "invoice_date",
+    "exporter",
+    "consignee",
+    "country_of_origin",
+    "country_of_destination",
+    "currency",
+    "total_invoice_value",
+    "description_of_goods",
+    "quantity",
+    "unit_price"
+  ]
+}

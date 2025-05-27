@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "bill_of_lading_number": { "type": "string" },
+    "shipper": { "type": "string" },
+    "consignee": { "type": "string" },
+    "notify_party": { "type": "string" },
+    "vessel_name": { "type": "string" },
+    "voyage_number": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "place_of_delivery": { "type": "string" },
+    "container_number": { "type": "string" },
+    "seal_number": { "type": "string" },
+    "marks_and_numbers": { "type": "string" },
+    "number_and_kind_of_packages": { "type": "string" },
+    "description_of_goods": { "type": "string" },
+    "gross_weight": { "type": "string" },
+    "measurement": { "type": "string" },
+    "freight_&_charges": { "type": "string" },
+    "date_of_issue": { "type": "string" },
+    "place_of_issue": { "type": "string" },
+    "carrier": { "type": "string" },
+    "signature": { "type": "string" }
+  },
+  "required": [
+    "bill_of_lading_number",
+    "shipper",
+    "consignee",
+    "vessel_name",
+    "voyage_number",
+    "port_of_loading",
+    "port_of_discharge",
+    "number_and_kind_of_packages",
+    "description_of_goods",
+    "gross_weight",
+    "date_of_issue",
+    "place_of_issue",
+    "carrier",
+    "signature"
+  ]
+}

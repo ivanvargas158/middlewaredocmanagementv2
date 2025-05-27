@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "packing_list_number": { "type": "string" },
+    "exporter": { "type": "string" },
+    "consignee": { "type": "string" },
+    "notify_party": { "type": "string" },
+    "date": { "type": "string" },
+    "vessel/flight": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "container_number": { "type": "string" },
+    "marks_and_numbers": { "type": "string" },
+    "description_of_goods": { "type": "string" },
+    "number_of_packages": { "type": "string" },
+    "gross_weight": { "type": "string" },
+    "net_weight": { "type": "string" },
+    "volume": { "type": "string" },
+    "minerva_plant": { "type": "string" },
+    "signature_and_stamp": { "type": "string" }
+  },
+  "required": [
+    "packing_list_number",
+    "exporter",
+    "consignee",
+    "date",
+    "port_of_loading",
+    "port_of_discharge",
+    "description_of_goods",
+    "number_of_packages",
+    "gross_weight",
+    "minerva_plant",
+    "signature_and_stamp"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "certificate_number": { "type": "string" },
+    "exporter": { "type": "string" },
+    "importer": { "type": "string" },
+    "consignee": { "type": "string" },
+    "country_of_origin": { "type": "string" },
+    "country_of_destination": { "type": "string" },
+    "date_of_issue": { "type": "string" },
+    "product_description": { "type": "string" },
+    "quantity": { "type": "string" },
+    "lot_batch_number": { "type": "string" },
+    "organic_status": { "type": "string" },
+    "certification_body": { "type": "string" },
+    "signature_and_stamp": { "type": "string" }
+  },
+  "required": [
+    "certificate_number",
+    "exporter",
+    "importer",
+    "consignee",
+    "country_of_origin",
+    "country_of_destination",
+    "date_of_issue",
+    "product_description",
+    "quantity",
+    "organic_status",
+    "certification_body",
+    "signature_and_stamp"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "packing_slip_number": { "type": "string" },
+    "exporter": { "type": "string" },
+    "consignee": { "type": "string" },
+    "notify_party": { "type": "string" },
+    "date": { "type": "string" },
+    "vessel_flight": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "container_number": { "type": "string" },
+    "marks_and_numbers": { "type": "string" },
+    "description_of_goods": { "type": "string" },
+    "number_of_packages": { "type": "integer" },
+    "gross_weight": { "type": "number" },
+    "net_weight": { "type": "number" },
+    "volume": { "type": "string" },
+    "swift_facility": { "type": "string" },
+    "signature_and_stamp": { "type": "string" }
+  },
+  "required": [
+    "packing_slip_number",
+    "exporter",
+    "consignee",
+    "date",
+    "port_of_loading",
+    "port_of_discharge",
+    "description_of_goods",
+    "number_of_packages",
+    "gross_weight",
+    "swift_facility",
+    "signature_and_stamp"
+  ]
+}

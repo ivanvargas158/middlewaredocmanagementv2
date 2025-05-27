@@ -1,0 +1,33 @@
+
+{
+  "type": "object",
+  "properties": {
+    "certificate_number": { "type": "string" },
+    "exporter": { "type": "string" },
+    "consignee": { "type": "string" },
+    "country_of_origin": { "type": "string" },
+    "country_of_destination": { "type": "string" },
+    "date_of_issue": { "type": "string" },
+    "product_description": { "type": "string" },
+    "quantity": { "type": "integer" },
+    "net_weight": { "type": "string" },
+    "gross_weight": { "type": "string" },
+    "means_of_transport": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "ministry_authority": { "type": "string" },
+    "signature_and_stamp": { "type": "string" }
+  },
+  "required": [
+    "certificate_number",
+    "exporter",
+    "consignee",
+    "country_of_origin",
+    "country_of_destination",
+    "date_of_issue",
+    "product_description",
+    "quantity",
+    "ministry_authority",
+    "signature_and_stamp"
+  ]
+}
