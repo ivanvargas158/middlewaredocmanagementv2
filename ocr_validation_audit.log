@@ -1,0 +1,2 @@
+2025-05-27 14:47:33,132 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-27 14:47:33,141 INFO Document confidence: 0.82 | Pass: False
