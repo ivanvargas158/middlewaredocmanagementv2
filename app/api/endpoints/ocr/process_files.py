@@ -8,7 +8,7 @@ from app.services.blob_storage import save_file_blob_storage
 from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
 from app.services.cosmos_db import get_container
 from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice
-#from app.services.template_manager import register_template,match_template 
+from app.services.template_manager import register_template,match_template 
 from app.services.postgresql_db import save_doc_logs
 from app.schemas.general_enum import DocumentType
 from app.core.settings import get_settings
