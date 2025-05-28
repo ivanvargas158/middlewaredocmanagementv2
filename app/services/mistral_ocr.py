@@ -183,7 +183,7 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     field_scores = {}
     missing_fields = []   
     for field,pattern in required_fields.items():
-        value = flat_fields.get(field)
+        value = get_nested_value(field,flat_fields)#flat_fields.get(field)
         #score, reason = score_field(value, required=True)
         score, reason = score_field(value, pattern)
         field_scores[field] = (score, reason,value)
@@ -222,6 +222,15 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     }
 
 
+def get_nested_value(field_path: str, data: dict):
+    keys = field_path.split('.')
+    
+    def recursive_get(keys_list, current_data):
+        if not keys_list or current_data is None:
+            return current_data
+        return recursive_get(keys_list[1:], current_data.get(keys_list[0]))
+    
+    return recursive_get(keys, data)
 
 
 # --- Cross-field Logic Implementations ---

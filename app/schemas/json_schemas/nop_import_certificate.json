@@ -9,7 +9,7 @@
     "country_of_destination": { "type": "string" },
     "date_of_issue": { "type": "string" },
     "product_description": { "type": "string" },
-    "quantity": { "type": "string" },
+    "quantity": { "type": "integer" },
     "lot_batch_number": { "type": "string" },
     "organic_status": { "type": "string" },
     "certification_body": { "type": "string" },

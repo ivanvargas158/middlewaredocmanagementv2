@@ -21,13 +21,11 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
 
         openai_prompt = """You are an advanced document understanding agent, optimized for shipping and logistics workflows and designed to work in tandem with the Mistral OCR API.
         Your responsibilities are:
-        Parse the Mistral OCR output (provided in markdown format), which includes field names, extracted values, and confidence scores.
+        Parse the Mistral OCR output (provided in markdown format), which includes field names and extracted values.
         Precisely map each extracted field to its corresponding internal schema field using the provided schema mapping table.
         For each schema field, output a JSON object with:
         The internal schema field name as the key.
-        The extracted value and confidence score (if present in the OCR output).
-        If a field is missing or ambiguous in the OCR data, set:
-            "value": null
+        If a field is missing or ambiguous in the OCR data, set: null
         Strictly adhere to the schema mapping: Only include fields listed in the schema mapping table. Do not infer, invent, or hallucinate any values or fields.
         Output requirements:
         The result must be a valid, minified JSON object (no line breaks or extra spaces).

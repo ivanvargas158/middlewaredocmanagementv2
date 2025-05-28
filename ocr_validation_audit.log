@@ -11,3 +11,122 @@
 2025-05-27 17:24:35,946 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
 2025-05-27 17:24:44,589 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2025-05-27 17:24:44,599 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 10:11:40,367 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2025-05-28 10:17:08,793 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 10:17:08,814 INFO Document confidence: 0.82 | Pass: False
+2025-05-28 10:28:20,248 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 10:32:01,408 INFO Document confidence: 0.82 | Pass: False
+2025-05-28 10:39:28,023 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 10:39:28,035 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 10:55:11,831 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 10:55:20,164 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 10:55:20,176 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 11:06:04,554 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:06:12,058 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:06:20,069 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 11:10:49,308 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:10:57,131 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:10:57,155 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 11:11:36,349 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:11:41,043 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:11:41,048 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 11:12:53,580 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:13:01,023 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:13:01,031 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 11:13:45,065 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:13:51,597 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:13:51,606 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 11:19:38,249 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:20:19,943 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:20:19,946 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 11:50:14,315 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:50:29,149 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:50:29,157 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 11:50:48,152 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:50:53,810 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:50:53,819 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 11:51:13,221 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:51:22,832 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:51:22,858 INFO Document confidence: 0.95 | Pass: True
+2025-05-28 11:54:00,979 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:54:10,000 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:55:06,656 INFO Document confidence: 0.84 | Pass: False
+2025-05-28 11:59:13,895 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 11:59:24,244 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 11:59:46,922 INFO Document confidence: 0.84 | Pass: False
+2025-05-28 12:00:12,171 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:00:18,497 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:00:18,503 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:01:01,621 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:01:46,422 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:01:46,441 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:03:02,598 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:03:58,591 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:05:00,865 INFO Document confidence: 0.95 | Pass: True
+2025-05-28 12:07:43,737 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:07:58,915 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:07:58,923 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:08:51,042 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:08:59,780 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:08:59,784 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:09:35,920 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:09:42,273 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:09:42,281 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:09:57,251 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:10:42,031 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:16:08,627 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:16:12,879 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:16:12,882 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:16:23,958 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:16:29,680 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:16:29,683 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:16:40,227 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:23:13,996 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:23:19,601 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:23:19,603 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:23:32,762 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:23:38,023 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:23:38,026 INFO Document confidence: 0.83 | Pass: False
+2025-05-28 12:23:57,789 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:24:01,972 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:24:01,975 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:24:19,141 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:24:28,605 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:24:28,612 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 12:24:42,562 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:24:46,513 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:24:46,514 INFO Document confidence: 0.73 | Pass: False
+2025-05-28 12:26:00,365 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 12:26:05,138 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 12:26:05,142 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 13:25:31,197 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:25:38,265 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:25:38,282 INFO Document confidence: 0.33 | Pass: False
+2025-05-28 13:26:37,491 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:26:46,936 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:26:46,947 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 13:27:28,941 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:27:33,394 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:27:33,396 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 13:28:12,153 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:28:15,769 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:28:15,777 INFO Document confidence: 0.82 | Pass: False
+2025-05-28 13:30:06,284 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:31:16,694 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:31:29,423 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:31:29,432 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 13:32:11,676 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:32:17,637 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:32:17,640 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 13:32:47,066 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:32:50,896 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:32:50,904 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 13:33:26,641 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:33:32,869 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:33:32,871 INFO Document confidence: 0.90 | Pass: False
+2025-05-28 13:34:04,108 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:34:09,436 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:34:09,438 INFO Document confidence: 0.83 | Pass: False
+2025-05-28 13:34:36,404 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 13:34:41,609 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 13:34:41,617 INFO Document confidence: 1.00 | Pass: True

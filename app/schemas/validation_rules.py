@@ -2,7 +2,6 @@ import re
 from enum import Enum
 from typing import Dict, List, Set
 from .general_enum import DocumentType
-from app.schemas.general_dto import ErrorValidationRules 
 from app.utils.custom_exceptions import ValidationError
 class RuleSet(str, Enum):
     general_rules = "general"
@@ -27,34 +26,38 @@ general_rules = {
         "cross_field_rules": []  # Add rules if needed
     },
     DocumentType.master_bill_of_lading: {
-        "required_fields": ["bill_of_lading_number",
-                            "shipper",
-                            "consignee",
-                            "vessel_name",
-                            "port_of_loading",
-                            "port_of_discharge",
-                            "gross_weight",
-                            "number_of_packages",
-                            "description_of_goods",
-                            "date_of_issue",
-                            "place_of_issue",
-                            "carrier"]
-    },    
+        "required_fields": {"bill_of_lading_number": r"^.+$",  # Non-empty string
+                            "shipper": r"^.+$",  # Non-empty string
+                            "consignee": r"^.+$",  # Non-empty string
+                            "vessel_name": r"^.+$",  # Non-empty string
+                            "port_of_loading": r"^.+$",  # Non-empty string
+                            "port_of_discharge": r"^.+$",  # Non-empty string
+                            "gross_weight": r"^[1-9]\d*(\.\d+)?$",  # Positive float or integer
+                            "number_of_packages": r"^[1-9]\d*$",  # Positive integer
+                            "description_of_goods": r"^.+$",  # Non-empty string
+                            "date_of_issue": r"^.+$",  # Non-empty string
+                            "place_of_issue": r"^.+$",  # Non-empty string
+                            "carrier": r"^.+$",  # Non-empty string
+                            }
+                        },    
     DocumentType.one_ocean_master_bill_of_lading: {
-        "required_fields": ["bill_of_lading_number",
-                            "shipper",
-                            "consignee",
-                            "vessel_name",
-                            "voyage_number",
-                            "port_of_loading",
-                            "port_of_discharge",
-                            "number_and_kind_of_packages",
-                            "description_of_goods",
-                            "gross_weight",
-                            "date_of_issue",
-                            "place_of_issue",
-                            "carrier",
-                            "signature"]
+        "required_fields": {
+                        "bill_of_lading_number": r"^.+$",  # Non-empty string
+                        "shipper": r"^.+$",  # Non-empty string
+                        "consignee": r"^.+$",  # Non-empty string
+                        "vessel_name": r"^.+$",  # Non-empty string
+                        "voyage_number": r"^.+$",  # Non-empty string
+                        "port_of_loading": r"^.+$",  # Non-empty string
+                        "port_of_discharge": r"^.+$",  # Non-empty string
+                        "number_and_kind_of_packages": r"^.+$",  # Non-empty string
+                        "description_of_goods": r"^.+$",  # Non-empty string
+                        "gross_weight": r"^.+$",  # Non-empty string
+                        "date_of_issue": r"^.+$",  # Non-empty string
+                        "place_of_issue": r"^.+$",  # Non-empty string
+                        "carrier": r"^.+$",  # Non-empty string
+                        "signature": r"^.+$",  # Non-empty string
+
+                    }
                             },
     DocumentType.packing_list_swift: {
         "required_fields": {
@@ -73,95 +76,97 @@ general_rules = {
         "cross_field_rules": []  # Add rules if needed
     },
     DocumentType.packing_list_minerva: {
-        "required_fields": ["packing_list_number",
-                            "exporter",
-                            "consignee",
-                            "date",
-                            "port_of_loading",
-                            "port_of_discharge",
-                            "description_of_goods",
-                            "number_of_packages",
-                            "gross_weight",
-                            "minerva_plant",
-                            "signature_and_stamp"]
+        "required_fields": {
+                    "packing_list_number": r"^.+$",  # Non-empty string
+                    "exporter": r"^.+$",  # Non-empty string
+                    "consignee": r"^.+$",  # Non-empty string
+                    "date": r"^.+$",  # Non-empty string
+                    "port_of_loading": r"^.+$",  # Non-empty string
+                    "port_of_discharge": r"^.+$",  # Non-empty string
+                    "description_of_goods": r"^.+$",  # Non-empty string
+                    "number_of_packages": r"^.+$",  # Non-empty string
+                    "gross_weight": r"^.+$",  # Non-empty string
+                    "minerva_plant": r"^.+$",  # Non-empty string
+                    "signature_and_stamp": r"^.+$",  # Non-empty string
+        }
     },
     DocumentType.health_certificate_argentina:{
-         "required_fields": [
-                   "certificate_number",
-                    "exporter",
-                    "consignee",
-                    "country_of_origin",
-                    "country_of_destination",
-                    "date_of_issue",
-                    "product_description",
-                    "quantity",
-                    "ministry_authority",
-                    "signature_and_stamp"
-         ]
+         "required_fields": {
+                   "certificate_number":r"^.+$",  # Non-empty string,
+                    "exporter":r"^.+$",  # Non-empty string,
+                    "consignee":r"^.+$",  # Non-empty string,
+                    "country_of_origin":r"^.+$",  # Non-empty string,
+                    "country_of_destination":r"^.+$",  # Non-empty string,
+                    "date_of_issue":r"^.+$",  # Non-empty string,
+                    "product_description":r"^.+$",  # Non-empty string,
+                    "quantity": r"^[1-9]\d*$",  # Integer > 0,
+                    "ministry_authority":r"^.+$",  # Non-empty string,
+                    "signature_and_stamp":r"^.+$",  # Non-empty string
+                }
 
     },
     DocumentType.health_certificate_brasil:{
-         "required_fields": [
-                   "certificate_number",
-                    "exporter",
-                    "consignee",
-                    "country_of_origin",
-                    "country_of_destination",
-                    "date_of_issue",
-                    "product_description",
-                    "quantity",
-                    "ministry_authority",
-                    "signature_and_stamp"
-         ]
+         "required_fields": {
+                   "certificate_number":r"^.+$",  # Non-empty string,
+                    "exporter":r"^.+$",  # Non-empty string,,
+                    "consignee":r"^.+$",  # Non-empty string,,
+                    "country_of_origin":r"^.+$",  # Non-empty string,,
+                    "country_of_destination":r"^.+$",  # Non-empty string,,
+                    "date_of_issue":r"^.+$",  # Non-empty string,,
+                    "product_description":r"^.+$",  # Non-empty string,,
+                    "quantity": r"^[1-9]\d*$",  # Integer > 0,
+                    "ministry_authority":r"^.+$",  # Non-empty string,,
+                    "signature_and_stamp":r"^.+$",  # Non-empty string,
+         }
 
     },
     DocumentType.nop_import_certificate:{
-         "required_fields": [
-                   "certificate_number",
-                    "exporter",
-                    "importer",
-                    "consignee",
-                    "country_of_origin",
-                    "country_of_destination",
-                    "date_of_issue",
-                    "product_description",
-                    "quantity",
-                    "organic_status",
-                    "certification_body",
-                    "signature_and_stamp"
-         ]
+         "required_fields": {
+                   "certificate_number":r"^.+$",  # Non-empty string,
+                    "exporter":r"^.+$",  # Non-empty string,
+                    "importer":r"^.+$",  # Non-empty string,
+                    "consignee":r"^.+$",  # Non-empty string,
+                    "country_of_origin":r"^.+$",  # Non-empty string,
+                    "country_of_destination":r"^.+$",  # Non-empty string,
+                    "date_of_issue":r"^.+$",  # Non-empty string,
+                    "product_description":r"^.+$",  # Non-empty string,
+                    "quantity":r"^[1-9]\d*$",  # Integer > 0,
+                    "organic_status":r"^.+$",  # Non-empty string,,
+                    "certification_body":r"^.+$",  # Non-empty string,
+                    "signature_and_stamp":r"^.+$",  # Non-empty string,
+         }
 
     },
     DocumentType.certificate_of_origin:{
-         "required_fields": [
-                   "certificate_number",
-                    "exporter",
-                    "consignee",
-                    "country_of_origin",
-                    "country_of_destination",
-                    "date_of_issue",
-                    "product_description",
-                    "quantity",
-                    "minerva_plant",
-                    "signature_and_stamp"
-                        ]
+         "required_fields": {
+                   "certificate_number":r"^.+$",  # Non-empty string,
+                    "exporter":r"^.+$",  # Non-empty string,
+                    "consignee":r"^.+$",  # Non-empty string,
+                    "country_of_origin":r"^.+$",  # Non-empty string,
+                    "country_of_destination":r"^.+$",  # Non-empty string,
+                    "date_of_issue":r"^.+$",  # Non-empty string,
+                    "product_description":r"^.+$",  # Non-empty string,
+                    "quantity":r"^[1-9]\d*$",  # Integer > 0,
+                    "minerva_plant":r"^.+$",  # Non-empty string,,
+                    "signature_and_stamp":r"^.+$",  # Non-empty string,
+                }
 
     },
      DocumentType.certificate_of_analysis:{
-         "required_fields": [
-                   "certificate_number",
-                    "date_of_issue",
-                    "exporter",
-                    "consignee",
-                    "product_name",
-                    "batch_lot_number",
-                    "quantity",
-                    "test_parameters",
-                    "test_results",
-                    "conclusion",
-                    "minerva_plant",
-                    "signature_and_stamp"
-                        ]
+         "required_fields": {
+                   "certificate_number":r"^.+$",  # Non-empty string,,
+                    "date_of_issue":r"^.+$",  # Non-empty string,
+                    "exporter":r"^.+$",  # Non-empty string,
+                    "consignee":r"^.+$",  # Non-empty string,
+                    "product_name":r"^.+$",  # Non-empty string,
+                    "batch_lot_number":r"^.+$",  # Non-empty string,
+                    "quantity":r"^[1-9]\d*$",  # Integer > 0,
+                    "test_parameters":r"^.+$",  # Non-empty string,
+                    "test_results":r"^.+$",  # Non-empty string,
+                    "conclusion":r"^.+$",  # Non-empty string,
+                    "minerva_plant":r"^.+$",  # Non-empty string,
+                    "signature_and_stamp":r"^.+$",  # Non-empty string,
+                }
 
     },
     DocumentType.air_waybill: {
