@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     mstral_api_Key: str = "VIJDVhgvEI7jBEFuwZFxXxyIHjTL7mA8"
     mistral_embed_model: str = "mistral-ocr-latest"
 
+    # --- OPEN AI -----
+    Openai_Api_Key_ContextUser: str = "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"
+    Openai_Base_Model_ContextUser: str = "gpt-4o-mini"
+
+    
     # -- Azure Vision
     
     azurevision_subscription_key:str = 'C0Dy78AegncXMpXGloMEcvFrQyeSPNNW5AGIqXLzJ1PcIgM9kRP2JQQJ99BAACYeBjFXJ3w3AAAFACOGYLc8'
@@ -54,9 +59,7 @@ class Settings(BaseSettings):
     # --- Logging & Monitoring ---
     log_level: str = ""
 
-    # --- OPEN AI -----
-    Openai_Api_Key_ContextUser: str = "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"
-    Openai_Base_Model_ContextUser: str = "gpt-4o-mini"
+
 
         
     # --- Performance Tuning ---

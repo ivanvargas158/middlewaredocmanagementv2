@@ -11,21 +11,20 @@ class RuleSet(str, Enum):
 
 general_rules = {
     DocumentType.commercial_invoice: {
-        "required_fields": [ "invoice_number",
-                            "invoice_date",
-                            "exporter",
-                            "consignee",
-                            "country_of_origin",
-                            "country_of_destination",
-                            "currency",
-                            "total_invoice_value",
-                            "description_of_goods",
-                            "quantity",
-                            "unit_price"],
-        "currency_requirements": {
-            "allowed_currencies": ["USD", "EUR", "GBP"],
-            "exchange_rate_validation": True
-        }
+        "required_fields": {
+                       "invoice_number": r"^.+$",  # Non-empty string
+                        "invoice_date": r"^.+$",  # Non-empty string
+                        "exporter": r"^.+$",  # Non-empty string
+                        "consignee": r"^.+$",  # Non-empty string
+                        "country_of_origin": r"^.+$",  # Non-empty string
+                        "country_of_destination": r"^.+$",  # Non-empty string
+                        "currency": r"^.+$",  # Non-empty string
+                        "total_invoice_value": r"^[1-9]\d*(\.\d+)?$",  # Positive number (int or float)
+                        "description_of_goods": r"^.+$",  # Non-empty string
+                        "quantity": r"^[1-9]\d*$",  # Positive integer
+                        "unit_price": r"^.+$",  # Non-empty string
+                },
+        "cross_field_rules": []  # Add rules if needed
     },
     DocumentType.master_bill_of_lading: {
         "required_fields": ["bill_of_lading_number",

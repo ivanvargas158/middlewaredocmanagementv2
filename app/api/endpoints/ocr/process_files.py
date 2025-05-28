@@ -188,8 +188,8 @@ async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill 
     try:
         file_bytes = await file.read()
         content_type = str(file.content_type)
-        #ocrResult = process_mistral_ocr(file_bytes,content_type)
-        ocrResult = process_azurevision_ocr(file_bytes)    
+        ocrResult = process_mistral_ocr(file_bytes,content_type)
+        #ocrResult = process_azurevision_ocr(file_bytes)    
         document_hash  = register_template(file_bytes,doc_type,version,tenant_id, ocrResult['ocr_text'],doc_type_code)
         return {f"Document save as temmplate successfully {document_hash}"}
 
