@@ -40,7 +40,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         ocrResult = process_mistral_ocr(file_bytes,content_type) 
 
         ocr_text = ocrResult['ocr_text']
-                
+
         doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
@@ -112,8 +112,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),api_key: str = Dep
         content_type = str(file.content_type)        
         file_name = f"{upload_file_id}-{filename}"
         
-        ocrResult = process_azurevision_ocr(file_bytes) 
-        
+        ocrResult = process_azurevision_ocr(file_bytes)        
        
 
         ocr_text = ocrResult['ocr_text']
@@ -200,5 +199,21 @@ async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill 
         raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail= exc.args ,
-                )
+                )    
+    
+
+# @router.post("/get_text", status_code=status.HTTP_200_OK)
+# async def get_text(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):   
+#     try:
+#         file_bytes = await file.read()
+#         content_type = str(file.content_type)
+#         ocrResult = process_mistral_ocr(file_bytes,content_type)
+#         #ocrResult = process_azurevision_ocr(file_bytes)    
+#         return ocrResult['ocr_text']
+
+#     except Exception as exc:
+#         raise HTTPException(
+#                     status_code=status.HTTP_400_BAD_REQUEST,
+#                     detail= exc.args ,
+#                 )
     

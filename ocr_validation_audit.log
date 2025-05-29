@@ -130,3 +130,23 @@
 2025-05-28 13:34:36,404 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
 2025-05-28 13:34:41,609 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2025-05-28 13:34:41,617 INFO Document confidence: 1.00 | Pass: True
+2025-05-28 15:15:46,839 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:21:41,075 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:21:44,332 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 15:27:11,836 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:27:12,509 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 15:33:28,440 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:33:28,883 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 15:38:07,079 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:38:10,056 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 15:38:35,297 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:38:35,989 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 15:46:17,962 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:46:27,739 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 15:47:20,779 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 15:47:24,556 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-05-28 17:21:40,448 INFO HTTP Request: POST https://api.mistral.ai/v1/ocr "HTTP/1.1 200 OK"
+2025-05-28 17:21:56,218 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-28 17:21:56,228 INFO Document confidence: 0.90 | Pass: False
+2025-05-29 11:06:55,480 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-29 11:06:55,493 INFO Document confidence: 1.00 | Pass: True

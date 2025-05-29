@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     mistral_embed_model: str = "mistral-ocr-latest"
 
     # --- OPEN AI -----
-    Openai_Api_Key_ContextUser: str = "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"
+    Openai_Api_Key_ContextUser: str = "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"
     Openai_Base_Model_ContextUser: str = "gpt-4.1-mini"
 
     
