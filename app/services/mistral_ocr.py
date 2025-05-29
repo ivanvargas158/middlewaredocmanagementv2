@@ -1,5 +1,9 @@
 import base64
-import time 
+import time
+import logging
+import re
+from typing import Dict, Tuple, List
+from datetime import datetime
 from typing import Dict, Any,Union
 from mistralai import Mistral
 from io import BytesIO
@@ -8,7 +12,6 @@ from datetime import date
 from app.core.settings import get_settings
 from app.utils.custom_exceptions import ValidationError
 from app.schemas.validation_rules import get_validation_rules,RuleSet
-#from app.schemas.schema_registry import validate_shipping_document,DOCUMENT_SCHEMAS
 from app.schemas.general_enum import DocumentType
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
@@ -53,7 +56,7 @@ def process_mistral_ocr(file_bytes:bytes, file_type: str) -> Dict[str, Any]:
             try:
                 result_azurevision_ocr = process_azurevision_ocr(file_bytes)
                 full_text = result_azurevision_ocr["ocr_text"]
-                confidence = result_azurevision_ocr["confidence"]
+                confidence = result_azurevision_ocr["ocr_confidence"]
                 ocr_applied = "azure"
             except ValidationError as ve:
                 raise ValidationError(errors=f"{ve}")
@@ -61,7 +64,7 @@ def process_mistral_ocr(file_bytes:bytes, file_type: str) -> Dict[str, Any]:
 
         ocr_result = {
             "ocr_text": full_text,
-            "confidence": confidence,
+            "ocr_confidence": confidence,
             "metadata": {
                 "documentType": file_type_key,
                 "pageCount": len(ocr_response.pages)
@@ -116,26 +119,11 @@ def process_azurevision_ocr(file_bytes:bytes):
         average_confidence = (total_confidence / word_count) if word_count > 0 else 0.0
         return {
             "ocr_text": "\n".join(extracted_text),
-            "confidence": round(average_confidence, 3)
+            "ocr_confidence": round(average_confidence, 3)
         }
     
     else:
         raise ValidationError(errors="Azure OCR Failed")
-
-
-
-
-
-import logging
-import re
-from typing import Dict, Tuple, List
-from datetime import datetime 
-# --- Logging Setup ---
-logging.basicConfig(
-    filename='ocr_validation_audit.log',
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s %(message)s'
-)
 
 
 # --- Gibberish/Symbol Detection ---
@@ -177,14 +165,12 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     required_fields = rules.get("required_fields", [])
     cross_field_rule_names = rules.get("cross_field_rules", [])
     # Required fields from rules
-    #required_fields = general_rules[doc_type]["required_fields"]
 
     # Score each required field (presence and gibberish check)
     field_scores = {}
     missing_fields = []   
     for field,pattern in required_fields.items():
-        value = get_nested_value(field,flat_fields)#flat_fields.get(field)
-        #score, reason = score_field(value, required=True)
+        value = get_nested_value(field,flat_fields)
         score, reason = score_field(value, pattern)
         field_scores[field] = (score, reason,value)
         if reason=='Missing' or reason=='Gibberish/symbols detected': 
@@ -194,7 +180,7 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     cross_penalty = 0.0
     cross_issues = []
     for rule_name in cross_field_rule_names:
-        rule_func = CROSS_FIELD_RULES.get(rule_name)
+        rule_func = CROSS_FIELD_RULES.get(rule_name) #If we need to add validations rules for some field. Modify the Enum and cross_field_rules
         if rule_func:
             penalty, issue = rule_func(flat_fields)
             if penalty > 0:
@@ -215,8 +201,7 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     return {
         "doc_type": doc_type,
         "doc_confidence": doc_confidence,
-        "missing_fields": missing_fields,
-        #"cross_field_issues": cross_issues,        
+        "missing_fields": missing_fields,        
         "pass": pass_flag,
         "all_fields":flat_fields
     }

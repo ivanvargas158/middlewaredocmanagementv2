@@ -14,8 +14,9 @@ class Settings(BaseSettings):
     schema_registry_url: str = "http://localhost:8001/schemas"
         
         
-    azure_storage_endpoint: str = "https://synapsevue.blob.core.windows.net/?sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2026-01-01T03:53:32Z&st=2025-05-01T19:53:32Z&spr=https&sig=0vF4hBpmZG31qKSqOyNPtjqNbr9SfxXuQuwC48XIaR4%3D"
-    
+    azure_storage_endpoint_cargologik: str = "https://synapsevue.blob.core.windows.net/?sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2026-01-01T03:53:32Z&st=2025-05-01T19:53:32Z&spr=https&sig=0vF4hBpmZG31qKSqOyNPtjqNbr9SfxXuQuwC48XIaR4%3D"
+    azure_storage_endpoint_providence: str = "https://saprovidence01.blob.core.windows.net/?sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T04:11:47Z&st=2025-05-29T20:11:47Z&spr=https&sig=CZ0FJZfUcKWtQ3iWq6TP%2BvudPU71t7vLXb%2FXXlKqtd4%3D"
+
     # --- Security Credentials ---
   
     schema_registry_token: Optional[str]= ""
@@ -26,7 +27,7 @@ class Settings(BaseSettings):
     mistral_embed_model: str = "mistral-ocr-latest"
 
     # --- OPEN AI -----
-    Openai_Api_Key_ContextUser: str = "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"
+    Openai_Api_Key_ContextUser: str = "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"
     Openai_Base_Model_ContextUser: str = "gpt-4.1-mini"
 
     
@@ -36,11 +37,18 @@ class Settings(BaseSettings):
     azurevision_endpoint:str = 'https://enhancevisionapi.cognitiveservices.azure.com/'
 
     # --- CosmosDB - Configuration ---
-    cosmos_endpoint: str = "https://synapsevue-cosmosdb.documents.azure.com:443/"
-    cosmos_key: str = "QJrtOoalYvYVRh8EfYjH90nS9v6hnRJffndCSCGJXgwUI30LvqVTFSKA5iExEpbN0ecnB7d92zOnACDb1Uqn1w=="
-    cosmos_database: str = "synapsevueAI"
-    cosmos_container_contextual_recall: str = "emailagent_memory"
-    cosmos_container_doc_management: str = "doc_management"
+    cosmos_endpoint_cl: str = "https://synapsevue-cosmosdb.documents.azure.com:443/"
+    cosmos_key_cl: str = "QJrtOoalYvYVRh8EfYjH90nS9v6hnRJffndCSCGJXgwUI30LvqVTFSKA5iExEpbN0ecnB7d92zOnACDb1Uqn1w=="
+    cosmos_database_cl: str = "synapsevueAI"
+    cosmos_container_contextual_recall_cl: str = "emailagent_memory"
+    cosmos_container_doc_management_cl: str = "doc_management"
+
+    cosmos_endpoint_providence: str = "https://providence-cosmosdb.documents.azure.com:443/"
+    cosmos_key_providence: str = "VzollXNh63RGErEbnRzUgOjomOwYidK33EmkDTfnQy03a47Z4GLcCP7dued9zdocE7izvMkVTfxhACDblkyXBw=="
+    cosmos_database_providence: str = "DataSync.cosmos"
+    cosmos_container_providence: str = "FreightInvoice"
+
+
    
      # --- PostgreSQL - Configuration ---
     postgresql_host: str = "c-synapsevuedatabase.b6un2utbpmag4r.postgres.cosmos.azure.com"
@@ -79,6 +87,7 @@ class Settings(BaseSettings):
     
     # -- Tenants ---
     cargologik_tenant:str = "cargologik"
+    providence_tenant:str = "providence"
 
     #Auth API Key
 

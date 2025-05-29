@@ -1,4 +1,5 @@
 import hashlib
+import re
 from difflib import SequenceMatcher
 from datetime import datetime
 from app.services.postgresql_db import save_doc_type_template,get_templates
@@ -42,7 +43,7 @@ def text_similarity(a: str, b: str) -> float:
     # Simple ratio, replace with more advanced NLP if needed 
     return SequenceMatcher(None, a, b).ratio()
 
-def match_template(document_bytes: bytes, result_ocr_text:str, tenantId:int,min_similarity=0.6) -> Tuple[str|None, float] :
+def match_template(document_bytes: bytes, result_ocr_text:str, tenantId:int,min_similarity=0.5) -> Tuple[str|None, float] :
     try:        
         list_templates_db: list[Tuple[str, ...]]  = get_templates(tenantId)
         fingerprint = create_hash(document_bytes) 
@@ -68,3 +69,64 @@ def match_template(document_bytes: bytes, result_ocr_text:str, tenantId:int,min_
     except Exception as ex:
         raise ValidationError(f"Error matching the template {ex}") 
     
+#Option #2 to match Invoice Freight
+
+def is_arcbest_invoice(text):
+    """Check if the provided text matches ArcBest freight invoice patterns."""
+
+    patterns = {
+        "header": [
+            r"(?i)ORIGINAL INVOICE",
+            r"(?i)Remit Payment To:\s*ArcBest",
+            r"(?i)Service:\s*LTL"
+        ],
+        "addresses": [
+            r"ArcBest\s*PO BOX 10048\s*FORT SMITH,\s*AR,\s*72917-0048",
+            r"ACCOUNTS PAYABLE\s*PO BOX 3395\s*NEW YORK,\s*NY,\s*10008-3395"
+        ],
+        "contact_info": [
+            r"Phone:\s*\(\d{3}\)\s*\d{3}-\d{4}\s*Fax:\s*\(\d{3}\)\s*\d{3}-\d{4}",
+            r"jconnelly@abf\.com",
+            r"arcb\.com"
+        ],
+        "financial_fields": [
+            r"AMOUNT DUE:\s*\$\d{1,5}\.\d{2}",
+            r"PAYMENT DUE DATE:\s*\d{2}/\d{2}/\d{4}",
+            r"\(payable in US funds\)",
+            r"TOTAL AMOUNT DUE BY.*?\$\d{1,5}\.\d{2}"
+        ],
+        "identifiers": [
+            r"Freight bill No:\s*\d+",
+            r"Account No:\s*\w{5,}-\d+",
+            r"Shipper Acct\. #\s*\w+-\d+",
+            r"Consignee Acct\. #\s*[\dA-Z\-]+",
+            r"Bill of Lading No:\s*\d+",
+            r"PQ SCHEDULE NO:\s*\w+",
+            r"CRN:\s*WWW\d+"
+        ],
+        "footer": [
+            r"\*PLEASE DETACH THIS PORTION AND ENCLOSE WITH YOUR PAYMENT\*",
+            r"\*{3}\s*RETAIN THIS PORTION FOR YOUR RECORDS\s*\*{3}",
+            r"Thank you for choosing ArcBest℠",
+            r"FED TAX ID#\s*\d{2}-\d{7}"
+        ]
+    }
+
+    # Count how many major sections have at least one match
+    matched_sections = 0
+    for section, pats in patterns.items():
+        if any(re.search(pat, text) for pat in pats):
+            matched_sections += 1
+
+    # Heuristic: if 5+ of the 6 major sections are matched, assume it's valid
+    return matched_sections >= 5
+
+# # Example usage:
+# if __name__ == "__main__":
+#     with open("sample_invoice.txt", "r", encoding="utf-8") as f:
+#         document_text = f.read()
+    
+#     if is_arcbest_invoice(document_text):
+#         print("✅ Document is an ArcBest invoice.")
+#     else:
+#         print("❌ Document does NOT match ArcBest invoice pattern.")
