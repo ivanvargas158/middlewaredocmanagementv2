@@ -49,30 +49,30 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
 
         result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules)
 
-        blob_path = f"{settings.cargologik_tenant}/{doc_type}/{file_name}"
-        blob_url_saved = save_file_blob_storage(file_bytes,"docmanagement",blob_path,settings.azure_storage_endpoint_cargologik)
+        # blob_path = f"{settings.cargologik_tenant}/{doc_type}/{file_name}"
+        # blob_url_saved = save_file_blob_storage(file_bytes,"docmanagement",blob_path,settings.azure_storage_endpoint_cargologik)
 
-        container_client = get_container(settings.cosmos_endpoint_cl,settings.cosmos_key_cl,settings.cosmos_database_cl,settings.cosmos_container_doc_management_cl)        
-        est = pytz.timezone('America/New_York')
-        now = datetime.now(est)
-        est_time_string = now.strftime("%m/%d/%Y %I:%M:%S %p")
-        new_item = {  
-            'id': str(uuid.uuid4()),          
-            'name': filename,
-            'type': content_type,
-            'status': 'processed',
-            'confidence': result_scores.get('doc_confidence'),
-            'created_at_db':est_time_string,
-            'blob_url': blob_url_saved,
-            'ocr_text': ocrResult['ocr_text'],
-            'tenantId':settings.providence_tenant,
-            'documentType':doc_type,
-            'created_at':est_time_string,
-            'upload_file_id':upload_file_id
-        } 
-        container_client.upsert_item(body=new_item)
+        # container_client = get_container(settings.cosmos_endpoint_cl,settings.cosmos_key_cl,settings.cosmos_database_cl,settings.cosmos_container_doc_management_cl)        
+        # est = pytz.timezone('America/New_York')
+        # now = datetime.now(est)
+        # est_time_string = now.strftime("%m/%d/%Y %I:%M:%S %p")
+        # new_item = {  
+        #     'id': str(uuid.uuid4()),          
+        #     'name': filename,
+        #     'type': content_type,
+        #     'status': 'processed',
+        #     'confidence': result_scores.get('doc_confidence'),
+        #     'created_at_db':est_time_string,
+        #     'blob_url': blob_url_saved,
+        #     'ocr_text': ocrResult['ocr_text'],
+        #     'tenantId':settings.providence_tenant,
+        #     'documentType':doc_type,
+        #     'created_at':est_time_string,
+        #     'upload_file_id':upload_file_id
+        # } 
+        # container_client.upsert_item(body=new_item)
 
-        is_processed = True        
+        # is_processed = True        
         return result_scores
     except ValidationError as exc:
         result_scores = {"error":exc.to_dict()} 
@@ -86,8 +86,8 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail= exc.args ,
                 )
-    finally:
-        save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
+    # finally:
+    #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
 @router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=False)
 async def upload_freight_invoice(file: UploadFile = File(...),load:str = '',api_key: str = Depends(get_api_key)):    
