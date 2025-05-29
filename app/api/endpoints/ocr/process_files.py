@@ -21,7 +21,7 @@ router = APIRouter()
 
 settings = get_settings()
 
-@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
+@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=False)
 async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
@@ -89,7 +89,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
     # finally:
     #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
-@router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=False)
+@router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_freight_invoice(file: UploadFile = File(...),load:str = '',api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
@@ -117,30 +117,30 @@ async def upload_freight_invoice(file: UploadFile = File(...),load:str = '',api_
 
         result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules)
 
-        blob_path = f"Load/{load}/processed_invoices/{file_name}"
-        blob_url_saved = save_file_blob_storage(file_bytes,"linkt",blob_path,settings.azure_storage_endpoint_providence)
+        # blob_path = f"Load/{load}/processed_invoices/{file_name}"
+        # blob_url_saved = save_file_blob_storage(file_bytes,"linkt",blob_path,settings.azure_storage_endpoint_providence)
 
-        container_client = get_container(settings.cosmos_endpoint_providence,settings.cosmos_key_providence,settings.cosmos_database_providence,settings.cosmos_container_providence)        
-        est = pytz.timezone('America/New_York')
-        now = datetime.now(est)
-        est_time_string = now.strftime("%m/%d/%Y %I:%M:%S %p")
-        new_item = {  
-            'id': str(uuid.uuid4()),          
-            'name': filename,
-            'type': content_type,
-            'status': 'processed',
-            'confidence': result_scores.get('doc_confidence'),
-            'created_at_db':est_time_string,
-            'blob_url': blob_url_saved,
-            'ocr_text': ocrResult['ocr_text'],
-            'tenantId':settings.providence_tenant,
-            'documentType':doc_type,
-            'created_at':est_time_string,
-            'upload_file_id':upload_file_id
-        }       
-        container_client.upsert_item(body=new_item)
+        # container_client = get_container(settings.cosmos_endpoint_providence,settings.cosmos_key_providence,settings.cosmos_database_providence,settings.cosmos_container_providence)        
+        # est = pytz.timezone('America/New_York')
+        # now = datetime.now(est)
+        # est_time_string = now.strftime("%m/%d/%Y %I:%M:%S %p")
+        # new_item = {  
+        #     'id': str(uuid.uuid4()),          
+        #     'name': filename,
+        #     'type': content_type,
+        #     'status': 'processed',
+        #     'confidence': result_scores.get('doc_confidence'),
+        #     'created_at_db':est_time_string,
+        #     'blob_url': blob_url_saved,
+        #     'ocr_text': ocrResult['ocr_text'],
+        #     'tenantId':settings.providence_tenant,
+        #     'documentType':doc_type,
+        #     'created_at':est_time_string,
+        #     'upload_file_id':upload_file_id
+        # }       
+        # container_client.upsert_item(body=new_item)
 
-        is_processed = True    
+        # is_processed = True    
         return result_scores
     except ValidationError as exc:
         result_scores = {"error":exc.to_dict()} 
@@ -153,9 +153,9 @@ async def upload_freight_invoice(file: UploadFile = File(...),load:str = '',api_
         raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail= exc.args ,
-                )
-    finally:
-        save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant)
+                 )
+    # finally:
+    #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant)
 
 
 def validate_file_type(filename: str, content_type: str):
@@ -171,7 +171,7 @@ def validate_file_size(file_bytes: bytes):
         raise ValidationError(errors=f"File size exceeds {settings.max_file_size} MB limit.")
     
 
-@router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=True)
+@router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=False)
 async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill of Lading',doc_type_code:str='',version:str='v1.0',tenant_id:int = 1,api_key: str = Depends(get_api_key)):   
     try:
         file_bytes = await file.read()
