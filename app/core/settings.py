@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings
 from typing import List, Optional
 from pydantic import field_validator,fields,Field
@@ -27,7 +28,7 @@ class Settings(BaseSettings):
     mistral_embed_model: str = "mistral-ocr-latest"
 
     # --- OPEN AI -----
-    Openai_Api_Key_ContextUser: str = "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"
+    Openai_Api_Key_ContextUser: str =  Field(validation_alias="Openai_API_Key")
     Openai_Base_Model_ContextUser: str = "gpt-4.1-mini"
 
     
