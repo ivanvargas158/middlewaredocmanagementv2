@@ -154,8 +154,8 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail= exc.args ,
                  )
-    # finally:
-    #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant)
+    finally:
+        save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant)
 
 
 def validate_file_type(filename: str, content_type: str):
