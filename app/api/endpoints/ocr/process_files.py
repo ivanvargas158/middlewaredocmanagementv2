@@ -90,7 +90,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
     #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
 @router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=True)
-async def upload_freight_invoice(file: UploadFile = File(...),load:str = '',api_key: str = Depends(get_api_key)):    
+async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
     is_processed: bool = False
@@ -117,7 +117,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),load:str = '',api_
 
         result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules)
 
-        # blob_path = f"Load/{load}/processed_invoices/{file_name}"
+        # blob_path = f"Load/{loadId}/processed_invoices/{file_name}"
         # blob_url_saved = save_file_blob_storage(file_bytes,"linkt",blob_path,settings.azure_storage_endpoint_providence)
 
         # container_client = get_container(settings.cosmos_endpoint_providence,settings.cosmos_key_providence,settings.cosmos_database_providence,settings.cosmos_container_providence)        
