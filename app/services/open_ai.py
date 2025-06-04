@@ -118,13 +118,14 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
                 - For each freight line item, scan all parts of the invoice (including body, tables, footnotes, and unstructured text) for mentions of:
                     - Dimensions: length, width, and height — in inches (e.g. "48x40x60", "L48 W40 H60", or "48in L x 40in W x 60in H").
                     - Units may be abbreviated or missing — infer "inches" unless otherwise stated.
-                    - Add the class, nmfc_code, nmfc_sub and description for each dimension
+                    - Add the class, nmfc_code, nmfc_sub and packaging for each dimension
+                        - Packaging, is the type of packaging. For example 2 PLT, the packaging is PLT.
 
                 - Respond in strict JSON. Example:
                     {{
                     "dimensions": [
-                        {{ "qty": 1,"length_in":48, "width_in": 40, "height_in": 41,"class":"70","nmfc_code":"067050","nmfc_sub":"02","description":"PC" }},
-                        {{ "qty": 1,"length_in":48, "width_in": 40, "height_in": 43,"class":"70","nmfc_code":"067050","nmfc_sub":"02","description":"PC" }},
+                        {{ "qty": 1,"length_in":48, "width_in": 40, "height_in": 41,"class":"70","nmfc_code":"067050","nmfc_sub":"02","packaging":"PLT" }},
+                        {{ "qty": 1,"length_in":48, "width_in": 40, "height_in": 43,"class":"70","nmfc_code":"067050","nmfc_sub":"02","packaging":"SKD" }},
                     ],            
                     }}           
            
@@ -133,7 +134,7 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
                 - Always assign values **to the right of the label**, not the label text itself.
                 - If you see a labeled field in the format:
                         [LABEL]: [VALUE]
-                        
+
                 - The label (e.g. "P.O. Number") is the key.
                 - The value (e.g. "4162512") to the right of the colon is what should be extracted.
 

@@ -15,12 +15,14 @@
       "items": {
         "type": "object",
         "properties": {
-        "length_in": { "type": "number" },
-        "width_in": { "type": "number" },
-        "height_in": { "type": "number" },
+        "qty": { "type": "integer" },
+        "length_in": { "type": "integer" },
+        "width_in": { "type": "integer" },
+        "height_in": { "type": "integer" },
         "class": { "type": "string" },
         "nmfc_code": { "type": "string" },
-        "nmfc_sub": { "type": "string" }
+        "nmfc_sub": { "type": "string" },
+        "packaging ": { "type": "string" }
       },
       "required": ["length_in", "width_in", "height_in","class"]
       }      
