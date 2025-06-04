@@ -52,7 +52,7 @@ def get_templates(tenantId:int) -> List[Tuple[str, ...]]:
         if conn:
             conn.close()
 
-def save_doc_logs(upload_file_id: str, file_name:str,is_processed:bool,doc_type: str,content:str,tenant_id:str):
+def save_doc_logs(upload_file_id: str, file_name:str,is_processed:bool,doc_type: str,content:str,tenant_id:str,load_id=None):
     current_date = get_est_time()
     conn = None
     try:
@@ -65,8 +65,8 @@ def save_doc_logs(upload_file_id: str, file_name:str,is_processed:bool,doc_type:
         cursor = conn.cursor()
         
         cursor.execute("""
-            CALL public.insert_doc_log(%s, %s, %s, %s, %s,%s)
-        """, (upload_file_id,file_name, is_processed,doc_type, content,tenant_id))
+            CALL public.insert_doc_log(%s, %s, %s, %s, %s,%s,%s)
+        """, (upload_file_id,file_name, is_processed,doc_type, content,tenant_id,load_id))
         
         conn.commit()
         cursor.close()

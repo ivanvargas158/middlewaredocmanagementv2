@@ -136,11 +136,12 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         #     'tenantId':settings.providence_tenant,
         #     'documentType':doc_type,
         #     'created_at':est_time_string,
-        #     'upload_file_id':upload_file_id
+        #     'upload_file_id':upload_file_id,
+        #     'loadId':loadId
         # }       
         # container_client.upsert_item(body=new_item)
 
-        # is_processed = True    
+        is_processed = True    
         return result_scores
     except ValidationError as exc:
         result_scores = {"error":exc.to_dict()} 
@@ -155,7 +156,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
                     detail= exc.args ,
                  )
     finally:
-        save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant)
+        save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant,loadId)
 
 
 def validate_file_type(filename: str, content_type: str):
