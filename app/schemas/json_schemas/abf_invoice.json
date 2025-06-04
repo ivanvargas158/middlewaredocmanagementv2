@@ -22,7 +22,7 @@
         "class": { "type": "string" },
         "nmfc_code": { "type": "string" },
         "nmfc_sub": { "type": "string" },
-        "packaging ": { "type": "string" }
+        "package": { "type": "string" }
       },
       "required": ["length_in", "width_in", "height_in","class"]
       }      

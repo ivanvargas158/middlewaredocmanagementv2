@@ -118,8 +118,8 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
                 - For each freight line item, scan all parts of the invoice (including body, tables, footnotes, and unstructured text) for mentions of:
                     - Dimensions: length, width, and height — in inches (e.g. "48x40x60", "L48 W40 H60", or "48in L x 40in W x 60in H").
                     - Units may be abbreviated or missing — infer "inches" unless otherwise stated.
-                    - Add the class, nmfc_code, nmfc_sub and packaging for each dimension
-                        - Packaging, is the type of packaging. For example 2 PLT, the packaging is PLT.
+                    - Add the class, nmfc_code, nmfc_sub and package for each dimension
+                        - package, is the type of package. For example 2 PLT, the package is PLT.
 
                 - Respond in strict JSON. Example:
                     {{
