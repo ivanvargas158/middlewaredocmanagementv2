@@ -1,19 +1,22 @@
 import json
-import pytz
 import uuid
-import os
-from typing import Any
+import pytz
 from datetime import datetime
+from io import BytesIO
+from PyPDF2 import PdfReader
+from typing import Any
+from typing import List,Tuple
+from app.services.cosmos_db import get_container
 from app.services.blob_storage import save_file_blob_storage
 from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
-from app.services.cosmos_db import get_container
 from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice
 from app.services.template_manager import register_template,match_template 
 from app.services.postgresql_db import save_doc_logs
+from app.services.handle_file import validate_file_type,validate_file_size,split_pdf
 from app.schemas.general_enum import DocumentType
 from app.core.settings import get_settings
 from app.core.auth import get_api_key
-from app.schemas.validation_rules import validate_against_rules,RuleSet
+from app.schemas.validation_rules import RuleSet
 from app.utils.custom_exceptions import ValidationError
 from fastapi import APIRouter, Depends, HTTPException, status,UploadFile,File
 
@@ -21,7 +24,7 @@ router = APIRouter()
 
 settings = get_settings()
 
-@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=False)
+@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
@@ -35,12 +38,10 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         validate_file_type(str(file.filename), str(file.content_type))
         validate_file_size(file_bytes)
         content_type = str(file.content_type)        
-        file_name = f"{upload_file_id}-{filename}"
-        
+        file_name = f"{upload_file_id}-{filename}"        
         ocrResult = process_mistral_ocr(file_bytes,content_type) 
-
         ocr_text = ocrResult['ocr_text']
-
+        print(ocr_text)
         doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
@@ -102,14 +103,31 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         filename = file.filename
         validate_file_type(str(file.filename), str(file.content_type))
         validate_file_size(file_bytes)
-        content_type = str(file.content_type)        
+        content_type = str(file.content_type) #'application/pdf'       
         file_name = f"{upload_file_id}-{filename}"
-        
-        ocrResult = process_azurevision_ocr(file_bytes)        
-       
+        doc_type_code:str|None = None
+        score:float=0
+        ocr_text:str=''
+        ocrResult:Any
+        if content_type=='application/pdf':
+            input_stream = BytesIO(file_bytes)
+            pdf_reader = PdfReader(input_stream)
+            if len(pdf_reader.pages)>0:
+                list_pages: List[Tuple[str | None, float, bytes, str]] = []
+                list_pages = split_pdf(file_bytes,tenantId)
+                doc_found = next((item for item in list_pages if item[0] == DocumentType.abf_freight_invoice), None)
+                if doc_found:
+                    #save the page regarding to template
+                    doc_type_code,score,file_bytes,ocr_text = doc_found
+            else:
+                ocrResult = process_azurevision_ocr(file_bytes)              
+                ocr_text = ocrResult['ocr_text']
+                doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)    
+        else:            
+            ocrResult = process_azurevision_ocr(file_bytes)              
+            ocr_text = ocrResult['ocr_text']
+            doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
 
-        ocr_text = ocrResult['ocr_text']
-        doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
         doc_type = DocumentType(doc_type_code)        
@@ -132,7 +150,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         #     'confidence': result_scores.get('doc_confidence'),
         #     'created_at_db':est_time_string,
         #     'blob_url': blob_url_saved,
-        #     'ocr_text': ocrResult['ocr_text'],
+        #     'ocr_text': ocr_text,
         #     'tenantId':settings.providence_tenant,
         #     'documentType':doc_type,
         #     'created_at':est_time_string,
@@ -157,20 +175,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
                  )
     finally:
         save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant,loadId)
-
-
-def validate_file_type(filename: str, content_type: str):
-    ext = os.path.splitext(filename)[1].lower()
-    if content_type not in settings.allowed_mime_types:
-        raise ValidationError(errors=f"Unsupported file type: {content_type}")
-    if ext not in [".pdf", ".png", ".jpg", ".jpeg", ".tiff"]:
-        raise ValidationError(errors=f"Unsupported file extension: {ext}")
-
-def validate_file_size(file_bytes: bytes):
-    size_mb = len(file_bytes) / (1024 * 1024)
-    if size_mb > settings.max_file_size:
-        raise ValidationError(errors=f"File size exceeds {settings.max_file_size} MB limit.")
-    
+   
 
 @router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=False)
 async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill of Lading',doc_type_code:str='',version:str='v1.0',tenant_id:int = 1,api_key: str = Depends(get_api_key)):   

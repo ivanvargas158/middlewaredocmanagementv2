@@ -153,20 +153,19 @@ general_rules = {
 
     },
      DocumentType.certificate_of_analysis:{
-         "required_fields": {
-                   "certificate_number":r"^.+$",  # Non-empty string,,
-                    "date_of_issue":r"^.+$",  # Non-empty string,
-                    "exporter":r"^.+$",  # Non-empty string,
-                    "consignee":r"^.+$",  # Non-empty string,
-                    "product_name":r"^.+$",  # Non-empty string,
-                    "batch_lot_number":r"^.+$",  # Non-empty string,
-                    "quantity":r"^[1-9]\d*$",  # Integer > 0,
-                    "test_parameters":r"^.+$",  # Non-empty string,
-                    "test_results":r"^.+$",  # Non-empty string,
-                    "conclusion":r"^.+$",  # Non-empty string,
-                    "minerva_plant":r"^.+$",  # Non-empty string,
-                    "signature_and_stamp":r"^.+$",  # Non-empty string,
-                }
+                "required_fields": {
+                "date_of_issue": r"^.+$",                
+                "issuer": r"^.+$",                       
+                "inspector_name": r"^.+$",               
+                "brand": r"^.+$",                        
+                "shipping_mark": r"^.+$",                
+                "vessel": r"^.+$",                       
+                "destination": r"^.+$",                  
+                "container_number": r"^.+$",             
+                "product_code": r"^.+$",                 
+                "quantity": r"^[1-9]\d*$",               
+                "production_lots": r"^.+$",              
+            }
 
     },
     DocumentType.air_waybill: {

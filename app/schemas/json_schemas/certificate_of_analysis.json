@@ -1,34 +1,43 @@
+
 {
   "type": "object",
   "properties": {
-    "certificate_number": { "type": "string" },
     "date_of_issue": { "type": "string" },
-    "exporter": { "type": "string" },
-    "consignee": { "type": "string" },
-    "product_name": { "type": "string" },
-    "batch_lot_number": { "type": "string" },
-    "manufacture_date": { "type": "string" },
-    "expiry_date": { "type": "string" },
+    "issuer": { "type": "string" },          
+    "inspector_name": { "type": "string" },   
+    "brand": { "type": "string" },            
+    "shipping_mark": { "type": "string" },
+    "vessel": { "type": "string" },
+    "destination": { "type": "string" },
+    "container_number": { "type": "string" },
+    "product_code": { "type": "string" },
+    "product_description": { "type": "string" },
     "quantity": { "type": "integer" },
-    "test_parameters": { "type": "string" },
-    "test_results": { "type": "string" },
-    "conclusion": { "type": "string" },
-    "minerva_plant": { "type": "string" },
-    "inspector_name": { "type": "string" },
-    "signature_and_stamp": { "type": "string" }
+    "net_weight_kg": { "type": "string" },
+    "gross_weight_kg": { "type": "string" },
+    "production_lots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "production_date": { "type": "string" },
+          "cartons": { "type": "integer" },
+          "lot_number": { "type": "string" }
+        }
+      }
+    }
   },
   "required": [
-    "certificate_number",
     "date_of_issue",
-    "exporter",
-    "consignee",
-    "product_name",
-    "batch_lot_number",
+    "issuer",
+    "inspector_name",
+    "brand",
+    "shipping_mark",
+    "vessel",
+    "destination",
+    "container_number",
+    "product_code",
     "quantity",
-    "test_parameters",
-    "test_results",
-    "conclusion",
-    "minerva_plant",
-    "signature_and_stamp"
+    "production_lots"
   ]
 }
