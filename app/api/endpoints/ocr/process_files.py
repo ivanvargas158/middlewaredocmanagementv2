@@ -9,7 +9,7 @@ from typing import List,Tuple
 from app.services.cosmos_db import get_container
 from app.services.blob_storage import save_file_blob_storage
 from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
-from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice
+from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice,extract_keywords_openAIv2
 from app.services.template_manager import register_template,match_template 
 from app.services.postgresql_db import save_doc_logs
 from app.services.handle_file import validate_file_type,validate_file_size,split_pdf
@@ -24,7 +24,7 @@ router = APIRouter()
 
 settings = get_settings()
 
-@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
+@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=False)
 async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
@@ -41,10 +41,16 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         file_name = f"{upload_file_id}-{filename}"        
         ocrResult = process_mistral_ocr(file_bytes,content_type) 
         ocr_text = ocrResult['ocr_text']
-        print(ocr_text)
-        doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
+
+        doc_type_code,score = match_template(file_bytes,ocr_text,tenantId) 
+        
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
+        #special case: master_bill_of_lading. Extract the ocr text allways from Azure, to match the schema json 
+        if doc_type_code == DocumentType.master_bill_of_lading:
+            azure_ocr = process_azurevision_ocr(file_bytes)
+            ocr_text = azure_ocr['ocr_text']
+
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI(doc_type, ocr_text)  
 
@@ -194,7 +200,7 @@ async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill 
                 )    
     
 
-@router.post("/get_text", status_code=status.HTTP_200_OK,include_in_schema=False)
+@router.post("/get_text", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def get_text(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):   
     try:
         file_bytes = await file.read()

@@ -1,43 +1,71 @@
-
 {
   "type": "object",
   "properties": {
-    "date_of_issue": { "type": "string" },
-    "issuer": { "type": "string" },          
-    "inspector_name": { "type": "string" },   
-    "brand": { "type": "string" },            
+    "product_code": { "type": "string" },
+    "product_description": { "type": "string" },
     "shipping_mark": { "type": "string" },
+    "brand": { "type": "string" },
     "vessel": { "type": "string" },
     "destination": { "type": "string" },
     "container_number": { "type": "string" },
-    "product_code": { "type": "string" },
-    "product_description": { "type": "string" },
-    "quantity": { "type": "integer" },
-    "net_weight_kg": { "type": "string" },
-    "gross_weight_kg": { "type": "string" },
-    "production_lots": {
+    "total_units": { "type": "integer" },
+    "net_weight_kg": { "type": "number" },
+    "gross_weight_kg": { "type": "number" },
+    "microbiological_analysis": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "production_date": { "type": "string" },
           "cartons": { "type": "integer" },
-          "lot_number": { "type": "string" }
-        }
+          "lot_number": { "type": "string" },
+          "salmonella_in_325g": { "type": "string" },
+          "top_seven_stecs_in_325g": { "type": "string" }
+        },
+        "required": [
+          "production_date",
+          "cartons",
+          "lot_number",
+          "salmonella_in_325g",
+          "top_seven_stecs_in_325g"
+        ]
       }
-    }
+    },
+    "reference_methods": { "type": "array", "items": { "type": "string" } },
+    "laboratory": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "telephone": { "type": "string" }
+      },
+      "required": ["name", "address"]
+    },
+    "certifier": {
+      "type": "object",
+      "properties": {
+        "organization": { "type": "string" },
+        "name": { "type": "string" }
+      },
+      "required": ["organization", "name"]
+    },
+    "date_of_issue": { "type": "string" }
   },
   "required": [
-    "date_of_issue",
-    "issuer",
-    "inspector_name",
-    "brand",
+    "product_code",
     "shipping_mark",
+    "brand",
     "vessel",
     "destination",
     "container_number",
-    "product_code",
-    "quantity",
-    "production_lots"
+    "total_units",
+    "net_weight_kg",
+    "gross_weight_kg",
+    "microbiological_analysis",
+    "laboratory",
+    "certifier",
+    "date_of_issue"
   ]
 }
+
+ 

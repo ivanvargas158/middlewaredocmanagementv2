@@ -1,35 +1,116 @@
 {
   "type": "object",
   "properties": {
-    "packing_slip_number": { "type": "string" },
-    "exporter": { "type": "string" },
-    "consignee": { "type": "string" },
-    "notify_party": { "type": "string" },
-    "date": { "type": "string" },
-    "vessel_flight": { "type": "string" },
-    "port_of_loading": { "type": "string" },
-    "port_of_discharge": { "type": "string" },
-    "container_number": { "type": "string" },
-    "marks_and_numbers": { "type": "string" },
-    "description_of_goods": { "type": "string" },
-    "number_of_packages": { "type": "integer" },
-    "gross_weight": { "type": "number" },
-    "net_weight": { "type": "number" },
-    "volume": { "type": "string" },
-    "swift_facility": { "type": "string" },
-    "signature_and_stamp": { "type": "string" }
+    "exporter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "address"
+      ]
+    },
+    "importer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "address"
+      ]
+    },
+    "packing_list_number": {
+      "type": "string"
+    },
+    "contract_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "vessel": {
+      "type": "string"
+    },
+    "port_of_loading": {
+      "type": "string"
+    },
+    "destination_port": {
+      "type": "string"
+    },
+    "container_info": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cartons": {
+            "type": "integer"
+          },
+          "description_of_goods": {
+            "type": "string"
+          },
+          "net_weight_kg": {
+            "type": "number"
+          },
+          "gross_weight_kg": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "cartons",
+          "description_of_goods",
+          "net_weight_kg",
+          "gross_weight_kg"
+        ]
+      }
+    },
+    "totals": {
+            "type": "object",
+            "properties": {
+              "total_net_weight_kg": {
+                "type": "number"
+              },
+              "total_gross_weight_kg": {
+                "type": "number"
+              },
+              "total_cartons": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "total_net_weight_kg",
+              "total_gross_weight_kg",
+              "total_cartons"
+            ]
+    },
+    "remarks": {
+      "type": "string"
+    }
   },
   "required": [
-    "packing_slip_number",
     "exporter",
-    "consignee",
-    "date",
+    "importer",
+    "packing_list_number",
+    "vessel",
     "port_of_loading",
-    "port_of_discharge",
-    "description_of_goods",
-    "number_of_packages",
-    "gross_weight",
-    "swift_facility",
-    "signature_and_stamp"
+    "destination_port",
+    "container_info"
   ]
 }

@@ -68,6 +68,80 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     
 
 
+
+def extract_keywords_openAIv2(doc_type: DocumentType,doc_text:str):
+    
+    schema_mapping_data:str = get_json_schema(doc_type)
+    if schema_mapping_data=="":
+        raise ValidationError(errors=f"Invalid document type(schema json) : {doc_type}")
+     
+    try:  
+
+        openai_prompt:str = """
+        # Role and Objective
+        You are an advanced document extraction agent specialized in shipping, logistics, and invoice workflows for Swift Argentina. Your job is to extract and map all key variables from Azure AI Document Intelligence or Mistral OCR API output into the required internal JSON schema.
+
+        # Task & Constraints
+        - Input is structured JSON or markdown output from Azure AI Document Intelligence or Mistral OCR, containing field names and extracted values.
+        - Extract and map values to the schema below, using only what is explicitly present in the input.
+        - If any field is missing, unclear, or ambiguous in the source, set its value to null.
+        - Never infer, guess, invent, or hallucinate any values or fields.
+        - Only include fields and structure specified in the schema—do not add, remove, or rename fields.
+        - If multiple values are present for the same field (e.g., net/gross weights), always prefer the value from the "totals" or summary section unless otherwise instructed.
+        - For "product_table", each product line item must be represented as an object in the array, preserving order as shown in the document.
+
+        # Extraction Schema
+
+        {schema_mapping}
+
+        Output Example (minified JSON)
+
+        {ocr_markdown}
+
+        Output Requirements
+        Output a single, valid, minified JSON object strictly matching the schema above.
+
+        Do not include commentary, markdown, or formatting—return only the JSON object.
+
+        For missing or ambiguous fields, set the value to null.
+
+        Use only the provided schema field names as keys.
+
+        For tables/arrays, preserve item order.
+
+        Instructions Recap
+        Only use fields from the schema above.
+
+        No extra fields or values—no inference or fabrication.
+
+        Output only a valid, minified JSON object as in the example above.
+        """
+
+
+        openai_prompt = openai_prompt.format(schema_mapping=schema_mapping_data, ocr_markdown=doc_text)
+
+        response = client.chat.completions.create(
+            model = settings.Openai_Base_Model_ContextUser,
+            messages = [
+                {"role": "user", "content": openai_prompt},
+            ],
+            temperature = 0.0,
+            response_format={ "type": "json_object" }
+
+        ) 
+
+        content = response.choices[0].message.content
+
+        response_data = json.loads(str(content))        
+
+        return response_data
+
+    except json.JSONDecodeError as e:
+        raise ValidationError(errors=f"Error: Failed to parse JSON from LLM response for memory extraction: {e}")
+    except Exception as e:
+        raise ValidationError(errors=f"Error during memory extraction: {e}")
+    
+
 def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str):
     
     schema_mapping_data:str = get_json_schema(doc_type)

@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     # --- Mistral
 
     mstral_api_Key: str = "VIJDVhgvEI7jBEFuwZFxXxyIHjTL7mA8"
-    mistral_embed_model: str = "mistral-ocr-latest"
+    mistral_ocr_model: str = "mistral-ocr-latest"
 
     # --- OPEN AI -----
     Openai_Api_Key_ContextUser: str =  Field(validation_alias="Openai_API_Key")

@@ -33,7 +33,7 @@ def process_mistral_ocr(file_bytes:bytes, file_type: str) -> Dict[str, Any]:
         file_type_key = 'pdf' if file_type == 'application/pdf' else 'image'        
         if file_type_key == 'pdf':
            ocr_response = mistral_client.ocr.process(
-                model=settings.mistral_embed_model,
+                model=settings.mistral_ocr_model,
                 document={
                     "type": "document_url",
                     "document_url": f"data:{file_type};base64,{base64_data}" 
@@ -41,7 +41,7 @@ def process_mistral_ocr(file_bytes:bytes, file_type: str) -> Dict[str, Any]:
             )
         else:
             ocr_response = mistral_client.ocr.process(
-                model=settings.mistral_embed_model,
+                model=settings.mistral_ocr_model,
                 document={
                     "type": "image_url",
                     "image_url": f"data:{file_type};base64,{base64_data}" 
@@ -133,7 +133,7 @@ def is_gibberish(text: str) -> bool:
     non_alpha = sum(1 for c in text if not c.isalnum() and c not in " .,-/")
     if len(text) > 0 and (non_alpha / len(text)) > 0.3:
         return True
-    if re.search(r'(.)\1{4,}', text):  # 5+ repeated chars
+    if re.search(r'(.)\1{8,}', text):  # 5+ repeated chars
         return True
     if re.search(r'[\uFFFD\u25A0\u25A1]', text):  # common OCR replacement chars
         return True
@@ -170,11 +170,25 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     field_scores = {}
     missing_fields = []   
     for field,pattern in required_fields.items():
-        value = get_nested_value(field,flat_fields)
-        score, reason = score_field(value, pattern)
-        field_scores[field] = (score, reason,value)
-        if reason=='Missing' or reason=='Gibberish/symbols detected': 
-            missing_fields.append(field)
+        if '[]' in field:
+            base_path, sub_field = field.split('[]')
+            base_path = base_path.strip('.')
+            array_data = get_nested_value(base_path, flat_fields)
+
+            if isinstance(array_data, list):
+                for index, item in enumerate(array_data):
+                    value = get_nested_value(sub_field.strip('.'), item)
+                    field_key = f"{base_path}[{index}].{sub_field.strip('.')}"
+                    score, reason = score_field(value, pattern)
+                    field_scores[field_key] = (score, reason, value)
+                    if reason == 'Missing' or reason == 'Gibberish/symbols detected':
+                        missing_fields.append(field_key)
+        else:
+            value = get_nested_value(field,flat_fields)
+            score, reason = score_field(value, pattern)
+            field_scores[field] = (score, reason,value)
+            if reason=='Missing' or reason=='Gibberish/symbols detected': 
+                missing_fields.append(field)
     # Schema-level validation
     cross_issues = [] 
     cross_penalty = 0.0

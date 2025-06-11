@@ -1,28 +1,126 @@
 {
   "type": "object",
   "properties": {
-    "certificate_number": { "type": "string" },
-    "exporter": { "type": "string" },
-    "consignee": { "type": "string" },
-    "country_of_origin": { "type": "string" },
-    "country_of_destination": { "type": "string" },
-    "date_of_issue": { "type": "string" },
-    "product_description": { "type": "string" },
-    "quantity": { "type": "integer" },
-    "batch_lot_number": { "type": "string" },
-    "minerva_plant": { "type": "string" },
-    "signature_and_stamp": { "type": "string" }
+    "product_code": {
+      "type": "string"
+    },
+    "product_description": {
+      "type": "string"
+    },
+    "shipping_mark": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "vessel": {
+      "type": "string"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "container_number": {
+      "type": "string"
+    },
+    "total_units": {
+      "type": "integer"
+    },
+    "net_weight_kg": {
+      "type": "number"
+    },
+    "gross_weight_kg": {
+      "type": "number"
+    },
+    "microbiological_analysis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "production_date": {
+            "type": "string"
+          },
+          "cartons": {
+            "type": "integer"
+          },
+          "lot_number": {
+            "type": "string"
+          },
+          "salmonella_in_325g": {
+            "type": "string"
+          },
+          "top_seven_stecs_in_325g": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "production_date",
+          "cartons",
+          "lot_number",
+          "salmonella_in_325g",
+          "top_seven_stecs_in_325g"
+        ]
+      }
+    },
+    "reference_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "laboratory": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "address"
+      ]
+    },
+    "certifier": {
+      "type": "object",
+      "properties": {
+        "organization": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "organization",
+        "name"
+      ]
+    },
+    "date_of_issue": {
+      "type": "string"
+    }
   },
   "required": [
-    "certificate_number",
-    "exporter",
-    "consignee",
-    "country_of_origin",
-    "country_of_destination",
-    "date_of_issue",
+    "product_code",
     "product_description",
-    "quantity",
-    "minerva_plant",
-    "signature_and_stamp"
+    "shipping_mark",
+    "brand",
+    "vessel",
+    "destination",
+    "container_number",
+    "total_units",
+    "net_weight_kg",
+    "gross_weight_kg",
+    "microbiological_analysis",
+    "laboratory",
+    "certifier",
+    "date_of_issue"
   ]
 }

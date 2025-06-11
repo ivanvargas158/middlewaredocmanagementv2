@@ -1,32 +1,209 @@
 {
   "type": "object",
   "properties": {
-    "certificate_number": { "type": "string" },
-    "exporter": { "type": "string" },
-    "importer": { "type": "string" },
-    "consignee": { "type": "string" },
-    "country_of_origin": { "type": "string" },
-    "country_of_destination": { "type": "string" },
-    "date_of_issue": { "type": "string" },
-    "product_description": { "type": "string" },
-    "quantity": { "type": "integer" },
-    "lot_batch_number": { "type": "string" },
-    "organic_status": { "type": "string" },
-    "certification_body": { "type": "string" },
-    "signature_and_stamp": { "type": "string" }
+    "certificate_type": {
+      "type": "string"
+    },
+    "issuing_agency": {
+      "type": "string"
+    },
+    "import_certificate_number": {
+      "type": "string"
+    },
+    "date_of_issue": {
+      "type": "string"
+    },
+    "expiration_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "certifying_body_issuing_certificate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "address"
+      ]
+    },
+    "certifying_body_of_final_handler": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "address"
+      ]
+    },
+    "recipient_us": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "registration_number": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "person",
+            "email",
+            "phone"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "address",
+        "contact"
+      ]
+    },
+    "certified_to": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "city_state_product_destination": {
+      "type": "string"
+    },
+    "product": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "harmonized_tariff_code": {
+            "type": "string"
+          },
+          "shipping_identification": {
+            "type": "string"
+          },
+          "final_handler": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "contact": {
+                "type": "object",
+                "properties": {
+                  "person": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "registration_number": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "person",
+                  "email",
+                  "phone"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "address",
+              "contact"
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "harmonized_tariff_code",
+          "shipping_identification",
+          "final_handler"
+        ]
+      }
+    },
+    "total_net_weight_kg": {
+      "type": "number"
+    },
+    "total_containers": {
+      "type": "integer"
+    },
+    "product_exported_from": {
+      "type": "string"
+    },
+    "project_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remarks_attestations": {
+      "type": "string"
+    },
+    "signature_of_certifying_body": {
+      "type": "string"
+    },
+    "signature_date": {
+      "type": "string"
+    }
   },
   "required": [
-    "certificate_number",
-    "exporter",
-    "importer",
-    "consignee",
-    "country_of_origin",
-    "country_of_destination",
+    "certificate_type",
+    "issuing_agency",
+    "import_certificate_number",
     "date_of_issue",
-    "product_description",
-    "quantity",
-    "organic_status",
-    "certification_body",
-    "signature_and_stamp"
+    "certifying_body_issuing_certificate",
+    "certifying_body_of_final_handler",
+    "recipient_us",
+    "city_state_product_destination",
+    "product",
+    "total_net_weight_kg",
+    "total_containers",
+    "product_exported_from",
+    "shipment_type",
+    "remarks_attestations",
+    "signature_of_certifying_body",
+    "signature_date"
   ]
 }
