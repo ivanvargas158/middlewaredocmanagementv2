@@ -24,7 +24,7 @@ router = APIRouter()
 
 settings = get_settings()
 
-@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=False)
+@router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
@@ -96,7 +96,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
     # finally:
     #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
-@router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=True)
+@router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=False)
 async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
