@@ -45,9 +45,9 @@
     },
 
     "reweigh_or_inspection_notes": { "type": "string" },
-    "ship_date": { "type": "string", "format": "date" },
-    "invoice_date": { "type": ["string", "null"], "format": "date" },
-    "invoice_due_date": { "type": "string", "format": "date" },
+    "ship_date": { "type": "string", "format": "date","pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "invoice_date": { "type": ["string", "null"], "format": "date","pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "invoice_due_date": { "type": "string", "format": "date","pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "reference_numbers": {
       "type": "object",
       "properties": {

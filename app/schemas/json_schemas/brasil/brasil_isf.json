@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "seller_name_address": {
+      "type": "string"
+    },
+    "buyer_name_address": {
+      "type": "string"
+    },
+    "ship_to_party": {
+      "type": "string"
+    },
+    "container_stuffing_location": {
+      "type": "string"
+    },
+    "consolidator_stuffer": {
+      "type": "string"
+    },
+    "importer_of_record": {
+      "type": "string"
+    },
+    "manufacturer_name_address": {
+      "type": "string"
+    },
+    "consignee": {
+      "type": "string"
+    },
+    "country_of_origin": {
+      "type": "string"
+    },
+    "commodity_description": {
+      "type": "string"
+    },
+    "commodity_code": {
+      "type": "string"
+    },
+    "vessel_voyage": {
+      "type": "string"
+    },
+    "bill_of_lading_number": {
+      "type": "string"
+    },
+    "container_number": {
+      "type": "string"
+    },
+    "etd": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "eta": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "isf_contact_email": {
+      "type": "string",
+      "format": "email"
+    }
+  },
+  "required": [
+    "seller_name_address",
+    "buyer_name_address",
+    "ship_to_party",
+    "container_stuffing_location",
+    "importer_of_record",
+    "manufacturer_name_address",
+    "consignee",
+    "country_of_origin",
+    "commodity_description",
+    "vessel_voyage",
+    "bill_of_lading_number",
+    "container_number",
+    "etd",
+    "eta"
+  ]
+}

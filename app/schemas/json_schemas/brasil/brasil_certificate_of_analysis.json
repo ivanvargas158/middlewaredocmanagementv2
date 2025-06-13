@@ -1,0 +1,87 @@
+{
+  
+  "properties": {    
+    "loaded_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "container_number": {
+      "type": "string"
+    },
+    "shipping_mark": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "string"
+    },
+    "cartons_total": {
+      "type": "integer"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "contract_number": {
+      "type": "string"
+    },
+    "net_weight_kg": {
+      "type": "string",
+      "pattern": "^\\d{1,3}(\\.\\d{3})*,\\d{2}$"
+    },
+    "utilized_methodologies": {
+      "type": "string"
+    },
+    "microbiological_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_code": {
+            "type": "string"
+          },
+          "batch_lot": {
+            "type": "string"
+          },
+          "packing_date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "analysis_date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "cartons": {
+            "type": "integer"
+          },
+          "result_ecoli_o157_h7": {
+            "type": "string"
+          },
+          "result_ecoli_stec": {
+            "type": "string"
+          },
+          "result_salmonella": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_code",
+          "batch_lot",
+          "result_ecoli_o157_h7",
+          "result_salmonella"
+        ]
+      }
+    }
+  },
+  "required": [
+    "certificate_date",
+    "loaded_date",
+    "container_number",
+    "shipping_mark",
+    "customer",
+    "destination",
+    "contract_number",
+    "net_weight_kg"
+  ]
+}

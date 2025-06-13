@@ -154,7 +154,7 @@ def score_field(value: Union[str, int, float, Decimal, date], pattern: str) -> T
         return 0.0, "Missing"
     if is_gibberish(value_str):
         return 0.2, "Gibberish/symbols detected"
-    if re.match(pattern, value_str):
+    if re.match(pattern, value_str,re.DOTALL):
         return 1.0, "OK"
     return 0.5, "Format mismatch"
 
@@ -208,9 +208,6 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     cross_penalty = 0.1 * len(cross_issues)
     doc_confidence = round(max(0.0, base_score - cross_penalty),2)
     pass_flag = doc_confidence >= threshold
-
-    logging.info(f"Document confidence: {doc_confidence:.2f} | Pass: {pass_flag}")
- 
 
     return {
         "doc_type": doc_type,

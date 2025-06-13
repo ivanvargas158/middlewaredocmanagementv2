@@ -175,7 +175,7 @@ general_rules = {
     },
 
     
-    DocumentType.health_certificate_argentina:{
+    DocumentType.argentina_health_certificate:{
          "required_fields": {
                    "certificate_number":r"^.+$",  # Non-empty string,
                     "exporter":r"^.+$",  # Non-empty string,
@@ -190,7 +190,7 @@ general_rules = {
                 }
 
     },
-    DocumentType.health_certificate_brasil:{
+    DocumentType.brasil_health_certificate:{
          "required_fields": {
                    "certificate_number":r"^.+$",  # Non-empty string,
                     "exporter":r"^.+$",  # Non-empty string,,
@@ -325,8 +325,41 @@ general_rules = {
             "certifier.name": r"^.+$"
             }
     },
-
-    DocumentType.air_waybill: {
+    DocumentType.brasil_isf: {
+        "required_fields": {
+            "seller_name_address": r"^.+$",
+            "buyer_name_address": r"^.+$",
+            "ship_to_party": r"^.+$",
+            "container_stuffing_location": r"^.+$",
+            "importer_of_record": r"^.+$",
+            "manufacturer_name_address": r"^.+$",
+            "consignee": r"^.+$",
+            "country_of_origin": r"^.+$",
+            "commodity_description": r"^.+$",
+            "vessel_voyage": r"^.+$",
+            "bill_of_lading_number": r"^.+$",
+            "container_number": r"^[A-Z]{4}\d{7}$",  # Standard container number format (e.g., ABCD1234567)
+            "etd": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format YYYY-MM-DD
+            "eta": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format YYYY-MM-DD
+        }
+    },
+    DocumentType.brasil_certificate_of_analysis: {
+    "required_fields": {
+        "loaded_date": r"^\d{4}-\d{2}-\d{2}$",             # ISO date format (YYYY-MM-DD)
+        "container_number": r"^[A-Z]{4}\d{7}$",            # Standard container number format (ABCD1234567)
+        "shipping_mark": r"^.+$",                          # Non-empty string
+        "customer": r"^.+$",                               # Non-empty string
+        "destination": r"^.+$",                            # Non-empty string
+        "contract_number": r"^.+$",                        # Non-empty string
+        "net_weight_kg": r"^\d{1,3}(\.\d{3})*,\d{2}$",                 # Positive float or integer
+		"microbiological_results[].product_code": r"^.+$",
+        "microbiological_results[].batch_lot": r"^.+$",
+        "microbiological_results[].result_ecoli_o157_h7": r"^.+$",
+        "microbiological_results[].result_salmonella": r"^.+$"
+		
+        }
+    },
+        DocumentType.air_waybill: {
         "required_fields": ["mawb", "hawb", "gross_weight", "shipper"],
         "dangerous_goods": {
             "un_number_format": r"^UN\d{4}$",

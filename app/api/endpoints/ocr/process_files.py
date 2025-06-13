@@ -31,7 +31,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
     is_processed: bool = False
     doc_type: DocumentType = DocumentType.air_waybill
     result_scores: Any = ""
-    tenantId:int = 1
+    tenantId:int = 3
     try:
         file_bytes = await  file.read()
         filename = file.filename
@@ -96,7 +96,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
     # finally:
     #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
-@router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=False)
+@router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
@@ -183,7 +183,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.providence_tenant,loadId)
    
 
-@router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=False)
+@router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill of Lading',doc_type_code:str='',version:str='v1.0',tenant_id:int = 1,api_key: str = Depends(get_api_key)):   
     try:
         file_bytes = await file.read()
