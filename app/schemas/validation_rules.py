@@ -190,16 +190,40 @@ general_rules = {
                 }
 
     },
-    DocumentType.brasil_health_certificate:{
-         "required_fields": {
-                
-                "template.document_properties.required_fields[].field": r"^.+$", # Non-empty string
-                "template.document_properties.required_fields[].type": r"^.+$",  # Non-empty string
-                "template.document_properties.required_fields[].position.page": r"^\d+$",   # Integer
-                "template.document_properties.required_fields[].position.y1": r"^\d+(\.\d+)?$", # Decimal
-                "template.document_properties.required_fields[].position.y2": r"^\d+(\.\d+)?$", # Decimal
-                "template.tables.product_details.columns[]": r"^.+$",  # Each column name as non-empty string
-                "template.tables.product_details.validation_rules.<key>": r"^.+$"  # Any key must have a rule string
+    DocumentType.brasil_health_certificate: {
+        "required_fields": {
+            "exporter": r"^.+$",                    
+            "certificate_number": r"^.+$",                             
+            "competent_authority": r"^.+$",
+            "local_competent_authority": r"^.+$",
+            "importer": r"^.+$",
+            "country_of_origin": r"^.+$",
+            "origin_iso_code": r"^[A-Z]{2,3}$",
+            "country_of_dispatch": r"^.+$",
+            "dispatch_iso_code": r"^[A-Z]{2,3}$",
+            "country_of_destination": r"^.+$",
+            "destination_iso_code": r"^[A-Z]{2,3}$",
+            "place_of_loading": r"^.+$",
+            "means_of_transport": r"^.+$",
+            "point_of_entry": r"^.+$",
+            "conditions_for_transport_storage": r"^.+$",
+            "container_seal_numbers": r"^.+$",
+            "shipping_marks": r"^.+$",
+            "food_producers": r"^.+$",
+            "purpose": r"^.+$",
+            "ncm_hs_code": r"^\d{4,10}$",  # Adjusted for common NCM/HS code lengths
+            "certificate_reference_number": r"^.+$",
+            "carteira_fiscal_number": r"^.+$",
+
+            "product_details[].product_description": r"^.+$",
+            "product_details[].animal_species": r"^.+$",
+            "product_details[].lot_or_production_date": r"^\d{4}-\d{2}-\d{2}$",  # ISO date
+            "product_details[].slaughter_date": r"^\d{4}-\d{2}-\d{2}$",         # ISO date
+            "product_details[].producer_approval_number": r"^.+$",
+            "product_details[].type_of_packaging": r"^.+$",
+            "product_details[].number_of_packages": r"^\d+$",
+            "product_details[].net_weight_kgs": r"^\d+([.,]\d+)?$",
+            "product_details[].net_weight_lbs": r"^\d+([.,]\d+)?$"
         }
     },
     DocumentType.brasil_master_bill_of_lading:{

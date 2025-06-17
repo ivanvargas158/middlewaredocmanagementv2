@@ -1,118 +1,84 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Mistral OCR Health Certificate Fingerprint Schema",
-  "description": "A schema to validate the structure of a Mistral OCR fingerprint and template for a Brasil Health Certificate.",
+  "title": "mistral_ocr_msc_bill_of_lading_schema",
+  "description": "a_schema_to_validate_the_structured_json_output_from_an_ocr_process_on_an_msc_bill_of_lading,_based_on_the_provided_template.",
   "type": "object",
   "properties": {
-    "name": {
-      "description": "A human-readable name for the document configuration.",
-      "type": "string"
-    },
-    "fingerprint": {
-      "description": "Defines the unique text sequences to identify the document.",
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["text_sequence"]
-        },
-        "sequences": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "case_sensitive": {
-          "type": "boolean"
-        }
-      },
-      "required": ["type", "sequences", "case_sensitive"],
-      "additionalProperties": false
-    },
-    "template": {
-      "description": "The main template defining the extraction rules for the document.",
-      "$ref": "#/definitions/healthCertificateTemplate"
-    }
-  },
-  "additionalProperties": false,
-  "definitions": {
-    "healthCertificateTemplate": {
-      "type": "object",
-      "properties": {
-        "document_properties": {
+    "exporter": { "type": "string" },
+    "certificate_number": { "type": "string" },
+    "competent_authority": { "type": "string" },
+    "local_competent_authority": { "type": "string" },
+    "importer": { "type": "string" },
+    "country_of_origin": { "type": "string" },
+    "origin_iso_code": { "type": "string" },
+    "country_of_dispatch": { "type": "string" },
+    "dispatch_iso_code": { "type": "string" },
+    "country_of_destination": { "type": "string" },
+    "destination_iso_code": { "type": "string" },
+    "place_of_loading": { "type": "string" },
+    "means_of_transport": { "type": "string" },
+    "point_of_entry": { "type": "string" },
+    "conditions_for_transport_storage": { "type": "string" },
+    "container_seal_numbers": { "type": "string" },
+    "shipping_marks": { "type": "string" },
+    "food_producers": { "type": "string" },
+    "purpose": { "type": "string" },
+    "ncm_hs_code": { "type": "string" },
+    "certificate_reference_number": { "type": "string" },
+    "carteira_fiscal_number": { "type": "string" },
+
+      "product_details": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
-            "required_fields": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/fieldDefinition"
-              }
-            }
+            "product_description": { "type": "string" },
+            "animal_species": { "type": "string" },
+            "lot_or_production_date": { "type": "string" },
+            "slaughter_date": { "type": "string" },
+            "producer_approval_number": { "type": "string" },
+            "type_of_packaging": { "type": "string" },
+            "number_of_packages": { "type": "integer" },
+            "net_weight_kgs": { "type": "string" },
+            "net_weight_lbs": { "type": "string" }
           },
-          "required": ["required_fields"],
-          "additionalProperties": false
+          "required": [
+            "product_description",
+            "animal_species",
+            "lot_or_production_date",
+            "slaughter_date",
+            "producer_approval_number",
+            "type_of_packaging",
+            "number_of_packages",
+            "net_weight_kgs",
+            "net_weight_lbs"
+          ]
         },
-        "tables": {
-          "type": "object",
-          "properties": {
-            "product_details": {
-              "$ref": "#/definitions/tableDefinition"
-            }
-          },
-          "required": ["product_details"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["document_properties", "tables"],
-      "additionalProperties": false
-    },
-    "fieldDefinition": {
-      "type": "object",
-      "properties": {
-        "field": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "position": {
-          "type": "object",
-          "properties": {
-            "page": {
-              "type": "integer"
-            },
-            "y1": {
-              "type": "number"
-            },
-            "y2": {
-              "type": "number"
-            }
-          },
-          "required": ["page", "y1", "y2"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["field", "type"],
-      "additionalProperties": false
-    },
-    "tableDefinition": {
-      "type": "object",
-      "properties": {
-        "columns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "validation_rules": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["columns", "validation_rules"],
-      "additionalProperties": false
-    }
-  }
+        "required": [
+             "exporter" ,
+            "certificate_number" ,
+            "competent_authority" ,
+            "local_competent_authority" ,
+            "importer" ,
+            "country_of_origin" ,
+            "origin_iso_code" ,
+            "country_of_dispatch" ,
+            "dispatch_iso_code" ,
+            "country_of_destination", 
+            "destination_iso_code" ,
+            "place_of_loading" ,
+            "means_of_transport" ,
+            "point_of_entry" ,
+            "conditions_for_transport_storage", 
+            "container_seal_numbers" ,
+            "shipping_marks",
+            "food_producers",
+            "purpose",
+            "ncm_hs_code",
+            "certificate_reference_number",
+            "carteira_fiscal_number",
+           "product_details"
+        ]
+      }  
+  } 
 }
