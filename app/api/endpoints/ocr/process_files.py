@@ -25,13 +25,12 @@ router = APIRouter()
 settings = get_settings()
 
 @router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
-async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):    
+async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
     is_processed: bool = False
     doc_type: DocumentType = DocumentType.air_waybill
     result_scores: Any = ""
-    tenantId:int = 3
     try:
         file_bytes = await  file.read()
         filename = file.filename
@@ -39,17 +38,12 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         validate_file_size(file_bytes)
         content_type = str(file.content_type)        
         file_name = f"{upload_file_id}-{filename}"        
-        ocrResult = process_mistral_ocr(file_bytes,content_type) 
+        #ocrResult = process_mistral_ocr(file_bytes,content_type) 
+        ocrResult = process_azurevision_ocr(file_bytes)
         ocr_text = ocrResult['ocr_text']
-
-        doc_type_code,score = match_template(file_bytes,ocr_text,tenantId) 
-        
+        doc_type_code,score = match_template(file_bytes,ocr_text,countryId)        
         if doc_type_code is None:
-            raise ValidationError(errors=f"Document is not supported {filename}")
-        #special case: master_bill_of_lading. Extract the ocr text allways from Azure, to match the schema json 
-        if doc_type_code == DocumentType.master_bill_of_lading:
-            azure_ocr = process_azurevision_ocr(file_bytes)
-            ocr_text = azure_ocr['ocr_text']
+            raise ValidationError(errors=f"Document is not supported {filename}")     
 
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI(doc_type, ocr_text)  
@@ -184,13 +178,13 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
    
 
 @router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=True)
-async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill of Lading',doc_type_code:str='',version:str='v1.0',tenant_id:int = 1,api_key: str = Depends(get_api_key)):   
+async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill of Lading',doc_type_code:str='',version:str='v1.0',country_id:int = 1,api_key: str = Depends(get_api_key)):   
     try:
         file_bytes = await file.read()
         content_type = str(file.content_type)
-        ocrResult = process_mistral_ocr(file_bytes,content_type)
-        #ocrResult = process_azurevision_ocr(file_bytes)    
-        document_hash  = register_template(file_bytes,doc_type,version,tenant_id, ocrResult['ocr_text'],doc_type_code)
+        #ocrResult = process_mistral_ocr(file_bytes,content_type)
+        ocrResult = process_azurevision_ocr(file_bytes)    
+        document_hash  = register_template(file_bytes,doc_type,version,country_id, ocrResult['ocr_text'],doc_type_code)
         return {f"Document save as temmplate successfully {document_hash}"}
 
     except Exception as exc:
@@ -220,3 +214,50 @@ async def get_text(file: UploadFile = File(...),api_key: str = Depends(get_api_k
                     detail= exc.args ,
                 )
     
+
+
+@router.post("/split_doc", status_code=status.HTTP_200_OK,include_in_schema=True)
+async def split_doc(file: UploadFile = File(...),loadId:str = '',api_key: str = Depends(get_api_key)):    
+   
+    file_name:str = ''
+    is_processed: bool = False
+    doc_type: DocumentType = DocumentType.brasil_isf
+    result_scores: Any = ""
+    tenantId:int = 2
+    try:
+        file_bytes = await  file.read()
+        filename = file.filename
+       
+        content_type = str(file.content_type) #'application/pdf'   
+     
+        doc_type_code:str|None = None
+        score:float=0
+        ocr_text:str=''
+        ocrResult:Any
+        if content_type=='application/pdf':
+            input_stream = BytesIO(file_bytes)
+            pdf_reader = PdfReader(input_stream)
+            if len(pdf_reader.pages)>0:
+                list_pages: List[Tuple[str | None, float, bytes, str]] = []
+                list_pages = split_pdf(file_bytes,tenantId)
+                for item in list_pages:
+                    upload_file_id:str = str(uuid.uuid4())    
+                    file_name = f"{upload_file_id}-{filename}"
+                    doc_type_code,score,file_bytes,ocr_text = item
+                    blob_path = f"{settings.cargologik_tenant}/{doc_type}/{file_name}"
+                    blob_url_saved = save_file_blob_storage(file_bytes,"docmanagement",blob_path,settings.azure_storage_endpoint_cargologik)
+        
+        is_processed = True    
+        return result_scores
+    except ValidationError as exc:
+        result_scores = {"error":exc.to_dict()} 
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=exc.to_dict()
+        )
+    except Exception as exc:
+        result_scores = {"error":exc.args} 
+        raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail= exc.args ,
+                 ) 

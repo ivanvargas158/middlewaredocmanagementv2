@@ -15,6 +15,11 @@ schema_files = {
     DocumentType.nop_import_certificate: "nop_import_certificate.json",
     DocumentType.brasil_isf: "brasil_isf.json",
     DocumentType.brasil_certificate_of_analysis: "brasil_certificate_of_analysis.json",
+    DocumentType.brasil_master_bill_of_lading: "brasil_master_bill_of_lading.json",
+    DocumentType.brasil_health_certificate: "brasil_health_certificate.json",
+    DocumentType.brasil_commercial_invoice: "brasil_commercial_invoice.json",
+    DocumentType.brasil_packing_list: "brasil_packing_list.json",
+    DocumentType.brasil_certificate_of_origin: "brasil_certificate_of_origin.json",
     DocumentType.abf_freight_invoice: "abf_invoice.json"
 }
 

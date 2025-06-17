@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mistral_ocr_msc_bill_of_lading_schema",
+  "description": "a_schema_to_validate_the_structured_json_output_from_an_ocr_process_on_an_msc_bill_of_lading,_based_on_the_provided_template.",
+  "type": "object",
+  "properties": {
+    "bill_of_lading_no": { "type": "string" },
+    "shipper": { "type": "string" },
+    "consignee": { "type": "string" },
+    "notify_parties": { "type": "string" },
+    "vessel_and_voyage_no": { "type": "string" },
+    "place_of_receipt": { "type": "string" },
+    "place_of_delivery": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "agent": { "type": "string" },
+    "booking_ref": { "type": "string" },
+    "shipper_ref": { "type": "string" },
+    "container_numbers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "seal_numbers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "marks_and_numbers": { "type": "string" },
+    "description_of_packages_and_goods": { "type": "string" },
+    "gross_cargo_weight": { "type": "string" },
+    "measurement": { "type": "string" },
+    "total_items": { "type": "integer" },
+    "total_gross_weight": { "type": "string" },
+    "net_weight": { "type": "string" },
+    "gross_weight": { "type": "string" },
+    "ncm": { "type": "string" },
+    "hs_code": { "type": "string" },
+    "seal_sif": { "type": "string" },
+    "temperature": { "type": "string" },
+    "ruc": { "type": "string" },
+    "shipped_on_board_date": { "type": "string" },
+    "freight_payable_in": { "type": "string" },
+    "freight_charges": {
+      "type": "object",
+      "properties": {
+        "rate": { "type": "string" },
+        "prepaid": { "type": "string" },
+        "collect": { "type": "string" },
+        "terminal_handling_charge": { "type": "string" }
+      }
+    },
+    "declared_value": { "type": "string" },
+    "signed_on_behalf_of_the_carrier": { "type": "string" },
+    "place_and_date_of_issue": { "type": "string" },
+    "carrier_receipt": { "type": "string" },
+    "container_cargo_table": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "container_numbers": { "type": "string" },
+              "seal_numbers": { "type": "string" },
+              "marks_and_numbers": { "type": "string" },
+              "description_of_packages_and_goods": { "type": "string" },
+              "gross_cargo_weight": { "type": "string" },
+              "measurement": { "type": "string" },
+              "net_weight": { "type": "string" },
+              "gross_weight": { "type": "string" },
+              "ncm": { "type": "string" },
+              "hs_code": { "type": "string" },
+              "seal_sif": { "type": "string" },
+              "temperature": { "type": "string" },
+              "ruc": { "type": "string" }
+            }
+          }
+      }
+  },
+  "required": [
+    "bill_of_lading_no",
+    "shipper",
+    "consignee",
+    "notify_parties",
+    "vessel_and_voyage_no",
+    "port_of_loading",
+    "port_of_discharge",
+    "container_numbers",
+    "description_of_packages_and_goods",
+    "gross_cargo_weight",
+    "total_items",
+    "total_gross_weight",
+    "net_weight",
+    "gross_weight",
+    "shipped_on_board_date",
+    "freight_charges",
+    "place_and_date_of_issue",
+    "container_cargo_table"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Simplified Schema for Brasil Certificate of Origin",
+  "description": "A simplified JSON schema for the extracted data from a Brasil Certificate of Origin, structured with simple field types and table arrays.",
+  "type": "object",
+  "properties": {
+    "document_type": {
+      "type": "string"
+    },
+    "issuing_country": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "object",
+      "properties": {
+        "certificate_number": { "type": "string" },
+        "exporter": { "type": "string" },
+        "importer": { "type": "string" },
+        "importer_ref": { "type": "string" },
+        "shipping_mark": { "type": "string" },
+        "vessel": { "type": "string" },
+        "shipment_port": { "type": "string" },
+        "destination": { "type": "string" },
+        "total_net_weight_kgs_summary": { "type": "number" },
+        "total_gross_weight_kgs_summary": { "type": "number" },
+        "total_cartons_summary": { "type": "integer" },
+        "container_id_summary": { "type": "string" },
+        "total_weight": { "type": "number" },
+        "signer_cpf": { "type": "string" },
+        "issue_date": { "type": "string", "format": "date" },
+        "issue_location": { "type": "string" }
+      }
+    },
+    "tables": {
+      "type": "object",
+      "properties": {
+        "goods_description": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cartons": { "type": "integer" },
+              "description": { "type": "string" },
+              "net_weight_kgs": { "type": "number" }
+            },
+            "required": [
+              "cartons",
+              "description",
+              "net_weight_kgs"
+            ]
+          }
+        },
+        "container_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "container_id": { "type": "string" },
+              "net_weight_kgs": { "type": "number" },
+              "gross_weight_kgs": { "type": "number" },
+              "cartons": { "type": "integer" }
+            },
+            "required": [
+              "container_id",
+              "net_weight_kgs",
+              "gross_weight_kgs",
+              "cartons"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "document_type",
+    "issuing_country",
+    "fields",
+    "tables"
+  ]
+}

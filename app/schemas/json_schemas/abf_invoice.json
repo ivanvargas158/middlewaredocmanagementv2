@@ -9,7 +9,6 @@
     "weight_lbs": { "type": "integer" },
     "piece_count": { "type": "integer" },
     "total_invoice_amount_usd": { "type": "number" },
-
     "dimensions": {
       "type": "array",
       "items": {

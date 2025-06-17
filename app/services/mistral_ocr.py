@@ -6,9 +6,9 @@ from typing import Dict, Tuple, List
 from datetime import datetime
 from typing import Dict, Any,Union
 from mistralai import Mistral
-from io import BytesIO
-from decimal import Decimal
+from io import BytesIO 
 from datetime import date
+from decimal import Decimal
 from app.core.settings import get_settings
 from app.utils.custom_exceptions import ValidationError
 from app.schemas.validation_rules import get_validation_rules,RuleSet
@@ -98,7 +98,8 @@ def process_azurevision_ocr(file_bytes:bytes):
 
     # Call the "GET" API and wait for it to retrieve the results 
     while True:
-        read_result = computervision_client.get_read_result(operation_id)             
+        read_result = computervision_client.get_read_result(operation_id)  
+                  
         if read_result.status not in ['notStarted', 'running']:
             break
         time.sleep(1)
@@ -169,6 +170,8 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
     # Score each required field (presence and gibberish check)
     field_scores = {}
     missing_fields = []   
+    value:Any
+    score:float = 0
     for field,pattern in required_fields.items():
         if '[]' in field:
             base_path, sub_field = field.split('[]')
@@ -184,11 +187,10 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
                     if reason == 'Missing' or reason == 'Gibberish/symbols detected':
                         missing_fields.append(field_key)
         else:
+          
             value = get_nested_value(field,flat_fields)
-            score, reason = score_field(value, pattern)
-            field_scores[field] = (score, reason,value)
-            if reason=='Missing' or reason=='Gibberish/symbols detected': 
-                missing_fields.append(field)
+            process_field(field,value,pattern,field_scores,missing_fields)
+            
     # Schema-level validation
     cross_issues = [] 
     cross_penalty = 0.0
@@ -216,6 +218,22 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
         "pass": pass_flag,
         "all_fields":flat_fields
     }
+
+def process_field(field, value, pattern, field_scores, missing_fields):
+    def handle_score(subkey, val, pat):
+        score, reason = score_field(val, pat)
+        field_scores[subkey] = (score, reason, val)
+        if reason in ('Missing', 'Gibberish/symbols detected'):
+            missing_fields.append(subkey)
+
+    if isinstance(value, dict):
+        for key, subfield_value in value.items():
+            subfield_key = f'{field}/{key}'
+            subfield_pattern = pattern.get(key, None)
+            if subfield_pattern is not None:
+                handle_score(subfield_key, subfield_value, subfield_pattern)
+    else:
+        handle_score(field, value, pattern)
 
 
 def get_nested_value(field_path: str, data: dict):

@@ -192,18 +192,54 @@ general_rules = {
     },
     DocumentType.brasil_health_certificate:{
          "required_fields": {
-                   "certificate_number":r"^.+$",  # Non-empty string,
-                    "exporter":r"^.+$",  # Non-empty string,,
-                    "consignee":r"^.+$",  # Non-empty string,,
-                    "country_of_origin":r"^.+$",  # Non-empty string,,
-                    "country_of_destination":r"^.+$",  # Non-empty string,,
-                    "date_of_issue":r"^.+$",  # Non-empty string,,
-                    "product_description":r"^.+$",  # Non-empty string,,
-                    "quantity": r"^[1-9]\d*$",  # Integer > 0,
-                    "ministry_authority":r"^.+$",  # Non-empty string,,
-                    "signature_and_stamp":r"^.+$",  # Non-empty string,
-         }
-
+                
+                "template.document_properties.required_fields[].field": r"^.+$", # Non-empty string
+                "template.document_properties.required_fields[].type": r"^.+$",  # Non-empty string
+                "template.document_properties.required_fields[].position.page": r"^\d+$",   # Integer
+                "template.document_properties.required_fields[].position.y1": r"^\d+(\.\d+)?$", # Decimal
+                "template.document_properties.required_fields[].position.y2": r"^\d+(\.\d+)?$", # Decimal
+                "template.tables.product_details.columns[]": r"^.+$",  # Each column name as non-empty string
+                "template.tables.product_details.validation_rules.<key>": r"^.+$"  # Any key must have a rule string
+        }
+    },
+    DocumentType.brasil_master_bill_of_lading:{
+         "required_fields": {
+            "bill_of_lading_no": r"^.+$",                    # non-empty string
+            "shipper": r"^.+$",                              # non-empty string
+            "consignee": r"^.+$",                            # non-empty string
+            "notify_parties": r"^.+$",                        # non-empty string
+            "vessel_and_voyage_no": r"^.+$",                  # non-empty string
+            "port_of_loading": r"^.+$",                        # non-empty string
+            "port_of_discharge": r"^.+$",                      # non-empty string
+            "container_numbers": r"^.+$",                      # string inside array, each item non-empty
+            "description_of_packages_and_goods": r"^.+$",     # non-empty string
+            "gross_cargo_weight": r"^[\d.,\s]+$",              # numbers, dots, commas, spaces (e.g. "17,012.50")
+            "total_items": r"^\d+$",                            # integer (digits only)
+            "total_gross_weight": r"^[\d.,\s]+$",              # numbers, dots, commas, spaces
+            "net_weight": r"^[\d.,\s]+$",                       # numbers, dots, commas, spaces
+            "gross_weight": r"^[\d.,\s]+$",                     # numbers, dots, commas, spaces
+            "shipped_on_board_date": r"^\d{4}-\d{2}-\d{2}$",   # date YYYY-MM-DD
+            "freight_charges": {
+                "rate": r"^[\d.,\s]+$",                           # numbers, dots, commas, spaces
+                "prepaid": r"^.+$",                               # non-empty string
+                "collect": r"^.+$",                               # non-empty string
+                "terminal_handling_charge": r"^[\d.,\s]+$"        # numbers, dots, commas, spaces
+            },
+            "place_and_date_of_issue": r"^.+$",                 # non-empty string
+            "container_cargo_table[].container_numbers": r"^.+$",
+            "container_cargo_table[].seal_numbers": r"^.+$",
+            "container_cargo_table[].marks_and_numbers": r"^.+$",
+            "container_cargo_table[].description_of_packages_and_goods": r"^.+$",
+            "container_cargo_table[].gross_cargo_weight": r"^[\d.,\s]+$",
+            "container_cargo_table[].measurement": r"^.+$",
+            "container_cargo_table[].net_weight": r"^[\d.,\s]+$",
+            "container_cargo_table[].gross_weight": r"^[\d.,\s]+$",
+            "container_cargo_table[].ncm": r"^.+$",
+            "container_cargo_table[].hs_code": r"^.+$",
+            "container_cargo_table[].seal_sif": r"^.+$",
+            "container_cargo_table[].temperature": r"^.+$",
+            "container_cargo_table[].ruc": r"^.+$",   
+        }
     },
     DocumentType.nop_import_certificate: {
         "required_fields": {
@@ -344,22 +380,96 @@ general_rules = {
         }
     },
     DocumentType.brasil_certificate_of_analysis: {
-    "required_fields": {
-        "loaded_date": r"^\d{4}-\d{2}-\d{2}$",             # ISO date format (YYYY-MM-DD)
-        "container_number": r"^[A-Z]{4}\d{7}$",            # Standard container number format (ABCD1234567)
-        "shipping_mark": r"^.+$",                          # Non-empty string
-        "customer": r"^.+$",                               # Non-empty string
-        "destination": r"^.+$",                            # Non-empty string
-        "contract_number": r"^.+$",                        # Non-empty string
-        "net_weight_kg": r"^\d{1,3}(\.\d{3})*,\d{2}$",                 # Positive float or integer
-		"microbiological_results[].product_code": r"^.+$",
-        "microbiological_results[].batch_lot": r"^.+$",
-        "microbiological_results[].result_ecoli_o157_h7": r"^.+$",
-        "microbiological_results[].result_salmonella": r"^.+$"
-		
+        "required_fields": {
+            "loaded_date": r"^\d{4}-\d{2}-\d{2}$",             # ISO date format (YYYY-MM-DD)
+            "container_number": r"^[A-Z]{4}\d{7}$",            # Standard container number format (ABCD1234567)
+            "shipping_mark": r"^.+$",                          # Non-empty string
+            "customer": r"^.+$",                               # Non-empty string
+            "destination": r"^.+$",                            # Non-empty string
+            "contract_number": r"^.+$",                        # Non-empty string
+            "net_weight_kg": r"^\d{1,3}(\.\d{3})*,\d{2}$",                 # Positive float or integer
+            "microbiological_results[].product_code": r"^.+$",
+            "microbiological_results[].batch_lot": r"^.+$",
+            "microbiological_results[].result_ecoli_o157_h7": r"^.+$",
+            "microbiological_results[].result_salmonella": r"^.+$"		
         }
     },
-        DocumentType.air_waybill: {
+    DocumentType.brasil_commercial_invoice: {
+        "required_fields": {
+           "document_type": r"^.+$",
+            "issuing_country": r"^.+$",
+            "fields.invoice_number": r"^.+$",
+            "fields.invoice_date": r"^\d{4}-\d{2}-\d{2}$",
+            "fields.importer_details": r"^.+$",
+            "fields.ocean_vessel": r"^.+$",
+            "fields.port_of_loading": r"^.+$",
+            "fields.port_of_discharge": r"^.+$",
+            "fields.payment_terms": r"^.+$",
+            "fields.importer_ref": r"^.+$",
+            "fields.shipping_mark": r"^.+$",
+            "fields.signer_cpf": r"^.+$",
+
+            "tables.line_items[].description_of_goods": r"^.+$",
+            "tables.line_items[].net_weight_kgs": r"^\d+(\.\d+)?$",
+            "tables.line_items[].unit_price_usd_per_kgs": r"^\d+(\.\d+)?$",
+            "tables.line_items[].amount_usd": r"^\d+(\.\d+)?$",
+
+            "tables.totals[].description": r"^.+$",
+            "tables.totals[].currency": r"^[A-Z]{3}$",  # e.g., USD, BRL
+            "tables.totals[].amount": r"^\d+(\.\d+)?$",
+
+            "tables.container_details[].container_id": r"^.+$",
+            "tables.container_details[].net_weight_details": r"^.+$",
+            "tables.container_details[].gross_weight_details": r"^.+$",
+            "tables.container_details[].carton_count": r"^\d+$",
+
+            "banking_details.intermediary_bank": r"^.+$",
+            "banking_details.intermediary_aba": r"^.+$",
+            "banking_details.intermediary_swift": r"^[A-Z0-9]{8,11}$",
+            "banking_details.beneficiary_bank": r"^.+$",
+            "banking_details.beneficiary_bank_address": r"^.+$",
+            "banking_details.beneficiary_swift": r"^[A-Z0-9]{8,11}$",
+            "banking_details.beneficiary_account_number": r"^.+$",
+            "banking_details.beneficiary_name": r"^.+$"
+        }
+    },
+    DocumentType.brasil_certificate_of_origin: {
+        "required_fields": {
+            "document_type": r"^.+$",  # string
+            "issuing_country": r"^.+$",  # string
+            "fields.certificate_number": r"^.+$",  # string
+            "fields.exporter": r"^.+$",  # string
+            "fields.importer": r"^.+$",  # string
+            "fields.importer_ref": r"^.+$",  # string
+            "fields.shipping_mark": r"^.+$",  # string
+            "fields.vessel": r"^.+$",  # string
+            "fields.shipment_port": r"^.+$",  # string
+            "fields.destination": r"^.+$",  # string
+            "fields.total_net_weight_kgs_summary": r"^\d+(\.\d+)?$",  # number
+            "fields.total_gross_weight_kgs_summary": r"^\d+(\.\d+)?$",  # number
+            "fields.total_cartons_summary": r"^\d+$",  # integer
+            "fields.container_id_summary": r"^.+$",  # string
+            "fields.total_weight": r"^\d+(\.\d+)?$",  # number
+            "fields.signer_cpf": r"^.+$",  # string
+            "fields.issue_date": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format
+            "fields.issue_location": r"^.+$",  # string
+            "tables.goods_description[].cartons": r"^\d+$",  # integer
+            "tables.goods_description[].description": r"^.+$",  # string
+            "tables.goods_description[].net_weight_kgs": r"^\d+(\.\d+)?$",  # number
+            "tables.container_details[].container_id": r"^.+$",  # string
+            "tables.container_details[].net_weight_kgs": r"^\d+(\.\d+)?$",  # number
+            "tables.container_details[].gross_weight_kgs": r"^\d+(\.\d+)?$",  # number
+            "tables.container_details[].cartons": r"^\d+$"  # integer
+        }
+    },
+    DocumentType.brasil_certificate_of_origin: {
+        "required_fields": {
+             "document_type": r"^.+$",
+            "issuing_country": r"^.+$",
+            "fields.certificate_number": r"^.+$",
+        }
+    },
+    DocumentType.air_waybill: {
         "required_fields": ["mawb", "hawb", "gross_weight", "shipper"],
         "dangerous_goods": {
             "un_number_format": r"^UN\d{4}$",
