@@ -34,27 +34,28 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
     result_scores: Any = ""
     try:
         file_bytes = await  file.read()
-        filename = file.filename
+        if file.filename:
+            file_name = file.filename
         validate_file_type(str(file.filename), str(file.content_type))
         validate_file_size(file_bytes)
-        content_type = str(file.content_type)        
-        file_name = f"{upload_file_id}-{filename}"        
+        content_type = str(file.content_type)
+        file_name_uuid:str = f"{upload_file_id}-{file_name}"        
         #ocrResult = process_mistral_ocr(file_bytes,content_type) 
         ocrResult = process_azurevision_ocr(file_bytes)
         ocr_text = ocrResult['ocr_text']
         doc_type_code,score = match_template(file_bytes,ocr_text,countryId)        
         if doc_type_code is None:
-            raise ValidationError(errors=f"Document is not supported {filename}")     
+            raise ValidationError(errors=f"Document is not supported {file_name}")     
 
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI(doc_type, ocr_text)  
 
-        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules)
+        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name)
 
         if countryId == Country.brasil and doc_type==DocumentType.brasil_commercial_invoice:
           result_scores =  check_if_contains_beef(result_scores)
 
-        # blob_path = f"{settings.cargologik_tenant}/{doc_type}/{file_name}"
+        # blob_path = f"{settings.cargologik_tenant}/{doc_type}/{file_name_uuid}"
         # blob_url_saved = save_file_blob_storage(file_bytes,"docmanagement",blob_path,settings.azure_storage_endpoint_cargologik)
 
         # container_client = get_container(settings.cosmos_endpoint_cl,settings.cosmos_key_cl,settings.cosmos_database_cl,settings.cosmos_container_doc_management_cl)        

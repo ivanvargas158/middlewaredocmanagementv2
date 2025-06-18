@@ -160,7 +160,7 @@ def score_field(value: Union[str, int, float, Decimal, date], pattern: str) -> T
     return 0.5, "Format mismatch"
 
 # --- Main Document Validation ---
-def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_set:RuleSet, threshold=0.95)-> Dict[str, Any]:
+def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_set:RuleSet,file_name:str, threshold=0.95)-> Dict[str, Any]:
   
     rules = get_validation_rules(doc_type, rule_set)
     required_fields = rules.get("required_fields", [])
@@ -216,7 +216,8 @@ def validate_document(flat_fields: Dict[str, str], doc_type:DocumentType,rule_se
         "doc_confidence": doc_confidence,
         "missing_fields": missing_fields,        
         "pass": pass_flag,
-        "all_fields":flat_fields
+        "all_fields":flat_fields,
+        "file_name": file_name
     }
 
 def process_field(field, value, pattern, field_scores, missing_fields):

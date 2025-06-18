@@ -20,7 +20,7 @@ def save_doc_type_template(document_id: str, doc_type: str, version: str,
         cursor.close()    
             
 @functools.cache
-def get_templates(countryid:int) -> List[Tuple[str, ...]]:
+def get_templates(countryid:int) -> List[Tuple[str, str, str,str, bool]]:
     with database() as db_connection:
         cursor = db_connection.cursor()
         cursor.execute("""
