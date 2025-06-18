@@ -31,6 +31,11 @@ class Settings(BaseSettings):
     Openai_Api_Key_ContextUser: str =  Field(validation_alias="Openai_API_Key")
     Openai_Base_Model_ContextUser: str = "gpt-4.1-mini"
 
+    # --- AZURE OPEN AI -----
+    
+    Azure_Openai_Api_Key: str =  Field(validation_alias="Azure_Openai_API_Key")
+    Azure_Openai_Base_Model: str = "text-embedding-ada-002"
+    Azure_Openai_Url:str = "https://jsonembedding.openai.azure.com/"
     
     # -- Azure Vision
     
