@@ -486,6 +486,29 @@ general_rules = {
             "tables.container_details[].cartons": r"^\d+$"  # integer
         }
     },
+    DocumentType.brasil_packing_list: {
+        "required_fields": {
+            "document_type": r"^.+$",  
+            "issuing_country": r"^.+$",  
+            "fields.packing_list_number": r"^.+$",
+            "fields.packing_list_date": r"^.+$",
+            "fields.importer_details": r"^.+$",
+            "fields.ocean_vessel": r"^.+$",
+            "fields.port_of_loading": r"^.+$",
+            "fields.port_of_discharge": r"^.+$",
+            "fields.importer_ref": r"^.+$",
+            "fields.shipping_mark": r"^.+$",
+            "fields.signer_cpf": r"^.+$",
+            "tables.line_items[].description_of_goods": r"^.+$",
+            "tables.line_items[].net_weight_kgs": r"^.+$",
+            "tables.line_items[].gross_weight_kgs": r"^.+$",
+            "tables.line_items[].cartons": r"^.+$",
+            "tables.container_summary[].container_id": r"^.+$",
+            "tables.container_summary[].net_weight_kgs": r"^.+$",
+            "tables.container_summary[].gross_weight_kgs": r"^.+$",
+            "tables.container_summary[].cartons": r"^.+$"
+        }
+    },
     DocumentType.air_waybill: {
         "required_fields": ["mawb", "hawb", "gross_weight", "shipper"],
         "dangerous_goods": {
