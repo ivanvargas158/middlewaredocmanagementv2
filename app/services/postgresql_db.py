@@ -24,7 +24,7 @@ def get_templates(countryid:int) -> List[Tuple[str, ...]]:
     with database() as db_connection:
         cursor = db_connection.cursor()
         cursor.execute("""
-            SELECT id, doc_type, doc_text, doc_type_code FROM public.doc_type_template where country_id = %s
+            SELECT id, doc_type, doc_text, doc_type_code,is_requiered FROM public.doc_type_template where country_id = %s
         """,
           (countryid,)
         )

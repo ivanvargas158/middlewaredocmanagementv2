@@ -11,5 +11,5 @@ settings = get_settings()
 @router.get("/list-documents", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def list_documents(countryId:int=3, api_key: str = Depends(get_api_key)):
     list_templates_db: list[Tuple[str, ...]]  = get_templates(countryId)
-    return [(item[0], item[3]) for item in list_templates_db if len(item) > 2]
+    return [(item[0], item[1],item[3],item[4]) for item in list_templates_db if len(item) > 2]
 
