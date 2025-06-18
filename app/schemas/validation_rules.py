@@ -486,13 +486,6 @@ general_rules = {
             "tables.container_details[].cartons": r"^\d+$"  # integer
         }
     },
-    DocumentType.brasil_certificate_of_origin: {
-        "required_fields": {
-             "document_type": r"^.+$",
-            "issuing_country": r"^.+$",
-            "fields.certificate_number": r"^.+$",
-        }
-    },
     DocumentType.air_waybill: {
         "required_fields": ["mawb", "hawb", "gross_weight", "shipper"],
         "dangerous_goods": {

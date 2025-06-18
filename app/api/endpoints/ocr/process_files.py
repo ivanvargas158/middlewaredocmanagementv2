@@ -87,8 +87,8 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail= exc.args ,
                 )
-    # finally:
-    #     save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
+    finally:
+        save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
 @router.post("/upload_freight_invoice", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',api_key: str = Depends(get_api_key)):    
@@ -112,7 +112,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         if content_type=='application/pdf':
             input_stream = BytesIO(file_bytes)
             pdf_reader = PdfReader(input_stream)
-            if len(pdf_reader.pages)>0:
+            if len(pdf_reader.pages)>1:
                 list_pages: List[Tuple[str | None, float, bytes, str]] = []
                 list_pages = split_pdf(file_bytes,tenantId)
                 doc_found = next((item for item in list_pages if item[0] == DocumentType.abf_freight_invoice), None)

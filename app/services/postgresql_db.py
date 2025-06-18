@@ -33,13 +33,13 @@ def get_templates(countryid:int) -> List[Tuple[str, ...]]:
         return rows
     
 
-def save_doc_logs(upload_file_id: str, file_name:str,is_processed:bool,doc_type: str,content:str,country_id:str,load_id=None):
+def save_doc_logs(upload_file_id: str, file_name:str,is_processed:bool,doc_type: str,content:str,p_tenant_id:str,load_id=None):
     current_date = get_est_time()
     with database() as db_connection:            
         cursor = db_connection.cursor()        
         cursor.execute("""
             CALL public.insert_doc_log(%s, %s, %s, %s, %s,%s,%s)
-        """, (upload_file_id,file_name, is_processed,doc_type, content,country_id,load_id))        
+        """, (upload_file_id,file_name, is_processed,doc_type, content,p_tenant_id,load_id))        
         db_connection.commit()
         cursor.close()   
 
