@@ -10,25 +10,18 @@
     "issuing_country": {
       "type": "string"
     },
-    "fields": {
-      "type": "object",
-      "properties": {
-        "invoice_number": { "type": "string" },
-        "invoice_date": { "type": "string", "format": "date" },
-        "importer_details": { "type": "string" },
-        "ocean_vessel": { "type": "string" },
-        "port_of_loading": { "type": "string" },
-        "port_of_discharge": { "type": "string" },
-        "payment_terms": { "type": "string" },
-        "importer_ref": { "type": "string" },
-        "shipping_mark": { "type": "string" },
-        "signer_cpf": { "type": "string" }
-      }
-    },
-    "tables": {
-      "type": "object",
-      "properties": {
-        "line_items": {
+    "invoice_number": { "type": "string" },
+    "invoice_date": { "type": "string", "format": "date" },
+    "importer_details": { "type": "string" },
+    "ocean_vessel": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "payment_terms": { "type": "string" },
+    "importer_ref": { "type": "string" },
+    "shipping_mark": { "type": "string" },
+    "signer_cpf": { "type": "string" },
+
+    "line_items": {
           "type": "array",
           "items": {
             "type": "object",
@@ -46,7 +39,7 @@
             ]
           }
         },
-        "totals": {
+    "totals": {
           "type": "array",
           "items": {
             "type": "object",
@@ -62,7 +55,7 @@
             ]
           }
         },
-        "container_details": {
+    "container_details": {
           "type": "array",
           "items": {
             "type": "object",
@@ -79,28 +72,44 @@
               "carton_count"
             ]
           }
-        }
-      }
-    },
-    "banking_details": {
-      "type": "object",
-      "properties": {
-        "intermediary_bank": { "type": "string" },
-        "intermediary_aba": { "type": "string" },
-        "intermediary_swift": { "type": "string" },
-        "beneficiary_bank": { "type": "string" },
-        "beneficiary_bank_address": { "type": "string" },
-        "beneficiary_swift": { "type": "string" },
-        "beneficiary_account_number": { "type": "string" },
-        "beneficiary_name": { "type": "string" }
-      }
-    }
+        },
+    "intermediary_bank": { "type": "string" },
+    "intermediary_aba": { "type": "string" },
+    "intermediary_swift": { "type": "string" },
+    "beneficiary_bank": { "type": "string" },
+    "beneficiary_bank_address": { "type": "string" },
+    "beneficiary_swift": { "type": "string" },
+    "beneficiary_account_number": { "type": "string" },
+    "beneficiary_name": { "type": "string" }        
   },
   "required": [
     "document_type",
     "issuing_country",
-    "fields",
-    "tables",
-    "banking_details"
+    
+    "invoice_number",
+    "invoice_date",
+    "importer_details",
+    "ocean_vessel",
+    "port_of_loading",
+    "port_of_discharge",
+    "payment_terms",
+    "importer_ref",
+    "shipping_mark",
+    "signer_cpf",
+
+
+
+    "line_items",
+    "totals",
+    "container_details",
+    
+    "intermediary_bank",
+    "intermediary_aba",
+    "intermediary_swift",
+    "beneficiary_bank",
+    ".beneficiary_bank_address",
+    "beneficiary_swift",
+    "beneficiary_account_number",
+    "beneficiary_name"
   ]
 }

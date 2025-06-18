@@ -57,7 +57,7 @@ def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min
     
         result_doc_type_code = None    
         best_score = 0    
-        for template_id,doc_type,doc_text,doc_type_code in list_templates_db:        
+        for template_id,doc_type,doc_text,doc_type_code,is_requiered in list_templates_db:        
             # Assume each template has a 'sample_text' field for comparison
             score = text_similarity(doc_text, result_ocr_text)        
             if score > best_score:            

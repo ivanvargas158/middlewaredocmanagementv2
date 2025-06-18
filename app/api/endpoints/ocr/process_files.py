@@ -13,7 +13,8 @@ from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI
 from app.services.template_manager import register_template,match_template 
 from app.services.postgresql_db import save_doc_logs
 from app.services.handle_file import validate_file_type,validate_file_size,split_pdf
-from app.schemas.general_enum import DocumentType
+from app.services.business_rule import check_if_contains_beef
+from app.schemas.general_enum import DocumentType,Country
 from app.core.settings import get_settings
 from app.core.auth import get_api_key
 from app.schemas.validation_rules import RuleSet
@@ -49,6 +50,9 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
         result_openai_keywords = extract_keywords_openAI(doc_type, ocr_text)  
 
         result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules)
+
+        if countryId == Country.brasil and doc_type==DocumentType.brasil_commercial_invoice:
+          result_scores =  check_if_contains_beef(result_scores)
 
         # blob_path = f"{settings.cargologik_tenant}/{doc_type}/{file_name}"
         # blob_url_saved = save_file_blob_storage(file_bytes,"docmanagement",blob_path,settings.azure_storage_endpoint_cargologik)
