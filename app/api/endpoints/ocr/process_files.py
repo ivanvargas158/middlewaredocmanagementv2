@@ -81,7 +81,10 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
         # is_processed = True        
         return result_scores
     except ValidationError as exc:
-        result_scores = {"error":exc.to_dict()} 
+        if hasattr(exc, "to_dict") and callable(exc.to_dict):
+            result_scores = {"error":exc.to_dict()} 
+        else:
+            result_scores = {"error": str(exc)}
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=exc.to_dict()

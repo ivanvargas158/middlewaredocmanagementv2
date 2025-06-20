@@ -17,7 +17,7 @@ from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
 from msrest.authentication import CognitiveServicesCredentials
-
+from azure.core.exceptions import HttpResponseError
 
 settings = get_settings()
 
@@ -81,50 +81,66 @@ def process_mistral_ocr(file_bytes:bytes, file_type: str) -> Dict[str, Any]:
 
 def process_azurevision_ocr(file_bytes:bytes):
 
-    computervision_client = ComputerVisionClient(settings.azurevision_endpoint, CognitiveServicesCredentials(settings.azurevision_subscription_key))
+    try:
 
-    read_response = computervision_client.read_in_stream(BytesIO(file_bytes), raw=True)
+        computervision_client = ComputerVisionClient(settings.azurevision_endpoint, CognitiveServicesCredentials(settings.azurevision_subscription_key))
 
-    if not read_response or not hasattr(read_response, "headers"):
-        raise ValidationError(errors="Azure Read API response is invalid. Check your file and credentials.")
+        read_response = computervision_client.read_in_stream(BytesIO(file_bytes), raw=True)
 
-    read_operation_location = read_response.headers["Operation-Location"]
+        if not read_response or not hasattr(read_response, "headers"):
+            raise ValidationError(errors="Azure Read API response is invalid. Check your file and credentials.")
 
-    if not read_operation_location:
-        raise ValidationError(errors="Azure Operation-Location header missing from response.")
+        read_operation_location = read_response.headers["Operation-Location"]
 
-    # Grab the ID from the URL
-    operation_id = read_operation_location.split("/")[-1]
+        if not read_operation_location:
+            raise ValidationError(errors="Azure Operation-Location header missing from response.")
 
-    # Call the "GET" API and wait for it to retrieve the results 
-    while True:
-        read_result = computervision_client.get_read_result(operation_id)  
-                  
-        if read_result.status not in ['notStarted', 'running']:
-            break
-        time.sleep(1)
+        # Grab the ID from the URL
+        operation_id = read_operation_location.split("/")[-1]
 
-    #Print the detected text, line by line
-    if read_result.status == OperationStatusCodes.succeeded:
-        extracted_text = []
-        total_confidence = 0.0
-        word_count = 0
-        for page in read_result.analyze_result.read_results:
-            for line in page.lines:
-                line_text = []
-                extracted_text.append(line.text)
-                for word in line.words:
-                    line_text.append(word.text)
-                    total_confidence += word.confidence
-                    word_count += 1
-        average_confidence = (total_confidence / word_count) if word_count > 0 else 0.0
-        return {
-            "ocr_text": "\n".join(extracted_text),
-            "ocr_confidence": round(average_confidence, 3)
-        }
+        # Call the "GET" API and wait for it to retrieve the results 
+        while True:
+            read_result = computervision_client.get_read_result(operation_id)  
+                    
+            if read_result.status not in ['notStarted', 'running']:
+                break
+            time.sleep(1)
+
+        #Print the detected text, line by line
+        if read_result.status == OperationStatusCodes.succeeded:
+            extracted_text = []
+            total_confidence = 0.0
+            word_count = 0
+            for page in read_result.analyze_result.read_results:
+                for line in page.lines:
+                    line_text = []
+                    extracted_text.append(line.text)
+                    for word in line.words:
+                        line_text.append(word.text)
+                        total_confidence += word.confidence
+                        word_count += 1
+            average_confidence = (total_confidence / word_count) if word_count > 0 else 0.0
+            return {
+                "ocr_text": "\n".join(extracted_text),
+                "ocr_confidence": round(average_confidence, 3)
+            }
+        
+        else:
+            raise ValidationError(errors="Azure OCR Failed")
+
+
+    except HttpResponseError as e:
+
+        error_message = e.message or str(e)
+        if e.response is not None and hasattr(e.response, 'text') and e.response.text:
+            error_message += f" | Response: {e.response.text}"
+        raise ValidationError(errors=f"Azure Vision API error: {error_message}")
     
-    else:
-        raise ValidationError(errors="Azure OCR Failed")
+    except Exception as ex:
+
+        raise ValidationError(errors=f"Unexpected error during Azure OCR: {str(ex)}")
+
+    
 
 
 # --- Gibberish/Symbol Detection ---

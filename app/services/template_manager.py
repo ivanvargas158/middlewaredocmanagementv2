@@ -45,15 +45,9 @@ def text_similarity(a: str, b: str) -> float:
 
 def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min_similarity=0.5) -> Tuple[str|None, float] :
     try:        
-        list_templates_db: list[Tuple[str, ...]]  = get_templates(countryId)
+        list_templates_db: list[Tuple[str, str, str, str, bool]] = get_templates(countryId)
         # fingerprint = create_hash(document_bytes) 
-        
-        # # 1. Exact hash match   
-        # result = next((item for item in list_templates_db if item[0] == fingerprint), None)
-        # if result is not None:         
-        #     return result[3],1
-
-        # 2. Fuzzy text match    
+    
     
         result_doc_type_code = None    
         best_score = 0    
