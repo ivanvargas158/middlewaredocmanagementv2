@@ -6,9 +6,6 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
 
-    enable_schema_enforcement: bool = True
-    schema_admin_key: str = "your-secure-key"
-    
     # --- API Endpoints ---
     mistral_ocr_endpoint: str = "https://api.mistral.ai/v1/ocr"
 
@@ -24,7 +21,7 @@ class Settings(BaseSettings):
     
     # --- Mistral
 
-    mstral_api_Key: str = "VIJDVhgvEI7jBEFuwZFxXxyIHjTL7mA8"
+    mstral_api_Key: str = Field(validation_alias="mstral_api_Key")
     mistral_ocr_model: str = "mistral-ocr-latest"
 
     # --- OPEN AI -----
@@ -39,18 +36,18 @@ class Settings(BaseSettings):
     
     # -- Azure Vision
     
-    azurevision_subscription_key:str = 'C0Dy78AegncXMpXGloMEcvFrQyeSPNNW5AGIqXLzJ1PcIgM9kRP2JQQJ99BAACYeBjFXJ3w3AAAFACOGYLc8'
+    azurevision_subscription_key:str = Field(validation_alias="azurevision_subscription_key")
     azurevision_endpoint:str = 'https://enhancevisionapi.cognitiveservices.azure.com/'
 
     # --- CosmosDB - Configuration ---
     cosmos_endpoint_cl: str = "https://synapsevue-cosmosdb.documents.azure.com:443/"
-    cosmos_key_cl: str = "QJrtOoalYvYVRh8EfYjH90nS9v6hnRJffndCSCGJXgwUI30LvqVTFSKA5iExEpbN0ecnB7d92zOnACDb1Uqn1w=="
+    cosmos_key_cl: str =  Field(validation_alias="cosmos_key_cl")
     cosmos_database_cl: str = "synapsevueAI"
     cosmos_container_contextual_recall_cl: str = "emailagent_memory"
     cosmos_container_doc_management_cl: str = "doc_management"
 
     cosmos_endpoint_providence: str = "https://providence-cosmosdb.documents.azure.com:443/"
-    cosmos_key_providence: str = "VzollXNh63RGErEbnRzUgOjomOwYidK33EmkDTfnQy03a47Z4GLcCP7dued9zdocE7izvMkVTfxhACDblkyXBw=="
+    cosmos_key_providence: str = Field(validation_alias="cosmos_key_providence")
     cosmos_database_providence: str = "DataSync.cosmos"
     cosmos_container_providence: str = "FreightInvoice"
 
