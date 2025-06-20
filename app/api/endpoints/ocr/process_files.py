@@ -138,7 +138,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI_freight_invoice(doc_type, ocr_text)  
 
-        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules)
+        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name)
 
         # blob_path = f"Load/{loadId}/processed_invoices/{file_name}"
         # blob_url_saved = save_file_blob_storage(file_bytes,"linkt",blob_path,settings.azure_storage_endpoint_providence)
