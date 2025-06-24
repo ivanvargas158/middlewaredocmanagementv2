@@ -420,7 +420,6 @@ general_rules = {
     },
     DocumentType.brasil_commercial_invoice: {
         "required_fields": {
-            "document_type": r"^.+$",
             "issuing_country": r"^.+$",
             "invoice_number": r"^.+$",
             "invoice_date": r"^\d{4}-\d{2}-\d{2}$",
@@ -459,54 +458,52 @@ general_rules = {
     },
     DocumentType.brasil_certificate_of_origin: {
         "required_fields": {
-            "document_type": r"^.+$",  # string
             "issuing_country": r"^.+$",  # string
-            "fields.certificate_number": r"^.+$",  # string
-            "fields.exporter": r"^.+$",  # string
-            "fields.importer": r"^.+$",  # string
-            "fields.importer_ref": r"^.+$",  # string
-            "fields.shipping_mark": r"^.+$",  # string
-            "fields.vessel": r"^.+$",  # string
-            "fields.shipment_port": r"^.+$",  # string
-            "fields.destination": r"^.+$",  # string
-            "fields.total_net_weight_kgs_summary": r"^\d+(\.\d+)?$",  # number
-            "fields.total_gross_weight_kgs_summary": r"^\d+(\.\d+)?$",  # number
-            "fields.total_cartons_summary": r"^\d+$",  # integer
-            "fields.container_id_summary": r"^.+$",  # string
-            "fields.total_weight": r"^\d+(\.\d+)?$",  # number
-            "fields.signer_cpf": r"^.+$",  # string
-            "fields.issue_date": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format
-            "fields.issue_location": r"^.+$",  # string
-            "tables.goods_description[].cartons": r"^\d+$",  # integer
-            "tables.goods_description[].description": r"^.+$",  # string
-            "tables.goods_description[].net_weight_kgs": r"^\d+(\.\d+)?$",  # number
-            "tables.container_details[].container_id": r"^.+$",  # string
-            "tables.container_details[].net_weight_kgs": r"^\d+(\.\d+)?$",  # number
-            "tables.container_details[].gross_weight_kgs": r"^\d+(\.\d+)?$",  # number
-            "tables.container_details[].cartons": r"^\d+$"  # integer
+            "certificate_number": r"^.+$",  # string
+            "exporter": r"^.+$",  # string
+            "importer": r"^.+$",  # string
+            "importer_ref": r"^.+$",  # string
+            "shipping_mark": r"^.+$",  # string
+            "vessel": r"^.+$",  # string
+            "shipment_port": r"^.+$",  # string
+            "destination": r"^.+$",  # string
+            "total_net_weight_kgs_summary": r"^\d+(\.\d+)?$",  # number
+            "total_gross_weight_kgs_summary": r"^\d+(\.\d+)?$",  # number
+            "total_cartons_summary": r"^\d+$",  # integer
+            "container_id_summary": r"^.+$",  # string
+            "total_weight": r"^\d+(\.\d+)?$",  # number
+            "signer_cpf": r"^.+$",  # string
+            "issue_date": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format
+            "issue_location": r"^.+$",  # string
+            "goods_description[].cartons": r"^\d+$",  # integer
+            "goods_description[].description": r"^.+$",  # string
+            "goods_description[].net_weight_kgs": r"^\d+(\.\d+)?$",  # number
+            "container_details[].container_id": r"^.+$",  # string
+            "container_details[].net_weight_kgs": r"^\d+(\.\d+)?$",  # number
+            "container_details[].gross_weight_kgs": r"^\d+(\.\d+)?$",  # number
+            "container_details[].cartons": r"^\d+$"  # integer
         }
     },
     DocumentType.brasil_packing_list: {
-        "required_fields": {
-            "document_type": r"^.+$",  
+        "required_fields": {  
             "issuing_country": r"^.+$",  
-            "fields.packing_list_number": r"^.+$",
-            "fields.packing_list_date": r"^.+$",
-            "fields.importer_details": r"^.+$",
-            "fields.ocean_vessel": r"^.+$",
-            "fields.port_of_loading": r"^.+$",
-            "fields.port_of_discharge": r"^.+$",
-            "fields.importer_ref": r"^.+$",
-            "fields.shipping_mark": r"^.+$",
-            "fields.signer_cpf": r"^.+$",
-            "tables.line_items[].description_of_goods": r"^.+$",
-            "tables.line_items[].net_weight_kgs": r"^.+$",
-            "tables.line_items[].gross_weight_kgs": r"^.+$",
-            "tables.line_items[].cartons": r"^.+$",
-            "tables.container_summary[].container_id": r"^.+$",
-            "tables.container_summary[].net_weight_kgs": r"^.+$",
-            "tables.container_summary[].gross_weight_kgs": r"^.+$",
-            "tables.container_summary[].cartons": r"^.+$"
+            "packing_list_number": r"^.+$",
+            "packing_list_date": r"^.+$",
+            "importer_details": r"^.+$",
+            "ocean_vessel": r"^.+$",
+            "port_of_loading": r"^.+$",
+            "port_of_discharge": r"^.+$",
+            "importer_ref": r"^.+$",
+            "shipping_mark": r"^.+$",
+            "signer_cpf": r"^.+$",
+            "line_items[].description_of_goods": r"^.+$",
+            "line_items[].net_weight_kgs": r"^.+$",
+            "line_items[].gross_weight_kgs": r"^.+$",
+            "line_items[].cartons": r"^.+$",
+            "container_summary[].container_id": r"^.+$",
+            "container_summary[].net_weight_kgs": r"^.+$",
+            "container_summary[].gross_weight_kgs": r"^.+$",
+            "container_summary[].cartons": r"^.+$"
         }
     },
     DocumentType.air_waybill: {

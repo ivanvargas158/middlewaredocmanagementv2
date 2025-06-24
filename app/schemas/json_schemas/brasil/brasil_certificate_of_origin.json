@@ -4,37 +4,27 @@
   "description": "A simplified JSON schema for the extracted data from a Brasil Certificate of Origin, structured with simple field types and table arrays.",
   "type": "object",
   "properties": {
-    "document_type": {
-      "type": "string"
-    },
     "issuing_country": {
       "type": "string"
     },
-    "fields": {
-      "type": "object",
-      "properties": {
-        "certificate_number": { "type": "string" },
-        "exporter": { "type": "string" },
-        "importer": { "type": "string" },
-        "importer_ref": { "type": "string" },
-        "shipping_mark": { "type": "string" },
-        "vessel": { "type": "string" },
-        "shipment_port": { "type": "string" },
-        "destination": { "type": "string" },
-        "total_net_weight_kgs_summary": { "type": "number" },
-        "total_gross_weight_kgs_summary": { "type": "number" },
-        "total_cartons_summary": { "type": "integer" },
-        "container_id_summary": { "type": "string" },
-        "total_weight": { "type": "number" },
-        "signer_cpf": { "type": "string" },
-        "issue_date": { "type": "string", "format": "date" },
-        "issue_location": { "type": "string" }
-      }
-    },
-    "tables": {
-      "type": "object",
-      "properties": {
-        "goods_description": {
+    "certificate_number": { "type": "string" },
+    "exporter": { "type": "string" },
+    "importer": { "type": "string" },
+    "importer_ref": { "type": "string" },
+    "shipping_mark": { "type": "string" },
+    "vessel": { "type": "string" },
+    "shipment_port": { "type": "string" },
+    "destination": { "type": "string" },
+    "total_net_weight_kgs_summary": { "type": "number" },
+    "total_gross_weight_kgs_summary": { "type": "number" },
+    "total_cartons_summary": { "type": "integer" },
+    "container_id_summary": { "type": "string" },
+    "total_weight": { "type": "number" },
+    "signer_cpf": { "type": "string" },
+    "issue_date": { "type": "string", "format": "date" },
+    "issue_location": { "type": "string" },
+    
+    "goods_description": {
           "type": "array",
           "items": {
             "type": "object",
@@ -49,8 +39,8 @@
               "net_weight_kgs"
             ]
           }
-        },
-        "container_details": {
+      },
+    "container_details": {
           "type": "array",
           "items": {
             "type": "object",
@@ -66,15 +56,28 @@
               "gross_weight_kgs",
               "cartons"
             ]
-          }
-        }
-      }
-    }
+          }    
+        }   
   },
   "required": [
-    "document_type",
-    "issuing_country",
-    "fields",
-    "tables"
+    "issuing_country",    
+    "certificate_number",
+    "exporter",
+    "importer",
+    "importer_ref",
+    "shipping_mark",
+    "vessel",
+    "shipment_port",
+    "destination",
+    "total_net_weight_kgs_summary",
+    "total_gross_weight_kgs_summary",
+    "total_cartons_summary",
+    "container_id_summary",
+    "total_weight",
+    "signer_cpf",
+    "issue_date",
+    "issue_location",
+    "goods_description",
+    "container_details"
   ]
 }

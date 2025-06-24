@@ -20,6 +20,7 @@ schema_files = {
     DocumentType.brasil_commercial_invoice: "brasil_commercial_invoice.json",
     DocumentType.brasil_packing_list: "brasil_packing_list.json",
     DocumentType.brasil_certificate_of_origin: "brasil_certificate_of_origin.json",
+    DocumentType.brasil_master: "brasil_master.json",
     DocumentType.abf_freight_invoice: "abf_invoice.json"
 }
 

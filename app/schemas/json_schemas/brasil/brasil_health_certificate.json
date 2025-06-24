@@ -55,7 +55,7 @@
           ]
         },
         "required": [
-             "exporter" ,
+            "exporter" ,
             "certificate_number" ,
             "competent_authority" ,
             "local_competent_authority" ,

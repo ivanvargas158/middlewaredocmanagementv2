@@ -4,9 +4,6 @@
   "description": "A simplified JSON schema for the extracted data from a Brasil Commercial Invoice, structured with simple field types and table arrays.",
   "type": "object",
   "properties": {
-    "document_type": {
-      "type": "string"
-    },
     "issuing_country": {
       "type": "string"
     },
@@ -83,9 +80,7 @@
     "beneficiary_name": { "type": "string" }        
   },
   "required": [
-    "document_type",
-    "issuing_country",
-    
+    "issuing_country",    
     "invoice_number",
     "invoice_date",
     "importer_details",

@@ -43,14 +43,14 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
         #ocrResult = process_mistral_ocr(file_bytes,content_type) 
         ocrResult = process_azurevision_ocr(file_bytes)
         ocr_text = ocrResult['ocr_text']
-        doc_type_code,score = match_template(file_bytes,ocr_text,countryId)        
+        doc_type_code,score,doc_type_name = match_template(file_bytes,ocr_text,countryId)        
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {file_name}")     
 
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI(doc_type, ocr_text)  
 
-        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name)
+        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name,str(doc_type_name))
 
         if countryId == Country.brasil and doc_type==DocumentType.brasil_commercial_invoice:
           result_scores =  check_if_contains_beef(result_scores)
@@ -114,6 +114,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
         content_type = str(file.content_type) #'application/pdf'       
         file_name = f"{upload_file_id}-{filename}"
         doc_type_code:str|None = None
+        doc_type_name:str|None = None
         score:float=0
         ocr_text:str=''
         ocrResult:Any
@@ -130,18 +131,18 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
             else:
                 ocrResult = process_azurevision_ocr(file_bytes)              
                 ocr_text = ocrResult['ocr_text']
-                doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)    
+                doc_type_code,score,doc_type_name = match_template(file_bytes,ocr_text,tenantId)    
         else:            
             ocrResult = process_azurevision_ocr(file_bytes)              
             ocr_text = ocrResult['ocr_text']
-            doc_type_code,score = match_template(file_bytes,ocr_text,tenantId)
+            doc_type_code,score,doc_type_name = match_template(file_bytes,ocr_text,tenantId)
 
         if doc_type_code is None:
             raise ValidationError(errors=f"Document is not supported {filename}")
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI_freight_invoice(doc_type, ocr_text)  
 
-        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name)
+        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name,str(doc_type_name))
 
         # blob_path = f"Load/{loadId}/processed_invoices/{file_name}"
         # blob_url_saved = save_file_blob_storage(file_bytes,"linkt",blob_path,settings.azure_storage_endpoint_providence)
@@ -212,7 +213,7 @@ async def get_text(file: UploadFile = File(...),api_key: str = Depends(get_api_k
 
         ocr_text = ocrResult['ocr_text']
 
-        doc_type_code,score = match_template(file_bytes,ocr_text,2)
+        doc_type_code,score,doc_type_name = match_template(file_bytes,ocr_text,2)
 
         return {"ocr_text":ocrResult['ocr_text'],"score":score}
 

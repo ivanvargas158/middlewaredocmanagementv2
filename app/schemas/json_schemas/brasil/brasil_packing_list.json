@@ -4,30 +4,19 @@
   "description": "A simplified JSON schema for the extracted data from a Brasil Packing List, structured with simple field types and table arrays.",
   "type": "object",
   "properties": {
-    "document_type": {
-      "type": "string"
-    },
     "issuing_country": {
       "type": "string"
     },
-    "fields": {
-      "type": "object",
-      "properties": {
-        "packing_list_number": { "type": "string" },
-        "packing_list_date": { "type": "string", "format": "date" },
-        "importer_details": { "type": "string" },
-        "ocean_vessel": { "type": "string" },
-        "port_of_loading": { "type": "string" },
-        "port_of_discharge": { "type": "string" },
-        "importer_ref": { "type": "string" },
-        "shipping_mark": { "type": "string" },
-        "signer_cpf": { "type": "string" }
-      }
-    },
-    "tables": {
-      "type": "object",
-      "properties": {
-        "line_items": {
+    "packing_list_number": { "type": "string" },
+    "packing_list_date": { "type": "string", "format": "date" },
+    "importer_details": { "type": "string" },
+    "ocean_vessel": { "type": "string" },
+    "port_of_loading": { "type": "string" },
+    "port_of_discharge": { "type": "string" },
+    "importer_ref": { "type": "string" },
+    "shipping_mark": { "type": "string" },
+    "signer_cpf": { "type": "string" },
+    "line_items": {
           "type": "array",
           "items": {
             "type": "object",
@@ -45,7 +34,7 @@
             ]
           }
         },
-        "container_summary": {
+    "container_summary": {
           "type": "array",
           "items": {
             "type": "object",
@@ -62,14 +51,20 @@
               "cartons"
             ]
           }
-        }
-      }
-    }
+        }   
   },
   "required": [
-    "document_type",
     "issuing_country",
-    "fields",
-    "tables"
+    "packing_list_number",
+    "packing_list_date",
+    "importer_details",
+    "ocean_vessel",
+    "port_of_loading",
+    "port_of_discharge",
+    "importer_ref",
+    "shipping_mark",
+    "signer_cpf",
+    "line_items",
+    "container_summary"
   ]
 }

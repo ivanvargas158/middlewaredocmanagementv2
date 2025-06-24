@@ -20,6 +20,7 @@ class DocumentType(str, Enum):
     brasil_commercial_invoice = "brasil_commercial_invoice"
     brasil_packing_list = "brasil_packing_list"
     brasil_certificate_of_origin = "brasil_certificate_of_origin"
+    brasil_master  = "brasil_master"
     abf_freight_invoice  = "abf_freight_invoice"
 
 class Country(int, Enum):
