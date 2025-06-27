@@ -10,7 +10,6 @@ from io import BytesIO
 from datetime import date
 from decimal import Decimal
 from app.core.settings import get_settings
-from app.utils.custom_exceptions import ValidationError
 from app.schemas.validation_rules import get_validation_rules,RuleSet
 from app.schemas.general_enum import DocumentType
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
@@ -18,6 +17,10 @@ from azure.cognitiveservices.vision.computervision.models import OperationStatus
 from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
 from msrest.authentication import CognitiveServicesCredentials
 from azure.core.exceptions import HttpResponseError
+from fastapi import HTTPException
+import logging
+
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
@@ -26,57 +29,56 @@ def file_to_base64(file_bytes) -> str:
     return encoded_bytes.decode("utf-8")
 
 def process_mistral_ocr(file_bytes:bytes, file_type: str) -> Dict[str, Any]:
-    try:
-        ocr_applied:str = "mistral"
-        mistral_client = Mistral(api_key=settings.mstral_api_Key)
-        base64_data = file_to_base64(file_bytes)
-        file_type_key = 'pdf' if file_type == 'application/pdf' else 'image'        
-        if file_type_key == 'pdf':
-           ocr_response = mistral_client.ocr.process(
-                model=settings.mistral_ocr_model,
-                document={
-                    "type": "document_url",
-                    "document_url": f"data:{file_type};base64,{base64_data}" 
-                }
-            )
-        else:
-            ocr_response = mistral_client.ocr.process(
-                model=settings.mistral_ocr_model,
-                document={
-                    "type": "image_url",
-                    "image_url": f"data:{file_type};base64,{base64_data}" 
-                }
-            )                     
+     
+    ocr_applied:str = "mistral"
+    mistral_client = Mistral(api_key=settings.mstral_api_Key)
+    base64_data = file_to_base64(file_bytes)
+    file_type_key = 'pdf' if file_type == 'application/pdf' else 'image'        
+    if file_type_key == 'pdf':
+        ocr_response = mistral_client.ocr.process(
+            model=settings.mistral_ocr_model,
+            document={
+                "type": "document_url",
+                "document_url": f"data:{file_type};base64,{base64_data}" 
+            }
+        )
+    else:
+        ocr_response = mistral_client.ocr.process(
+            model=settings.mistral_ocr_model,
+            document={
+                "type": "image_url",
+                "image_url": f"data:{file_type};base64,{base64_data}" 
+            }
+        )                     
 
-        full_text = ""
-        for page in ocr_response.pages:           
-            full_text += page.markdown + "\n"
-        confidence:int = 0
-        if "![img-0.jpeg](img-0.jpeg)" in full_text:            
-            try:
-                result_azurevision_ocr = process_azurevision_ocr(file_bytes)
-                full_text = result_azurevision_ocr["ocr_text"]
-                confidence = result_azurevision_ocr["ocr_confidence"]
-                ocr_applied = "azure"
-            except ValidationError as ve:
-                raise ValidationError(errors=f"{ve}")
-            
+    full_text = ""
+    for page in ocr_response.pages:           
+        full_text += page.markdown + "\n"
+    confidence:int = 0
+    if "![img-0.jpeg](img-0.jpeg)" in full_text:            
+        try:
+            result_azurevision_ocr = process_azurevision_ocr(file_bytes)
+            full_text = result_azurevision_ocr["ocr_text"]
+            confidence = result_azurevision_ocr["ocr_confidence"]
+            ocr_applied = "azure"
+        except HTTPException as exc:
+            raise HTTPException(status_code=500, detail=f"{exc}")
+        
 
-        ocr_result = {
-            "ocr_text": full_text,
-            "ocr_confidence": confidence,
-            "metadata": {
-                "documentType": file_type_key,
-                "pageCount": len(ocr_response.pages)
-            },
-            "ocr_applied":ocr_applied,
-            "ocr_response": ocr_response
-        }
+    ocr_result = {
+        "ocr_text": full_text,
+        "ocr_confidence": confidence,
+        "metadata": {
+            "documentType": file_type_key,
+            "pageCount": len(ocr_response.pages)
+        },
+        "ocr_applied":ocr_applied,
+        "ocr_response": ocr_response
+    }
 
-        return ocr_result
+    return ocr_result
 
-    except Exception as e:
-        raise ValidationError(errors=f"Mistral OCR processing error: {str(e)}")
+   
  
 
 def process_azurevision_ocr(file_bytes:bytes):
@@ -88,12 +90,12 @@ def process_azurevision_ocr(file_bytes:bytes):
         read_response = computervision_client.read_in_stream(BytesIO(file_bytes), raw=True)
 
         if not read_response or not hasattr(read_response, "headers"):
-            raise ValidationError(errors="Azure Read API response is invalid. Check your file and credentials.")
+            raise HTTPException(status_code=500,detail="Azure Read API response is invalid. Check your file and credentials.")
 
         read_operation_location = read_response.headers["Operation-Location"]
 
         if not read_operation_location:
-            raise ValidationError(errors="Azure Operation-Location header missing from response.")
+            raise HTTPException(status_code=500,detail="Azure Operation-Location header missing from response.")
 
         # Grab the ID from the URL
         operation_id = read_operation_location.split("/")[-1]
@@ -126,7 +128,7 @@ def process_azurevision_ocr(file_bytes:bytes):
             }
         
         else:
-            raise ValidationError(errors="Azure OCR Failed")
+            raise HTTPException(status_code=500,detail="Azure OCR Failed")
 
 
     except HttpResponseError as e:
@@ -134,11 +136,11 @@ def process_azurevision_ocr(file_bytes:bytes):
         error_message = e.message or str(e)
         if e.response is not None and hasattr(e.response, 'text') and e.response.text:
             error_message += f" | Response: {e.response.text}"
-        raise ValidationError(errors=f"Azure Vision API error: {error_message}")
+        logger.error(f"Azure Vision API error: {error_message}")
+        raise HTTPException(status_code=500,detail=f"Azure Vision API error: {error_message}")
     
     except Exception as ex:
-
-        raise ValidationError(errors=f"Unexpected error during Azure OCR: {str(ex)}")
+        raise HTTPException(status_code=500,detail=f"Unexpected error during Azure OCR: {str(ex)}")
 
     
 

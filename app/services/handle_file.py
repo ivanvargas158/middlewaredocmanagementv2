@@ -3,22 +3,23 @@ from typing import List, Tuple
 from io import BytesIO
 from PyPDF2 import PdfReader, PdfWriter
 from app.core.settings import get_settings
-from app.utils.custom_exceptions import ValidationError
 from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
 from app.services.template_manager import register_template,match_template 
+from fastapi import HTTPException
+
 settings = get_settings()
 
 def validate_file_type(filename: str, content_type: str):
     ext = os.path.splitext(filename)[1].lower()
     if content_type not in settings.allowed_mime_types:
-        raise ValidationError(errors=f"Unsupported file type: {content_type}")
+        raise HTTPException(status_code=500, detail=f"Unsupported file type: {content_type}")
     if ext not in [".pdf", ".png", ".jpg", ".jpeg", ".tiff"]:
-        raise ValidationError(errors=f"Unsupported file extension: {ext}")
+        raise HTTPException(status_code=500, detail=f"Unsupported file extension: {ext}")
 
 def validate_file_size(file_bytes: bytes):
     size_mb = len(file_bytes) / (1024 * 1024)
     if size_mb > settings.max_file_size:
-        raise ValidationError(errors=f"File size exceeds {settings.max_file_size} MB limit.")
+        raise HTTPException(status_code=500, detail=f"File size exceeds {settings.max_file_size} MB limit.")
     
 def split_pdf(file: bytes, tenantId:int)-> List[Tuple[str | None, float, bytes, str]]:
     list_pages: List[Tuple[str | None, float, bytes, str]] = []
@@ -38,7 +39,7 @@ def split_pdf(file: bytes, tenantId:int)-> List[Tuple[str | None, float, bytes, 
 
         ocrResult = process_azurevision_ocr(output_bytes)              
         ocr_text = ocrResult['ocr_text']
-        doc_type_code,score = match_template(output_bytes,ocr_text,tenantId)
+        doc_type_code,score,doc_type_name = match_template(output_bytes,ocr_text,tenantId)
         list_pages.append((doc_type_code, score, output_bytes,ocr_text))
     return list_pages
         

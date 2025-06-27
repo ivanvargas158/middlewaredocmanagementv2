@@ -9,7 +9,7 @@ from typing import List,Tuple
 from app.services.cosmos_db import get_container
 from app.services.blob_storage import save_file_blob_storage
 from app.services.mistral_ocr import process_mistral_ocr,validate_document,process_azurevision_ocr
-from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice,extract_keywords_openAIv2
+from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice
 from app.services.template_manager import register_template,match_template 
 from app.services.postgresql_db import save_doc_logs
 from app.services.handle_file import validate_file_type,validate_file_size,split_pdf
@@ -18,7 +18,6 @@ from app.schemas.general_enum import DocumentType,Country
 from app.core.settings import get_settings
 from app.core.auth import get_api_key
 from app.schemas.validation_rules import RuleSet
-from app.utils.custom_exceptions import ValidationError
 from fastapi import APIRouter, Depends, HTTPException, status,UploadFile,File
 
 router = APIRouter()
@@ -45,7 +44,7 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
         ocr_text = ocrResult['ocr_text']
         doc_type_code,score,doc_type_name = match_template(file_bytes,ocr_text,countryId)        
         if doc_type_code is None:
-            raise ValidationError(errors=f"Document is not supported {file_name}")     
+            raise HTTPException(status_code=400, detail=f"Document is not supported /upload {file_name}")     
 
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI(doc_type, ocr_text)  
@@ -80,15 +79,11 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
 
         # is_processed = True        
         return result_scores
-    except ValidationError as exc:
-        if hasattr(exc, "to_dict") and callable(exc.to_dict):
-            result_scores = {"error":exc.to_dict()} 
-        else:
-            result_scores = {"error": str(exc)}
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=exc.to_dict()
-        )
+    except HTTPException as exc:
+        result_scores = {"error": exc.detail}
+        # Let FastAPI handle it normally
+        raise exc
+        
     except Exception as exc:
         result_scores = {"error":exc.args} 
         raise HTTPException(
@@ -138,7 +133,7 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
             doc_type_code,score,doc_type_name = match_template(file_bytes,ocr_text,tenantId)
 
         if doc_type_code is None:
-            raise ValidationError(errors=f"Document is not supported {filename}")
+             raise HTTPException(status_code=400, detail=f"Document is not supported /upload_freight_invoice {file_name}")             
         doc_type = DocumentType(doc_type_code)        
         result_openai_keywords = extract_keywords_openAI_freight_invoice(doc_type, ocr_text)  
 
@@ -170,12 +165,9 @@ async def upload_freight_invoice(file: UploadFile = File(...),loadId:str = '',ap
 
         is_processed = True    
         return result_scores
-    except ValidationError as exc:
-        result_scores = {"error":exc.to_dict()} 
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=exc.to_dict()
-        )
+    except HTTPException as exc:
+        result_scores = {"error": exc.detail}
+        raise exc
     except Exception as exc:
         result_scores = {"error":exc.args} 
         raise HTTPException(
@@ -195,7 +187,8 @@ async def save_template(file: UploadFile = File(...), doc_type:str='Master Bill 
         ocrResult = process_azurevision_ocr(file_bytes)    
         document_hash  = register_template(file_bytes,doc_type,version,country_id, ocrResult['ocr_text'],doc_type_code)
         return {f"Document save as temmplate successfully {document_hash}"}
-
+    except HTTPException as exc:
+        raise exc
     except Exception as exc:
         raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -258,12 +251,9 @@ async def split_doc(file: UploadFile = File(...),loadId:str = '',api_key: str = 
         
         is_processed = True    
         return result_scores
-    except ValidationError as exc:
-        result_scores = {"error":exc.to_dict()} 
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=exc.to_dict()
-        )
+    except HTTPException as exc:
+        # Let FastAPI handle it normally
+        raise exc
     except Exception as exc:
         result_scores = {"error":exc.args} 
         raise HTTPException(

@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Dict, List, Set
 from .general_enum import DocumentType
-from app.utils.custom_exceptions import ValidationError
+from fastapi import HTTPException
 class RuleSet(str, Enum):
     general_rules = "general"
 
@@ -605,19 +605,8 @@ def validate_against_rules(data: Dict, doc_type: DocumentType, rule_set: RuleSet
         pass
 
     if errors:
-        raise ValidationError(errors,doc_type=doc_type,ocr_mapped_fields=data)
+        raise HTTPException(status_code=500, detail=errors)
     
     return data
 
-
-def validate_single_field(schema_class, field_name: str, value):
-    try:
-        # Create partial input with just the field to validate
-        validated = schema_class(**{field_name: value})
-        return 1.0, "OK"
-    except ValidationError as e:
-        error_msg = e.errors()[0]['msg']
-        return 0.5, f"Validation error: {error_msg}"
-    
-# score, reason = validate_single_field(DangerousGoodsSchema, "un_number", "UN1234")
-# print(score, reason)  # Output: 1.0, OK
+ 

@@ -3,9 +3,8 @@ import re
 from difflib import SequenceMatcher
 from datetime import datetime
 from app.services.postgresql_db import save_doc_type_template,get_templates
-from app.utils.custom_exceptions import ValidationError
 from typing import Tuple 
-  
+from fastapi import HTTPException  
          
 def create_hash(document_bytes: bytes) -> str:
     """Create normalized document fingerprint using multi-hash strategy"""
@@ -61,7 +60,7 @@ def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min
                     return result_doc_type_code,best_score,doc_type_name                     
         return None,0,None
     except Exception as ex:
-        raise ValidationError(f"Error matching the template {ex}") 
+        raise HTTPException(status_code=500, detail=f"Error matching the template {ex}") 
     
 #Option #2 to match Invoice Freight
 
