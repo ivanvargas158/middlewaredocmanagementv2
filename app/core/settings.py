@@ -21,33 +21,33 @@ class Settings(BaseSettings):
     
     # --- Mistral
 
-    mstral_api_Key: str = Field(validation_alias="mstral_api_Key")
+    mstral_api_Key: str = Field(validation_alias="MSTRAL_API_KEY")
     mistral_ocr_model: str = "mistral-ocr-latest"
 
     # --- OPEN AI -----
-    Openai_Api_Key_ContextUser: str =  Field(validation_alias="Openai_API_Key")
+    Openai_Api_Key_ContextUser: str =  Field(validation_alias="OPENAI_API_KEY")
     Openai_Base_Model_ContextUser: str = "gpt-4.1-mini"
 
     # --- AZURE OPEN AI -----
     
-    Azure_Openai_Api_Key: str =  Field(validation_alias="Azure_Openai_API_Key")
+    Azure_Openai_Api_Key: str =  Field(validation_alias="AZURE_OPENAI_API_KEY")
     Azure_Openai_Base_Model: str = "text-embedding-ada-002"
     Azure_Openai_Url:str = "https://jsonembedding.openai.azure.com/"
     
     # -- Azure Vision
     
-    azurevision_subscription_key:str = Field(validation_alias="azurevision_subscription_key")
+    azurevision_subscription_key:str = Field(validation_alias="AZUREVISION_SUBSCRIPTION_KEY")
     azurevision_endpoint:str = 'https://enhancevisionapi.cognitiveservices.azure.com/'
 
     # --- CosmosDB - Configuration ---
     cosmos_endpoint_cl: str = "https://synapsevue-cosmosdb.documents.azure.com:443/"
-    cosmos_key_cl: str =  Field(validation_alias="cosmos_key_cl")
+    cosmos_key_cl: str =  Field(validation_alias="COSMOS_KEY_CL")
     cosmos_database_cl: str = "synapsevueAI"
     cosmos_container_contextual_recall_cl: str = "emailagent_memory"
     cosmos_container_doc_management_cl: str = "doc_management"
 
     cosmos_endpoint_providence: str = "https://providence-cosmosdb.documents.azure.com:443/"
-    cosmos_key_providence: str = Field(validation_alias="cosmos_key_providence")
+    cosmos_key_providence: str = Field(validation_alias="COSMOS_KEY_PROVIDENCE")
     cosmos_database_providence: str = "DataSync.cosmos"
     cosmos_container_providence: str = "FreightInvoice"
 
