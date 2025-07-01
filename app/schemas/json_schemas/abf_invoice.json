@@ -4,10 +4,10 @@
     "carrier_scac": { "type": ["string", "null"] },
     "invoice_number": { "type": "string" },
     "pro_number": { "type": "string" },
-    "total_pieces": { "type": "integer" },
+    "total_piece_count": { "type": "integer" },
     "total_weight_lbs": { "type": "integer" },
     "weight_lbs": { "type": "integer" },
-    "pieces": { "type": "integer" },
+    "piece_count": { "type": "integer" },
     "total_invoice_amount_usd": { "type": "number" },
     "dimensions": {
       "type": "array",

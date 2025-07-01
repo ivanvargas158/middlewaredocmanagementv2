@@ -121,13 +121,13 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
                 }}   
         4. **Piece Extraction Rule:**
 
-            - pieces:
+            - piece_count:
 
                 - Extract numeric values that appear before units such as PLT, SKD, or similar (e.g., "1 PLT", "3 PLT", "1 SKD").
                 - Only return the numeric portion (e.g., from "3 PLT" → return 3).
                 - Return a single integer.
 
-            - total_pieces:
+            - total_piece_count:
 
                 - Locate the section of OCR text where the phrase "Total Pieces" appears.
                 - Extract the number found directly next to or beneath the phrase "Total Pieces".
