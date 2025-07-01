@@ -17,9 +17,9 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     if schema_mapping_data=="":
         raise HTTPException(status_code=500, detail=f"Invalid document type(schema json) : {doc_type}")   
 
-    openai_prompt = """You are an advanced document understanding agent, optimized for shipping and logistics workflows and designed to work in tandem with the Mistral OCR API.
+    openai_prompt = """You are an advanced document understanding agent, optimized for shipping and logistics workflows and designed to work in tandem with the OCR API.
     Your responsibilities are:
-    Parse the Mistral OCR output (provided in markdown format), which includes field names and extracted values.
+    Parse the OCR output (provided in markdown format), which includes field names and extracted values.
     Precisely map each extracted field to its corresponding internal schema field using the provided schema mapping table.
     For each schema field, output a JSON object with:
     The internal schema field name as the key.
@@ -30,7 +30,7 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     Do not include any commentary, explanation, or formatting outside of the JSON.
     Schema Mapping Table
     {schema_mapping}
-    Mistral OCR Markdown Output
+    OCR Markdown Output
     {ocr_markdown}
     Output Format Example
     {{"bol_number":"12345","shipper_name":"ACME Corp","consignee_name":null}}
@@ -71,7 +71,7 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
 
         {schema_mapping_data}
 
-            ### Special Parsing Rules and Notes ### 
+        ### Special Parsing Rules and Notes ### 
 
         1. **Accessorials Extraction Rule:**  
 
@@ -104,7 +104,7 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
                     NMFC 067050-01V → Sub: 01
                     NMFC 073150-03 → Sub: 03 
 
-        3. **Piece Dimensions Extraction Rule:**  
+        3. **Dimensions Extraction Rule:**  
             
             - For each freight line item, scan all parts of the invoice (including body, tables, footnotes, and unstructured text) for mentions of:
                 - Dimensions: length, width, and height — in inches (e.g. "48x40x60", "L48 W40 H60", or "48in L x 40in W x 60in H").
@@ -118,7 +118,22 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
                     {{ "qty": 1,"length_in":48, "width_in": 40, "height_in": 41,"class":"70","nmfc_code":"067050","nmfc_sub":"02","packaging":"PLT" }},
                     {{ "qty": 1,"length_in":48, "width_in": 40, "height_in": 43,"class":"70","nmfc_code":"067050","nmfc_sub":"02","packaging":"SKD" }},
                 ],            
-                }}           
+                }}   
+        4. **Piece Extraction Rule:**
+
+            - pieces:
+
+                - Extract numeric values that appear before units such as PLT, SKD, or similar (e.g., "1 PLT", "3 PLT", "1 SKD").
+                - Only return the numeric portion (e.g., from "3 PLT" → return 3).
+                - Return a single integer.
+
+            - total_pieces:
+
+                - Locate the section of OCR text where the phrase "Total Pieces" appears.
+                - Extract the number found directly next to or beneath the phrase "Total Pieces".
+                  - **Exclude any values associated with misleading labels like "TOTAL IND PIECES", "TOTAL INDIVIDUAL PIECES", or similar variations — these are not valid indicators for total_pieces.**
+                - Only use values where the label clearly and exactly states "Total Pieces" without extra qualifiers.
+                - Return a single integer.
         
         Special Field Mapping Notes:
 

@@ -7,4 +7,4 @@ app = FastAPI()
 
 app.include_router(process_files.router,prefix="/api/v1/ocr",tags=["Upload files"])
 app.include_router(manage_files.router,prefix="/api/v1/document",tags=["Manage files"])
-#app.include_router(webhook.router,prefix="/api/v1/webhook",tags=["Gmail Webhook"])
+app.include_router(webhook.router,prefix="/api/v1/webhook",tags=["Gmail Webhook"])

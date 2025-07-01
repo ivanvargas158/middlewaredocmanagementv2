@@ -14,9 +14,9 @@ from app.schemas.validation_rules import get_validation_rules,RuleSet
 from app.schemas.general_enum import DocumentType
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
-from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
-from msrest.authentication import CognitiveServicesCredentials
 from azure.core.exceptions import HttpResponseError
+from azure.cognitiveservices.vision.computervision.models import ComputerVisionOcrError
+from msrest.authentication import CognitiveServicesCredentials
 from fastapi import HTTPException
 import logging
 
@@ -129,7 +129,6 @@ def process_azurevision_ocr(file_bytes:bytes):
         
         else:
             raise HTTPException(status_code=500,detail="Azure OCR Failed")
-
 
     except HttpResponseError as e:
 

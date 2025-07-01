@@ -544,10 +544,10 @@ general_rules = {
                 "reference_numbers.bill_of_lading_number": r"^.+$",  # Non-empty string
                 "ship_date": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format YYYY-MM-DD
                 "invoice_due_date": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format YYYY-MM-DD
-                "total_piece_count": r"^[1-9]\d*$",  # Integer > 0
+                "total_pieces": r"^[1-9]\d*$",  # Integer > 0
                 "total_weight_lbs": r"^[1-9]\d*$",  # Integer > 0
                 "weight_lbs": r"^[1-9]\d*$",  # Integer > 0
-                "piece_count": r"^[1-9]\d*$"  # Integer > 0
+                "pieces": r"^[1-9]\d*$"  # Integer > 0
             },
             "cross_field_rules": []
     }       

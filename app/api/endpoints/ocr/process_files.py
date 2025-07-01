@@ -201,8 +201,8 @@ async def get_text(file: UploadFile = File(...),api_key: str = Depends(get_api_k
     try:
         file_bytes = await file.read()
         content_type = str(file.content_type)
-        ocrResult = process_mistral_ocr(file_bytes,content_type)
-        #ocrResult = process_azurevision_ocr(file_bytes)    
+        #ocrResult = process_mistral_ocr(file_bytes,content_type)
+        ocrResult = process_azurevision_ocr(file_bytes)    
 
         ocr_text = ocrResult['ocr_text']
 
