@@ -15,7 +15,7 @@ settings = get_settings()
 async def start_watch():
     url = "https://gmail.googleapis.com/gmail/v1/users/me/watch"
 
-    tmp_token:str = "ya29.a0AS3H6NzQ_Jd_XfeDnLSAok3jnJo4zqQg0f5j4MkbvXnK1AYaEWmgW5bylD1aAmy5ddSbs7lIAAoeKxnTuTutPoYecNlEMqIGEd8TShRAgTUTld8uEaU-r2PUffvwF83qtm7xzg9XWpudqIbTiRbW-kJilAH9lQrP-8d4dCp5BuBV_kCWL6paSyFSaCgYKAQ4SARESFQHGX2MiWpQ7dYCCoNDRO5OIQewEdw0191"
+    tmp_token:str = ""
     project:str = "emailagentetest"
     topic_name:str = "NotificationTest"
     headers = {
