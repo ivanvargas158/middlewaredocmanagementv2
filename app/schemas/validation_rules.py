@@ -229,8 +229,10 @@ general_rules = {
     DocumentType.brasil_master_bill_of_lading:{
          "required_fields": {
             "bill_of_lading_no": r"^.+$",                    # non-empty string
-            "shipper": r"^.+$",                              # non-empty string
-            "consignee": r"^.+$",                            # non-empty string
+            "shipper_name": r"^.+$",                              # non-empty string
+            "shipper_address": r"^.+$",                              # non-empty string
+            "consignee_name": r"^.+$",                            # non-empty string
+            "consignee_address": r"^.+$",                            # non-empty string
             "notify_parties": r"^.+$",                        # non-empty string
             "vessel_and_voyage_no": r"^.+$",                  # non-empty string
             "port_of_loading": r"^.+$",                        # non-empty string

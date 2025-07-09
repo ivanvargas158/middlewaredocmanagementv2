@@ -32,14 +32,27 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     {schema_mapping}
     OCR Markdown Output
     {ocr_markdown}
-    Output Format Example
-    {{"bol_number":"12345","shipper_name":"ACME Corp","consignee_name":null}}
     Instructions Recap:
     Only use schema field names as JSON keys.
     Do not include any fields not listed in the schema mapping.
     Do not invent or hallucinate values.
     Ensure the JSON is valid and minified.
-    Only return the final JSON output—no extra text."""
+    Only return the final JSON output—no extra text.
+     
+    Use this example if the fields exist in schema mapping:
+
+        Example 1:
+        OCR Markdown:
+        shipper_name: FORTUNCERES S.A  
+        shipper_address: ST PROJETADA, KM 4, LINHA 119,S/N CORUMBIARA - CHUPINGUAIA  
+        shipper_location: RONDONIA - BRAZIL  
+        shipper_country_code: BR,get the country code from  shipper_location
+        consignee_name: MINERVA MEATS USA INC  
+        consignee_address: 2400 E COMMERCIAL BLVD. SUITE 711  
+        consignee_location: FORT LAUDERDALE, FL 33308 U.S.A  
+        consignee_country_code: US, get the country code from consignee_location
+
+    """
 
     openai_prompt = openai_prompt.format(schema_mapping=schema_mapping_data, ocr_markdown=doc_text)
 
