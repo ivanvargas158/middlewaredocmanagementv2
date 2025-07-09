@@ -34,8 +34,8 @@
           "properties": {
             "product_description": { "type": "string" },
             "animal_species": { "type": "string" },
-            "lot_or_production_date": { "type": "string" },
-            "slaughter_date": { "type": "string" },
+            "lot_or_production_date": { "type": "string","format": "date","pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+            "slaughter_date": { "type": "string","format": "date","pattern": "^\\d{4}-\\d{2}-\\d{2}$"  },
             "producer_approval_number": { "type": "string" },
             "type_of_packaging": { "type": "string" },
             "number_of_packages": { "type": "integer" },

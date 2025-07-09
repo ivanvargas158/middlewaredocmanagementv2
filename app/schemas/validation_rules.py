@@ -265,7 +265,12 @@ general_rules = {
             "container_cargo_table[].seal_sif": r"^.+$",
             "container_cargo_table[].temperature": r"^.+$",
             "container_cargo_table[].ruc": r"^.+$",   
-        }
+
+            "packagesInfo[].packageType": r"^.+$",  # Non-empty string
+            "packagesInfo[].amount":  r"^[\d.,\s]+$",  # Non-empty string
+            "totalVolume": r"^[\d.,\s]+$",
+            "totalVolumeUnit": r"^.+$", 
+         }
     },
     DocumentType.nop_import_certificate: {
         "required_fields": {

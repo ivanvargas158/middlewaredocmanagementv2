@@ -14,13 +14,15 @@
     "consignee_location": { "type": "string"},
     "consignee_country_code": { "type": "string"},
     "notify_parties": { "type": "string" },
-    "vessel": { "type": "string" },
     "vessel_and_voyage_no": { "type": "string" },
+    "internalReference": { "type": "string" , "description": "Using the Shipper's CNPJ as an internal"},
     "place_of_receipt": { "type": "string" },
     "place_of_delivery": { "type": "string" },
     "port_of_loading": { "type": "string" },
     "port_of_discharge": { "type": "string" },
+    
     "agent": { "type": "string" },
+    "agent_address": { "type": "string" },
     "booking_ref": { "type": "string" },
     "container_numbers": {
       "type": "array",
@@ -32,32 +34,34 @@
     },
     "marks_and_numbers": { "type": "string" },
     "description_of_packages_and_goods": { "type": "string" },
-    "gross_cargo_weight": { "type": "string" },
+    "gross_cargo_weight": { "type": "number", "pattern": "^[\\d.,\\s]+$" },
     "measurement": { "type": "string" },
     "total_items": { "type": "integer" },
-    "total_gross_weight": { "type": "number" },
-    "net_weight": { "type": "number" },
-    "gross_weight": { "type": "number" },
+    "total_gross_weight": { "type": "number" , "pattern": "^[\\d.,\\s]+$" },
+    "net_weight": { "type": "number" , "pattern": "^[\\d.,\\s]+$"},
+    "gross_weight": { "type": "number", "pattern": "^[\\d.,\\s]+$" },
     "ncm": { "type": "string" },
     "hs_code": { "type": "string" },
     "seal_sif": { "type": "string" },
     "temperature": { "type": "string" },
     "ruc": { "type": "string" },
-    "shipped_on_board_date": { "type": "string" },
+    "shipped_on_board_date": { "type": "string" , "format":"date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "freight_payable_in": { "type": "string" },
     "freight_charges": {
       "type": "object",
       "properties": {
-        "rate": { "type": "string" },
+        "rate": { "type": "number","pattern": "^[\\d.,\\s]+$" },
         "prepaid": { "type": "string" },
         "collect": { "type": "string" },
-        "terminal_handling_charge": { "type": "string" }
+        "terminal_handling_charge": { "type": "number","pattern": "^[\\d.,\\s]+$" }
       }
     },
     "declared_value": { "type": "string" },
     "signed_on_behalf_of_the_carrier": { "type": "string" },
     "place_and_date_of_issue": { "type": "string" },
     "carrier_receipt": { "type": "string" },
+    "carrier": { "type": "string" },
+    "carrier_scac": { "type": "string" },
     "container_cargo_table": {
           "type": "array",
           "items": {
@@ -69,8 +73,8 @@
               "description_of_packages_and_goods": { "type": "string" },
               "gross_cargo_weight": { "type": "string" },
               "measurement": { "type": "string" },
-              "net_weight": { "type": "string" },
-              "gross_weight": { "type": "string" },
+              "net_weight": { "type": "number", "pattern": "^[\\d.,\\s]+$" },
+              "gross_weight": { "type": "number", "pattern": "^[\\d.,\\s]+$" },
               "ncm": { "type": "string" },
               "hs_code": { "type": "string" },
               "seal_sif": { "type": "string" },
@@ -78,7 +82,26 @@
               "ruc": { "type": "string" }
             }
           }
-      }
+      },  
+  "packagesInfo": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "packageType": { "type": "string" },
+            "amount": { "type": "number", "pattern": "^[\\d.,\\s]+$" },
+            "weight": { "type": "number" },
+            "weightMetric": { "type": "string" }, 
+            "hazardousMaterials": { "type": "string" }, 
+            "volume": { "type": "number" }, 
+            "volumeMetric": { "type": "number" }
+          }
+        }
+    },
+  "commodity": { "type": "string", "description": "The commodity is the main product being shipped, such as 'FROZEN BONELESS BEEF RIBEYE'. If multiple lines mention the same product, use the common product description." },
+  "totalVolume": { "type": "number", "pattern": "^[\\d.,\\s]+$"  },
+  "totalVolumeUnit": { "type": "string"}
+
   },
   "required": [
     "bill_of_lading_no",
@@ -100,6 +123,9 @@
     "shipped_on_board_date",
     "freight_charges",
     "place_and_date_of_issue",
-    "container_cargo_table"
+    "container_cargo_table",
+    "packagesInfo",
+    "totalVolume",
+    "totalVolumeUnit"
   ]
 }

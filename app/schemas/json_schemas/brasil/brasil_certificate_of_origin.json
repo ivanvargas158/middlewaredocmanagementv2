@@ -21,7 +21,7 @@
     "container_id_summary": { "type": "string" },
     "total_weight": { "type": "number" },
     "signer_cpf": { "type": "string" },
-    "issue_date": { "type": "string", "format": "date" },
+    "issue_date": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "issue_location": { "type": "string" },
     
     "goods_description": {

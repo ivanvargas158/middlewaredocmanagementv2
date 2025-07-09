@@ -38,7 +38,10 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     Do not invent or hallucinate values.
     Ensure the JSON is valid and minified.
     Only return the final JSON output—no extra text.
-     
+
+    rules:
+     - the field 'packagesInfo' exist in schema mapping  , Each entry begins with "[amount] [packageType]" and includes "N. W." followed by the weight.
+    
     Use this example if the fields exist in schema mapping:
 
         Example 1:
@@ -51,7 +54,8 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
         consignee_address: 2400 E COMMERCIAL BLVD. SUITE 711  
         consignee_location: FORT LAUDERDALE, FL 33308 U.S.A  
         consignee_country_code: US, get the country code from consignee_location
-
+        internalReference: 123456789, this is the shipper's CNPJ
+        packagesInfo: packageType: Cartons, amount: 100, weight: 5000, weightMetric: KG, hazardousMaterials: No
     """
 
     openai_prompt = openai_prompt.format(schema_mapping=schema_mapping_data, ocr_markdown=doc_text)
