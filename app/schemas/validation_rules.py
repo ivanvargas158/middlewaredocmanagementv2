@@ -246,10 +246,10 @@ general_rules = {
             "gross_weight": r"^[\d.,\s]+$",                     # numbers, dots, commas, spaces
             "shipped_on_board_date": r"^\d{4}-\d{2}-\d{2}$",   # date YYYY-MM-DD
             "freight_charges": {
-                "rate": r"^[\d.,\s]+$",                           # numbers, dots, commas, spaces
+                "rate": r"^.+$",                                # non-empty string
                 "prepaid": r"^.+$",                               # non-empty string
                 "collect": r"^.+$",                               # non-empty string
-                "terminal_handling_charge": r"^[\d.,\s]+$"        # numbers, dots, commas, spaces
+                "terminal_handling_charge": r"^.+$"              # numbers, dots, commas, spaces
             },
             "place_and_date_of_issue": r"^.+$",                 # non-empty string
             "container_cargo_table[].container_numbers": r"^.+$",

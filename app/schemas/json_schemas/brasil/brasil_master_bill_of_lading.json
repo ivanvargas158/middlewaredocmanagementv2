@@ -50,10 +50,10 @@
     "freight_charges": {
       "type": "object",
       "properties": {
-        "rate": { "type": "number","pattern": "^[\\d.,\\s]+$" },
+        "rate": { "type": "string" },
         "prepaid": { "type": "string" },
         "collect": { "type": "string" },
-        "terminal_handling_charge": { "type": "number","pattern": "^[\\d.,\\s]+$" }
+        "terminal_handling_charge": { "type": "string" }
       }
     },
     "declared_value": { "type": "string" },
