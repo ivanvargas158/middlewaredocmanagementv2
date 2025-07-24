@@ -15,11 +15,11 @@ def create_hash(document_bytes: bytes) -> str:
     except Exception as e:
         raise ValueError(f"Image processing failed: {str(e)}")
 
-def register_template(document_bytes: bytes,doc_type:str,version:str,tenent_id:int,doc_text:str,doc_type_code:str) -> str:
+async def register_template(document_bytes: bytes,doc_type:str,version:str,tenent_id:int,doc_text:str,doc_type_code:str) -> str:
     """Store document template with security checks"""
     try:
         document_hash = create_hash(document_bytes)
-        save_doc_type_template(document_hash,doc_type,version,tenent_id,doc_text,doc_type_code)
+        await save_doc_type_template(document_hash,doc_type,version,tenent_id,doc_text,doc_type_code)
         return document_hash
     except Exception as e:
         raise ValueError(f"Error saving the template: {str(e)}")     
@@ -42,12 +42,10 @@ def text_similarity(a: str, b: str) -> float:
     # Simple ratio, replace with more advanced NLP if needed 
     return SequenceMatcher(None, a, b).ratio()
 
-def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min_similarity=0.39) -> Tuple[str|None, float,str|None] :
+async def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min_similarity=0.39) -> Tuple[str|None, float,str|None] :
     try:        
-        list_templates_db: list[Tuple[str, str, str, str, bool]] = get_templates(countryId)
-        # fingerprint = create_hash(document_bytes) 
-    
-    
+        list_templates_db: list[Tuple[str, str, str, str, bool]] = await get_templates(countryId)
+       
         result_doc_type_code = None    
         best_score = 0    
         for template_id,doc_type_name,doc_text,doc_type_code,is_requiered in list_templates_db:        

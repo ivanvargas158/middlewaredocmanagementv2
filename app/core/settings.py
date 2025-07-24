@@ -98,6 +98,9 @@ class Settings(BaseSettings):
     api_key:str = "FEF85438-D360-4BC9-8265-7C0EC9F256C5"
     api_key_name:str = "x-api-key"
 
+
+    gmini_api_key:str = Field(validation_alias="GMINI_API_KEY")
+
     # --- Validation Helpers ---
     @field_validator("cors_origins", mode="before")
     @classmethod

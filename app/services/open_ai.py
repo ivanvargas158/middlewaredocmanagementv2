@@ -1,17 +1,24 @@
 import json
-from openai import OpenAI
+from openai import AzureOpenAI,AsyncOpenAI
 from app.core.settings import get_settings
 from app.schemas.general_enum import DocumentType
 from app.utils.load_json import get_json_schema
 from fastapi import HTTPException
+from contextlib import asynccontextmanager
 
 settings = get_settings()
+ 
 
-client = OpenAI(
-        api_key = settings.Openai_Api_Key_ContextUser,
-    )
+@asynccontextmanager
+async def openai_client():
+    client = AsyncOpenAI(api_key=settings.Openai_Api_Key_ContextUser)
+    try:
+        yield client
+    finally:
+        await client.close() 
 
-def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
+
+async def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     
     schema_mapping_data:str = get_json_schema(doc_type)
     if schema_mapping_data=="":
@@ -60,16 +67,21 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
 
     openai_prompt = openai_prompt.format(schema_mapping=schema_mapping_data, ocr_markdown=doc_text)
 
-    response = client.chat.completions.create(
-        model = settings.Openai_Base_Model_ContextUser,
-        messages = [
-            {"role": "user", "content": openai_prompt},
-        ],
-        temperature = 0.0,
-        response_format={ "type": "json_object" }
 
-    ) 
+    async with openai_client() as client:
+        response = await client.chat.completions.create(
+            model = settings.Openai_Base_Model_ContextUser,
+            messages = [
+                    {                    
+                    "role": "user", "content": openai_prompt
+                    },
+            ],
+            temperature = 0.0,
+            response_format={ "type": "json_object" }
 
+        ) 
+
+ 
     content = response.choices[0].message.content
 
     response_data = json.loads(str(content))        
@@ -77,7 +89,7 @@ def extract_keywords_openAI(doc_type: DocumentType,doc_text:str):
     return response_data
 
     
-def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str):
+async def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str):
     
     schema_mapping_data:str = get_json_schema(doc_type)
     if schema_mapping_data=="":
@@ -174,15 +186,18 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
         """
 
 
-    response = client.chat.completions.create(
-        model = settings.Openai_Base_Model_ContextUser,
-        messages = [
-            {"role": "user", "content": openai_prompt},
-        ],
-        temperature = 0.0,
-        response_format={ "type": "json_object" }
+    async with openai_client() as client:
+        response = await client.chat.completions.create(
+            model = settings.Openai_Base_Model_ContextUser,
+            messages = [
+                    {                    
+                    "role": "user", "content": openai_prompt
+                    },
+            ],
+            temperature = 0.0,
+            response_format={ "type": "json_object" }
 
-    ) 
+        ) 
 
     content = response.choices[0].message.content
 
@@ -191,3 +206,5 @@ def extract_keywords_openAI_freight_invoice(doc_type: DocumentType,doc_text:str)
     return response_data
  
     
+
+
