@@ -3,16 +3,6 @@ from app.schemas.general_enum import DocumentType
 from pathlib import Path
 
 schema_files = {
-    DocumentType.commercial_invoice: "commercial_invoice.json",
-    DocumentType.master_bill_of_lading: "master_bill_of_lading.json",
-    DocumentType.one_ocean_master_bill_of_lading: "one_ocean_master_bill_of_lading.json",
-    DocumentType.packing_list_swift: "packing_list_swift.json",
-    DocumentType.packing_list_minerva: "packing_list_minerva.json",
-    DocumentType.argentina_health_certificate: "health_certificate_argentina.json",
-    DocumentType.brasil_health_certificate: "health_certificate_brasil.json",
-    DocumentType.certificate_of_analysis: "certificate_of_analysis.json",
-    DocumentType.certificate_of_origin: "certificate_of_origin.json",
-    DocumentType.nop_import_certificate: "nop_import_certificate.json",
     DocumentType.brasil_isf: "brasil_isf.json",
     DocumentType.brasil_certificate_of_analysis: "brasil_certificate_of_analysis.json",
     DocumentType.brasil_master_bill_of_lading: "brasil_master_bill_of_lading.json",
@@ -20,8 +10,13 @@ schema_files = {
     DocumentType.brasil_commercial_invoice: "brasil_commercial_invoice.json",
     DocumentType.brasil_packing_list: "brasil_packing_list.json",
     DocumentType.brasil_certificate_of_origin: "brasil_certificate_of_origin.json",
-    DocumentType.brasil_master: "brasil_master.json",
-    DocumentType.abf_freight_invoice: "abf_invoice.json"
+    DocumentType.brasil_master: "brasil_master.json",  
+    DocumentType.ef_pdf_invoice_1: "ef_pdf_invoice_1.json",
+    DocumentType.ef_xls_type_4: "ef_xls_type_4.json",
+    DocumentType.ef_xls_type_isf_3: "ef_xls_type_isf_3.json",
+    DocumentType.ef_xlsx_type_ci_1: "ef_xlsx_type_ci_1.json",
+    DocumentType.ef_xlsx_type_isf_2: "ef_xlsx_type_isf_2.json",
+    DocumentType.ef_doc_type_ci_1: "ef_doc_type_ci_1.json",
 }
 
 # Load all schemas into a dictionary at startup
@@ -29,7 +24,7 @@ schema_dir = Path.cwd() / "app/schemas/json_schemas"
 # Set up paths
 base_dir = Path.cwd() / "app/schemas/json_schemas"
 # Include main dir + specific subdirs
-directories_to_scan = [base_dir, base_dir / "brasil"]
+directories_to_scan = [base_dir, base_dir / "brasil",base_dir / "exFreight"]
 
 loaded_schemas = {}
 

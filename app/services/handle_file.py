@@ -11,9 +11,10 @@ settings = get_settings()
 
 def validate_file_type(filename: str, content_type: str):
     ext = os.path.splitext(filename)[1].lower()
+    allowed_extensions = {".pdf", ".png", ".jpg", ".jpeg", ".tiff", ".xlsx", ".xls", ".docx", ".doc"}
     if content_type not in settings.allowed_mime_types:
         raise HTTPException(status_code=500, detail=f"Unsupported file type: {content_type}")
-    if ext not in [".pdf", ".png", ".jpg", ".jpeg", ".tiff"]:
+    if ext not in allowed_extensions:
         raise HTTPException(status_code=500, detail=f"Unsupported file extension: {ext}")
 
 def validate_file_size(file_bytes: bytes):

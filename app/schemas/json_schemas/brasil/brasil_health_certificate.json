@@ -53,32 +53,32 @@
             "net_weight_kgs",
             "net_weight_lbs"
           ]
-        },
-        "required": [
-            "exporter" ,
-            "certificate_number" ,
-            "competent_authority" ,
-            "local_competent_authority" ,
-            "importer" ,
-            "country_of_origin" ,
-            "origin_iso_code" ,
-            "country_of_dispatch" ,
-            "dispatch_iso_code" ,
-            "country_of_destination", 
-            "destination_iso_code" ,
-            "place_of_loading" ,
-            "means_of_transport" ,
-            "point_of_entry" ,
-            "conditions_for_transport_storage", 
-            "container_seal_numbers" ,
-            "shipping_marks",
-            "food_producers",
-            "purpose",
-            "ncm_hs_code",
-            "certificate_reference_number",
-            "carteira_fiscal_number",
-           "product_details"
-        ]
+        }
       }  
-  } 
+    },
+    "required": [
+    "exporter" ,
+    "certificate_number" ,
+    "competent_authority" ,
+    "local_competent_authority" ,
+    "importer" ,
+    "country_of_origin" ,
+    "origin_iso_code" ,
+    "country_of_dispatch" ,
+    "dispatch_iso_code" ,
+    "country_of_destination", 
+    "destination_iso_code" ,
+    "place_of_loading" ,
+    "means_of_transport" ,
+    "point_of_entry" ,
+    "conditions_for_transport_storage", 
+    "container_seal_numbers" ,
+    "shipping_marks",
+    "food_producers",
+    "purpose",
+    "ncm_hs_code",
+    "certificate_reference_number",
+    "carteira_fiscal_number",
+    "product_details"
+  ] 
 }

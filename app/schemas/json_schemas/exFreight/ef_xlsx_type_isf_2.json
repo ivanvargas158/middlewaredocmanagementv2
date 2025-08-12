@@ -1,0 +1,127 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ISF Filing Data",
+  "type": "object",
+  "properties": {
+    "ams_hbl_number": {
+      "type": "string",
+      "description": "AMS/HBL#"
+    },
+    "mbl_number": {
+      "type": "string",
+      "description": "MBL#"
+    },
+    "container_numbers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Container numbers (comma separated in form, array in JSON)"
+    },
+    "importer_of_record_number": {
+      "type": "string",
+      "description": "Importer of Record #"
+    },
+    "consignee_number": {
+      "type": "string",
+      "description": "Consignee (IRS) #"
+    },
+    "seller": {
+      "type": "object",
+      "description": "Seller/Exporter details",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      },
+      "required": ["name", "address", "city", "country"]
+    },
+    "buyer": {
+      "type": "object",
+      "description": "Buyer/Consignee details",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      }
+    },
+    "ship_to_party": {
+      "type": "object",
+      "description": "Ship-To party details",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "container_stuffing_location": {
+      "type": "object",
+      "description": "Container stuffing location (if different from seller)",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      }
+    },
+    "consolidator": {
+      "type": "object",
+      "description": "Consolidator/Freight Forwarder details",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      }
+    },
+    "manufacturer": {
+      "type": "object",
+      "description": "Manufacturer details (if different from seller)",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "description": "List of commodities with country of origin and HTS code",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_number": { "type": "string", "description": "Item number/description" },
+          "country_of_origin": { "type": "string" },
+          "hts_code": { "type": "string", "description": "6-10 digit HTS code" }
+        },
+        "required": ["item_number", "country_of_origin", "hts_code"]
+      }
+    },
+    "disclaimer": {
+      "type": "string",
+      "description": "Legal disclaimer statement from the form"
+    }
+  },
+  "required": [
+    "ams_hbl_number",
+    "mbl_number",
+    "container_numbers",
+    "seller",
+    "items"
+  ]
+}

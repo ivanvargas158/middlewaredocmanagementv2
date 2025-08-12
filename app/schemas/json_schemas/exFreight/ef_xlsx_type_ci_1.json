@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Commercial Invoice",
+  "type": "object",
+  "properties": {
+    "seller": {
+      "type": "object",
+      "description": "Exporter/Seller details",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "state_province": { "type": "string" },
+        "country": { "type": "string" }
+      },
+      "required": ["name", "address", "country"]
+    },
+    "buyer": {
+      "type": "object",
+      "description": "Importer/Consignee details",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "state_province": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "country": { "type": "string" },
+        "attention": { "type": "string" },
+        "phone": { "type": "string" },
+        "ein_number": { "type": "string" }
+      },
+      "required": ["name", "address", "country"]
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice number"
+    },
+    "invoice_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Invoice date"
+    },
+    "line_items": {
+      "type": "array",
+      "description": "List of items included in the shipment",
+      "items": {
+        "type": "object",
+        "properties": {
+          "art_no": { "type": "string", "description": "Article/Item number" },
+          "description": { "type": "string" },
+          "quantity_pcs": { "type": "integer" },
+          "unit_price_usd": { "type": "number" },
+          "amount_usd": { "type": "number" }
+        },
+        "required": ["description", "quantity_pcs", "unit_price_usd", "amount_usd"]
+      }
+    },
+    "total_amount_usd": {
+      "type": "number",
+      "description": "Total invoice amount in USD"
+    },
+    "packing": { "type": "string" },
+    "payment_terms": { "type": "string" },
+    "shipment_method": { "type": "string" },
+    "delivery_date_terms": { "type": "string" },
+    "origin_destination": {
+      "type": "object",
+      "description": "Shipment origin and final destination",
+      "properties": {
+        "origin_city_country": { "type": "string" },
+        "destination_city_country": { "type": "string" }
+      }
+    },
+    "remarks": {
+      "type": "array",
+      "description": "Special remarks or conditions",
+      "items": { "type": "string" }
+    }
+  },
+  "required": [
+    "seller",
+    "buyer",
+    "invoice_number",
+    "invoice_date",
+    "line_items",
+    "total_amount_usd"
+  ]
+}

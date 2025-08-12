@@ -3,16 +3,7 @@ from enum import Enum
 
 class DocumentType(str, Enum):
     air_waybill = "air_waybill"
-    dangerous_goods = "dangerous_goods"    
-    commercial_invoice = "commercial_invoice" 
-    master_bill_of_lading = "master_bill_of_lading"
-    one_ocean_master_bill_of_lading = "one_ocean_master_bill_of_lading"
-    packing_list_swift = "packing_list_swift"
-    packing_list_minerva = "packing_list_minerva"
-    argentina_health_certificate = "argentina_health_certificate"         
-    nop_import_certificate = "nop_import_certificate"
-    certificate_of_origin = "certificate_of_origin"
-    certificate_of_analysis = "certificate_of_analysis"
+    dangerous_goods = "dangerous_goods"         
     brasil_certificate_of_analysis = "brasil_certificate_of_analysis"
     brasil_isf = "brasil_isf"
     brasil_health_certificate = "brasil_health_certificate"
@@ -21,7 +12,12 @@ class DocumentType(str, Enum):
     brasil_packing_list = "brasil_packing_list"
     brasil_certificate_of_origin = "brasil_certificate_of_origin"
     brasil_master  = "brasil_master"
-    abf_freight_invoice  = "abf_freight_invoice"
+    ef_doc_type_ci_1  = "ef_doc_type_ci_1"
+    ef_pdf_invoice_1  = "ef_pdf_invoice_1"
+    ef_xls_type_4  = "ef_xls_type_4"
+    ef_xls_type_isf_3  = "ef_xls_type_isf_3"
+    ef_xlsx_type_ci_1  = "ef_xlsx_type_ci_1"
+    ef_xlsx_type_isf_2  = "ef_xlsx_type_isf_2"
 
 class Country(int, Enum):
     brasil = 3

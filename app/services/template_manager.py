@@ -24,25 +24,14 @@ async def register_template(document_bytes: bytes,doc_type:str,version:str,tenen
     except Exception as e:
         raise ValueError(f"Error saving the template: {str(e)}")     
  
-
-# async def find_template(document_bytes: bytes, threshold: float = 0.9) -> str:
-#     """Find matching document template with similarity check"""
-#     result:str=''
-
-#     query_hash = await create_hash(document_bytes)
-    
-#     templates = await get_templates()
-#     for template_id,doc_type in templates:
-#         if (template_id==query_hash):
-#             result = f"FP: {template_id} - doc type: {doc_type}"
-#     return result
+ 
 
 
 def text_similarity(a: str, b: str) -> float:
     # Simple ratio, replace with more advanced NLP if needed 
     return SequenceMatcher(None, a, b).ratio()
 
-async def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min_similarity=0.39) -> Tuple[str|None, float,str|None] :
+async def match_template(document_bytes: bytes, result_ocr_text:str, countryId:int,min_similarity=0.29) -> Tuple[str|None, float,str|None] :
     try:        
         list_templates_db: list[Tuple[str, str, str, str, bool]] = await get_templates(countryId)
        

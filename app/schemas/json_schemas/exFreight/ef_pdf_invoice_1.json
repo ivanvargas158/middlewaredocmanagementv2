@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Export Tax Invoice",
+  "type": "object",
+  "properties": {
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice number as per tax invoice document"
+    },
+    "invoice_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of invoice in DD-MM-YYYY format"
+    },
+    "delivery_note_number": {
+      "type": "string"
+    },
+    "purchase_order_number": {
+      "type": "string",
+      "description": "Buyer's Purchase Order number"
+    },
+    "purchase_order_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "supplier": {
+      "type": "object",
+      "description": "Details of seller/exporter",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "gstin": { "type": "string" },
+        "pan": { "type": "string" },
+        "state": { "type": "string" },
+        "state_code": { "type": "string" },
+        "cin": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "website": { "type": "string" },
+        "bank_details": {
+          "type": "object",
+          "properties": {
+            "bank_name": { "type": "string" },
+            "branch": { "type": "string" },
+            "account_number": { "type": "string" },
+            "ifsc_code": { "type": "string" },
+            "swift_code": { "type": "string" }
+          }
+        }
+      },
+      "required": ["name", "address", "gstin", "state_code"]
+    },
+    "consignee": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "country": { "type": "string" },
+        "gstin": { "type": "string" },
+        "state": { "type": "string" },
+        "state_code": { "type": "string" }
+      }
+    },
+    "buyer": {
+      "type": "object",
+      "description": "Buyer details (if different from consignee)",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "country": { "type": "string" },
+        "gstin": { "type": "string" },
+        "state": { "type": "string" },
+        "state_code": { "type": "string" }
+      }
+    },
+    "shipping_details": {
+      "type": "object",
+      "properties": {
+        "city_port_of_loading": { "type": "string" },
+        "port_code": { "type": "string" },
+        "city_port_of_discharge": { "type": "string" },
+        "destination": { "type": "string" },
+        "mode_terms_of_payment": { "type": "string" },
+        "terms_of_delivery": { "type": "string" },
+        "dispatched_through": { "type": "string" },
+        "place_of_receipt_by_shipper": { "type": "string" },
+        "vessel_flight_no": { "type": "string" },
+        "place_of_supply": { "type": "string" },
+        "shipping_bill_no": { "type": "string" },
+        "shipping_bill_date": { "type": "string", "format": "date" },
+        "lut_bond_no": { "type": "string" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "description": "List of line items in the invoice",
+      "items": {
+        "type": "object",
+        "properties": {
+          "po_sr_no": { "type": "string" },
+          "hsn_code": { "type": "string" },
+          "gst_percent": { "type": "string" },
+          "quantity": { "type": "number" },
+          "uom": { "type": "string" },
+          "rate_inr": { "type": "number" },
+          "total_inr": { "type": "number" },
+          "description": { "type": "string" }
+        },
+        "required": ["hsn_code", "quantity", "uom", "rate_inr", "total_inr"]
+      }
+    },
+    "totals": {
+      "type": "object",
+      "properties": {
+        "taxable_total_inr": { "type": "number" },
+        "cgst_percent": { "type": "string" },
+        "cgst_amount": { "type": "number" },
+        "sgst_percent": { "type": "string" },
+        "sgst_amount": { "type": "number" },
+        "igst_percent": { "type": "string" },
+        "igst_amount": { "type": "number" },
+        "round_off": { "type": "number" },
+        "grand_total_inr": { "type": "number" },
+        "amount_in_words": { "type": "string" },
+        "tax_amount_in_words": { "type": "string" }
+      }
+    },
+    "remarks": {
+      "type": "array",
+      "description": "Any remarks or declaration text",
+      "items": { "type": "string" }
+    },
+    "declaration": {
+      "type": "string",
+      "description": "Legal declaration text from the invoice"
+    }
+  },
+  "required": [
+    "invoice_number",
+    "invoice_date",
+    "supplier",
+    "consignee",
+    "items",
+    "totals"
+  ]
+}

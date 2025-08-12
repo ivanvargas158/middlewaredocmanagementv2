@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ISF Filing Document Schema",
+  "type": "object",
+  "properties": {
+    "so_number": {
+      "type": "string",
+      "description": "S/O Number"
+    },
+    "vessel_voyage": {
+      "type": "string",
+      "description": "Vessel name and voyage number"
+    },
+    "etd": {
+      "type": "string",
+      "format": "date",
+      "description": "Estimated Time of Departure (ETD)"
+    },
+    "eta": {
+      "type": "string",
+      "format": "date",
+      "description": "Estimated Time of Arrival (ETA)"
+    },
+    "type_of_movement": {
+      "type": "string",
+      "enum": ["FCL", "LCL"],
+      "description": "Full Container Load or Less-than Container Load"
+    },
+    "seller": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" }
+      },
+      "required": ["name", "address"]
+    },
+    "buyer": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "house_bl_number": { "type": "string" },
+        "master_bl_number": { "type": "string" },
+        "scac_code_house": { "type": "string" },
+        "scac_code_master": { "type": "string" }
+      }
+    },
+    "ship_to_party": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "consolidator": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "container_stuffing_location": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "importer_of_record_number": {
+      "type": "string",
+      "description": "Federal Tax ID# of importer"
+    },
+    "consignee_number": {
+      "type": "string",
+      "description": "IRS number"
+    },
+    "manufacturer": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "hts_code": {
+      "type": "string",
+      "description": "First 6 digits of the Harmonized Tariff Schedule code"
+    },
+    "country_of_origin": {
+      "type": "string"
+    },
+    "container_number": {
+      "type": "string"
+    },
+    "isf_submitted_by": {
+      "type": "object",
+      "properties": {
+        "company_name": { "type": "string" },
+        "person_name": { "type": "string" }
+      }
+    },
+    "disclaimer": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "so_number",
+    "vessel_voyage",
+    "etd",
+    "eta",
+    "seller",
+    "buyer",
+    "manufacturer",
+    "hts_code",
+    "country_of_origin",
+    "container_number"
+  ]
+}

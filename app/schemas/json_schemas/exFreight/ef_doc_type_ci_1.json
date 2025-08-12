@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Invoice Schema",
+  "type": "object",
+  "properties": {
+    "invoice_id": {
+      "type": "string",
+      "description": "Unique identifier for the invoice."
+    },
+    "invoice_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the invoice was issued (YYYY-MM-DD)."
+    },
+    "customer_details": {
+      "type": "object",
+      "properties": {
+        "billed_to": { "type": "string" },
+        "address": { "type": "string" },
+        "contact_person": { "type": "string" },
+        "phone": { "type": "string" },
+        "tax_id": { "type": "string" }
+      },
+      "required": [
+        "billed_to",
+        "address",
+        "contact_person",
+        "phone",
+        "tax_id"
+      ]
+    },
+    "line_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "quantity": { "type": "integer" },
+          "description": { "type": "string" },
+          "unit_price": { "type": "number" },
+          "line_total": { "type": "number" }
+        },
+        "required": ["quantity", "description", "unit_price", "line_total"]
+      },
+      "minItems": 1
+    },
+    "total_amount": {
+      "type": "number",
+      "description": "Total amount for the invoice."
+    },
+    "total_amount_in_words": {
+      "type": "string",
+      "description": "Total amount in words."
+    }
+  },
+  "required": [
+    "invoice_id",
+    "invoice_date",
+    "customer_details",
+    "line_items",
+    "total_amount",
+    "total_amount_in_words"
+  ]
+}

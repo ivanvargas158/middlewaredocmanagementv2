@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Importer Security Filing (ISF) 10+2",
+  "description": "A JSON schema for the Importer Security Filing (ISF) 10+2 data elements.",
+  "type": "object",
+  "properties": {
+    "seller": {
+      "description": "Name and address of the last known entity by whom the goods are sold or agreed to be sold.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "address"]
+    },
+    "buyer": {
+      "description": "Name and address of the last known entity to whom the goods are sold or agreed to be sold.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "address"]
+    },
+    "importer_of_record_number": {
+      "description": "Internal Revenue Service (IRS) number, Employer Identification Number (EIN), Social Security Number (SSN), or CBP assigned number of the entity liable for payment of all duties.",
+      "type": "string"
+    },
+    "consignee_number": {
+      "description": "Internal Revenue Service (IRS) number, Employer Identification Number (EIN), Social Security Number (SSN), or CBP assigned number of the individual(s) or firm(s) in the United States on whose account the merchandise is shipped.",
+      "type": "string"
+    },
+    "manufacturer_or_supplier": {
+      "description": "Name and address of the entity that last manufactures, assembles, produces, or grows the commodity.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "address"]
+    },
+    "ship_to_party": {
+      "description": "Name and address of the first deliver-to party scheduled to physically receive the goods after the goods have been released from customs custody.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "address"]
+    },
+    "country_of_origin": {
+      "description": "Country of manufacture, production, or growth of the article.",
+      "type": "string"
+    },
+    "commodity_hts_number": {
+      "description": "Harmonized Tariff Schedule (HTS) number of the article (at least the 6-digit level).",
+      "type": "string",
+      "pattern": "^\\d{6,10}$"
+    },
+    "container_stuffing_location": {
+      "description": "Name and address of the physical location(s) where the goods were stuffed into the container.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "address"]
+    },
+    "consolidator": {
+      "description": "Name and address of the party who stuffed the container or arranged for the stuffing of the container.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "address"]
+    },
+    "vessel_stow_plan": {
+      "description": "Information on the stowage of the vessel.",
+      "type": "object"
+    },
+    "container_status_messages": {
+      "description": "Messages on the status of the container.",
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "seller",
+    "buyer",
+    "importer_of_record_number",
+    "consignee_number",
+    "manufacturer_or_supplier",
+    "ship_to_party",
+    "country_of_origin",
+    "commodity_hts_number",
+    "container_stuffing_location",
+    "consolidator"
+  ]
+}

@@ -3,7 +3,6 @@ from pydantic_settings import BaseSettings
 from typing import List, Optional
 from pydantic import field_validator,fields,Field
 from functools import lru_cache
-
 class Settings(BaseSettings):
 
     # --- API Endpoints ---
@@ -81,11 +80,22 @@ class Settings(BaseSettings):
     # Configurable settings
     max_file_size_mb:int = 10
     
-    allowed_mime_types:set[str] = {
+    allowed_mime_types: set[str] = {
         "application/pdf",
         "image/png",
         "image/jpeg",
-        "image/tiff"
+        "image/tiff",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  # .xlsx
+        "application/vnd.ms-excel",  # .xls
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # .docx
+        "application/msword"  # .doc
+    }
+
+    mime_types_office:set[str] = {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword"
     }
     
     # -- Tenants ---
