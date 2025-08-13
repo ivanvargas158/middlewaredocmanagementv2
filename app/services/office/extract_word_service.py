@@ -44,7 +44,7 @@ def convert_doc_to_docx(doc_bytes: bytes,timeout: int = 20) -> bytes:
         # r"C:\Program Files\LibreOffice\program\soffice.exe", 
         # Run LibreOffice headless to convert .doc to .docx
         cmd = [
-            r"soffice.exe",         # LibreOffice executable, e.g., /usr/bin/soffice
+            r"soffice",         # LibreOffice executable, e.g., /usr/bin/soffice
             "--headless",      # Run without UI
             "--convert-to", "docx",  # Output format
             "--outdir", tmpdir,       # Output folder
