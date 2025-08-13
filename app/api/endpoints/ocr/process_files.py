@@ -1,16 +1,13 @@
 import json
 import uuid
-from io import BytesIO
-from PyPDF2 import PdfReader
 from typing import Any
-from typing import List,Tuple
 from app.services.business_rule import validate_document
-from app.services.open_ai import extract_keywords_openAI,extract_keywords_openAI_freight_invoice
+from app.services.open_ai import extract_keywords_openAI
 from app.services.template_manager import register_template,match_template 
 from app.services.postgresql_db import save_doc_logs
-from app.services.handle_file import validate_file_type,validate_file_size,split_pdf
+from app.services.handle_file import validate_file_type,validate_file_size
 from app.services.business_rule import check_if_contains_beef
-from app.schemas.general_enum import DocumentType,Country
+from app.schemas.general_enum import DocumentType,Country,ProcessExtractionType
 from app.core.settings import get_settings
 from app.core.auth import get_api_key
 from app.schemas.validation_rules import RuleSet
@@ -18,19 +15,19 @@ from fastapi import APIRouter, Depends, HTTPException, status,UploadFile,File
 from app.services.gmini_service import refine_ocr_text
 from app.services.azure_ocr_service import azure_ocr_async
 from app.utils.global_resources import mime_type_to_extractor 
+from app.services.chat_gpt_service import create_request
 router = APIRouter()
 
 settings = get_settings()
 
- 
 
 @router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
-async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str = Depends(get_api_key)):    
+async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extraction_type:int =ProcessExtractionType.process_and_validate, api_key: str = Depends(get_api_key)):    
     upload_file_id:str = str(uuid.uuid4())
     file_name:str = ''
     is_processed: bool = False
     doc_type: DocumentType = DocumentType.air_waybill
-    result_scores: Any = ""
+    result_scores: dict = {}
     result_text: str = ''
     try:
         file_bytes = await  file.read()
@@ -38,7 +35,7 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
             file_name = file.filename
         validate_file_type(str(file.filename), str(file.content_type))
         validate_file_size(file_bytes)         
-        content_type = str(file.content_type)
+        content_type = str(file.content_type)                 
         if content_type in settings.mime_types_office:
             extractor = mime_type_to_extractor.get(str(file.content_type))           
             if extractor:
@@ -49,20 +46,24 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3, api_key: str
             ocrResult:dict = await azure_ocr_async(file_bytes)
             ocr_text = ocrResult['ocr_text']
             result_text =  await refine_ocr_text(file_bytes,ocr_text)
-        
-        doc_type_code,score,doc_type_name = await match_template(file_bytes,result_text,countryId)        
-        if doc_type_code is None:
-            raise HTTPException(status_code=400, detail=f"Document is not supported /upload {file_name}")     
 
-        doc_type = DocumentType(doc_type_code)        
-        result_openai_keywords = await extract_keywords_openAI(doc_type, result_text)  
+        if process_extraction_type == ProcessExtractionType.process_and_validate:    
+            doc_type_code,score,doc_type_name = await match_template(file_bytes,result_text,countryId)        
+            if doc_type_code is None:
+                raise HTTPException(status_code=400, detail=f"Document is not supported /upload {file_name}")     
 
-        result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name,str(doc_type_name))
+            doc_type = DocumentType(doc_type_code)        
+            result_openai_keywords = await extract_keywords_openAI(doc_type, result_text)  
 
-        if countryId == Country.brasil and doc_type==DocumentType.brasil_commercial_invoice:
-          result_scores =  check_if_contains_beef(result_scores)
+            result_scores = validate_document(result_openai_keywords,doc_type,RuleSet.general_rules,file_name,str(doc_type_name))
 
-        
+            if countryId == Country.brasil and doc_type==DocumentType.brasil_commercial_invoice:
+                result_scores =  check_if_contains_beef(result_scores)
+
+        else:
+            result_json_schema:str =  await create_request(result_text,settings.fc_agent_api_key,settings.fc_agent_process_text_uuid,True)
+            result_scores = json.loads(result_json_schema)
+            result_scores["documents"][0]["file_name"] = file_name
         return result_scores
     except HTTPException as exc:
         result_scores = {"error": exc.detail} 

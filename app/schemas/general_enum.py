@@ -21,3 +21,8 @@ class DocumentType(str, Enum):
 
 class Country(int, Enum):
     brasil = 3
+
+class ProcessExtractionType(int, Enum):
+    process_and_validate = 1
+    extract_text = 2
+    

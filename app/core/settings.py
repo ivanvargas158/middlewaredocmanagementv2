@@ -111,6 +111,9 @@ class Settings(BaseSettings):
 
     gmini_api_key:str = Field(validation_alias="GMINI_API_KEY")
 
+    fc_agent_process_text_uuid: str = Field(validation_alias="FC_AGENT_PROCESS_TEXT_UUID")
+    fc_agent_api_key: str = Field(validation_alias="FC_AGENT_API_KEY")
+
     # --- Validation Helpers ---
     @field_validator("cors_origins", mode="before")
     @classmethod
