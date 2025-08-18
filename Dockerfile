@@ -1,4 +1,3 @@
-# Use a lightweight Python base image
 FROM python:3.10.9-slim
 
 # Install LibreOffice and dependencies
@@ -10,23 +9,31 @@ RUN apt-get update && apt-get install -y \
     fonts-dejavu \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Add LibreOffice binaries to PATH for easy calling of soffice
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"
-
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy only requirements first to leverage Docker cache
+# Copy requirements first for Docker cache
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy your FastAPI source code into the container
+# Copy application code
 COPY . .
 
-# Expose port 8000 for Uvicorn
+# Ensure local cache directory exists
+RUN mkdir -p .cache/models
+
+# Pre-download ONNX model at build time (Azure Blob)
+ARG AZURE_STORAGE_CONNECTION_STRING
+RUN python -c "\
+from azure.storage.blob import BlobServiceClient; \
+from pathlib import Path; import os; \
+CACHE_DIR = Path('./.cache/models'); CACHE_DIR.mkdir(parents=True, exist_ok=True); \
+BLOB_NAME='llama-prompt-guard-onnx/model.onnx'; \
+client = BlobServiceClient.from_connection_string(os.environ.get('AZURE_STORAGE_CONNECTION_STRING')).get_blob_client('models', BLOB_NAME); \
+with open(CACHE_DIR/BLOB_NAME.split('/')[-1], 'wb') as f: f.write(client.download_blob().readall()) \
+"
+
 EXPOSE 8000
 
-# Command to run your FastAPI app
+# Gunicorn with 2 workers, tuned for large models
 CMD ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "main:app", "--timeout", "500", "--keep-alive", "5"]

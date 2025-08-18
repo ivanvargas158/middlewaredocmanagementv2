@@ -16,11 +16,12 @@ from app.services.gmini_service import refine_ocr_text
 from app.services.azure_ocr_service import azure_ocr_async
 from app.utils.global_resources import mime_type_to_extractor 
 from app.services.chat_gpt_service import create_request
-from app.utils.global_security import InjectionGuardModel
+from app.utils.global_security import get_predictor
 router = APIRouter()
 
 settings = get_settings()
-model  = InjectionGuardModel()
+
+model  = get_predictor()
 
 @router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extraction_type:int =ProcessExtractionType.process_and_validate, api_key: str = Depends(get_api_key)):    
