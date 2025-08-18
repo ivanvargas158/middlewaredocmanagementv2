@@ -9,6 +9,9 @@ __pycache__/
 .env
 
 # Ignore IDE/editor settings
+.cache/
+
+# Ignore Cache
 .vscode/
 
 # Ignore log files
