@@ -12,8 +12,12 @@ app.include_router(manage_files.router,prefix="/api/v1/document",tags=["Manage f
 
 @app.on_event("startup")
 async def startup_event():
-    # Download ONNX model if not cached
+      # Download ONNX model to a safe folder
     model_path = download_model_from_blob()
- 
-    set_predictor(model_path=model_path)
+    
+    try:
+        set_predictor(model_path=model_path)
+    except Exception as e:
+        print(f"Failed to initialize ONNX model: {e}")
+        raise
  

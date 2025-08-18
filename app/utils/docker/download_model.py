@@ -1,14 +1,23 @@
+import os
+import logging
 from pathlib import Path
 from azure.storage.blob import BlobServiceClient
 from app.core.settings import get_settings
 
 settings = get_settings()
 
-cache_dir = Path("./.cache/models/llama-prompt-guard-onnx")
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+
+# Use HOME environment variable for a writable path in Azure App Service
+#linux
+cache_dir = Path(os.environ.get("HOME", "/tmp")) / ".cache/models/llama-prompt-guard-onnx"
+
+#windows
+#cache_dir = Path("./.cache/models/llama-prompt-guard-onnx")
 cache_dir.mkdir(parents=True, exist_ok=True)
 
 blob_prefix = "llama-prompt-guard-onnx/"  # folder prefix in Azure container
-
 
 def download_model_from_blob():
     blob_service_client = BlobServiceClient(settings.azure_storage_endpoint_cargologik)
@@ -26,13 +35,12 @@ def download_model_from_blob():
         local_path = cache_dir / file_name
 
         if not local_path.exists():
-            print(f"Downloading {blob_name} -> {local_path}")
             with open(local_path, "wb") as f:
                 f.write(container_client.download_blob(blob_name).readall())
         else:
-            print(f"Already exists: {local_path}")
+            logging.info(f"Already exists: {local_path}")
 
         local_files.append(local_path)
 
-    print("All model files downloaded.")
+    logging.info("All model files downloaded.")
     return cache_dir
