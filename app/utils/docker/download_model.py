@@ -1,18 +1,28 @@
-
 import os
 from pathlib import Path
 from azure.storage.blob import BlobServiceClient
+from app.core.settings import get_settings
 
-cache_dir = Path('./.cache/models')
+settings  = get_settings()
+
+cache_dir = Path("./.cache/models")
 cache_dir.mkdir(parents=True, exist_ok=True)
 
-blob_name = 'llama-prompt-guard-onnx/model.onnx'
-azure_conn_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
+blob_name = settings.azure_storage_endpoint_cl_blob_name
+ 
 
-if not azure_conn_str:
-    raise ValueError("AZURE_STORAGE_CONNECTION_STRING environment variable is not set.")
+def download_model_from_blob():
 
-client = BlobServiceClient.from_connection_string(azure_conn_str).get_blob_client('models', blob_name)
+    local_model_path = cache_dir / blob_name.split("/")[-1]
+    if local_model_path.exists():
+        return local_model_path
 
-with open(cache_dir / blob_name.split('/')[-1], 'wb') as f:
-    f.write(client.download_blob().readall())
+    blob_service_client = BlobServiceClient(settings.azure_storage_endpoint_cargologik)
+    container_client = blob_service_client.get_container_client(settings.azure_storage_endpoint_cl_container_models)
+    blob_client = container_client.get_blob_client(blob=blob_name)
+
+    print("Downloading model from Azure Blob Storage...")
+    with open(local_model_path, "wb") as f:
+        f.write(blob_client.download_blob().readall())
+    print("Model downloaded to", local_model_path)
+    return local_model_path
