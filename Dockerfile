@@ -10,31 +10,23 @@ RUN apt-get update && apt-get install -y \
     fonts-dejavu \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Add LibreOffice binaries to PATH
+# Add LibreOffice binaries to PATH for easy calling of soffice
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"
 
-# Set working directory
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy requirements first for caching
-COPY requirements.txt ./
+# Copy only requirements first to leverage Docker cache
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy your FastAPI source code
+# Copy your FastAPI source code into the container
 COPY . .
 
-# --- Download ONNX model from Azure Blob ---
-# ARG to pass the connection string at build time (optional)
-ARG AZURE_STORAGE_CONNECTION_STRING
-ENV AZURE_STORAGE_CONNECTION_STRING=$AZURE_STORAGE_CONNECTION_STRING
-
-# Run the download script
-RUN python app/utils/docker/download_model.py
-
-# Expose port for Uvicorn
+# Expose port 8000 for Uvicorn
 EXPOSE 8000
 
-# Command to run FastAPI with Gunicorn
+# Command to run your FastAPI app
 CMD ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "main:app", "--timeout", "500", "--keep-alive", "5"]

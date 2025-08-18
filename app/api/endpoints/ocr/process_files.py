@@ -21,7 +21,7 @@ router = APIRouter()
 
 settings = get_settings()
 
-model  = get_predictor()
+
 
 @router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extraction_type:int =ProcessExtractionType.process_and_validate, api_key: str = Depends(get_api_key)):    
@@ -48,7 +48,7 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extra
             ocrResult:dict = await azure_ocr_async(file_bytes)
             ocr_text = ocrResult['ocr_text']
             result_text =  await refine_ocr_text(file_bytes,ocr_text)
-
+        model  = get_predictor()
         result_scanner = model.predict(result_text)
 
         if result_scanner["is_malicious"]:
