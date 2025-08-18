@@ -78,7 +78,8 @@ def validate_document(flat_fields: Dict[str, str], doc_type_code:DocumentType,ru
         "missing_fields": missing_fields,        
         "pass": pass_flag,
         "all_fields":flat_fields,
-        "file_name": file_name
+        "file_name": file_name,
+        "is_injection_document_risk": False    
     }
 
 

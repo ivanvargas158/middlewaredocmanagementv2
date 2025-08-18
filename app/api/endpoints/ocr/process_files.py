@@ -16,10 +16,11 @@ from app.services.gmini_service import refine_ocr_text
 from app.services.azure_ocr_service import azure_ocr_async
 from app.utils.global_resources import mime_type_to_extractor 
 from app.services.chat_gpt_service import create_request
+from app.utils.global_security import InjectionGuardModel
 router = APIRouter()
 
 settings = get_settings()
-
+model  = InjectionGuardModel()
 
 @router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
 async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extraction_type:int =ProcessExtractionType.process_and_validate, api_key: str = Depends(get_api_key)):    
@@ -47,6 +48,13 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extra
             ocr_text = ocrResult['ocr_text']
             result_text =  await refine_ocr_text(file_bytes,ocr_text)
 
+        result_scanner = model.predict(result_text)
+
+        if result_scanner["is_malicious"]:
+             return {
+                    "is_injection_document_risk": True                    
+                }
+        
         if process_extraction_type == ProcessExtractionType.process_and_validate:    
             doc_type_code,score,doc_type_name = await match_template(file_bytes,result_text,countryId)        
             if doc_type_code is None:
@@ -64,6 +72,7 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extra
             result_json_schema:str =  await create_request(result_text,settings.fc_agent_api_key,settings.fc_agent_process_text_uuid,True)
             result_scores = json.loads(result_json_schema)
             result_scores["documents"][0]["file_name"] = file_name
+            result_scores["is_injection_document_risk"] = False
         return result_scores
     except HTTPException as exc:
         result_scores = {"error": exc.detail} 
