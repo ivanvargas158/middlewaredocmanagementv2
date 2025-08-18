@@ -17,8 +17,9 @@ class Predictor:
     def _init_model(self, model_path):
         if model_path is None or not Path(model_path).exists():
             raise FileNotFoundError(f"ONNX model not found at {model_path}")
-        self.tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-        self.session = ort.InferenceSession(str(model_path), providers=["CPUExecutionProvider"])
+        new_path = Path(model_path).as_posix()
+        self.tokenizer = AutoTokenizer.from_pretrained(new_path)
+        self.session = ort.InferenceSession(f"{new_path}/model.onnx", providers=["CPUExecutionProvider"])
 
     def _to_numpy(self, tensor):
         if isinstance(tensor, ort.OrtValue):

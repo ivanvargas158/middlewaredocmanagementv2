@@ -13,7 +13,7 @@ class Settings(BaseSettings):
         
     azure_storage_endpoint_cargologik: str = "https://synapsevue.blob.core.windows.net/?sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2026-01-01T03:53:32Z&st=2025-05-01T19:53:32Z&spr=https&sig=0vF4hBpmZG31qKSqOyNPtjqNbr9SfxXuQuwC48XIaR4%3D"
     azure_storage_endpoint_cl_container_models: str = "models"
-    azure_storage_endpoint_cl_blob_name: str = "llama-prompt-guard-onnx/model.onnx"
+ 
     # --- Security Credentials ---
   
     schema_registry_token: Optional[str]= ""
