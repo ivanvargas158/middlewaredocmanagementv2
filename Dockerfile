@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install -y \
 # Add LibreOffice binaries to PATH for easy calling of soffice
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"
 
+# Create cache directory and set correct permissions
+RUN mkdir -p /tmp/.cache/models/llama-prompt-guard-onnx \
+    && chmod -R 777 /tmp/.cache
+
 # Set working directory inside the container
 WORKDIR /app
 
