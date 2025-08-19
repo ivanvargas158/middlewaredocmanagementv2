@@ -12,11 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 # Add LibreOffice binaries to PATH for easy calling of soffice
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"
-
-# Explicitly create /tmp and /tmp/.cache/models directories with correct permissions
-RUN mkdir -p /tmp/.cache/models/llama-prompt-guard-onnx \
-    && chmod 1777 /tmp \
-    && chmod -R 777 /tmp/.cache
+ 
 
 # Set working directory inside the container
 WORKDIR /app
@@ -29,6 +25,24 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your FastAPI source code into the container
 COPY . .
+
+# Create directory for baked-in model
+RUN mkdir -p /app/models/llama-prompt-guard-onnx
+
+# Pass HF token as build argument
+ARG HF_TOKEN
+ENV HF_TOKEN=${HF_TOKEN}
+
+
+# Login to Hugging Face and export ONNX model during build
+RUN huggingface-cli login --token $HF_TOKEN && \
+    optimum-cli export onnx \
+    -m meta-llama/Llama-Prompt-Guard-2-86M \
+    --task text-classification \
+    --framework pt \
+    --opset 17 \
+    --atol 1e-5 \
+    /app/models/llama-prompt-guard-onnx
 
 # Expose port 8000 for Uvicorn
 EXPOSE 8000
