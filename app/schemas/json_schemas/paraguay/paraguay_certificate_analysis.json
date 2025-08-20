@@ -1,0 +1,392 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.example.com/microbiological-certificate.json",
+  "title": "Microbiological Certificate of Analysis",
+  "description": "Schema for microbiological certificates of analysis for beef production",
+  "type": "object",
+  "required": ["certificateNumber", "issueDate", "establishment", "shipment", "testingResults"],
+  "properties": {
+    "certificateNumber": {
+      "type": "string",
+      "description": "Certificate identification number"
+    },
+    "documentMetadata": {
+      "$ref": "#/$defs/DocumentMetadata",
+      "description": "Document control information"
+    },
+    "issueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of certificate issue"
+    },
+    "establishment": {
+      "$ref": "#/$defs/Establishment",
+      "description": "Production establishment details"
+    },
+    "shipment": {
+      "$ref": "#/$defs/Shipment",
+      "description": "Shipment information"
+    },
+    "testingScope": {
+      "$ref": "#/$defs/TestingScope",
+      "description": "Description of what was tested"
+    },
+    "laboratories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Laboratory"
+      },
+      "description": "Testing laboratories information"
+    },
+    "testingResults": {
+      "$ref": "#/$defs/TestingResults",
+      "description": "Test results by product lots"
+    },
+    "certificationStatement": {
+      "type": "string",
+      "description": "Legal certification statement"
+    },
+    "limitations": {
+      "type": "string",
+      "description": "Statement of certificate limitations"
+    },
+    "approvalWorkflow": {
+      "$ref": "#/$defs/ApprovalWorkflow",
+      "description": "Document approval chain"
+    }
+  },
+  "$defs": {
+    "DocumentMetadata": {
+      "type": "object",
+      "required": ["code", "revision", "pages"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Document code"
+        },
+        "revision": {
+          "type": "string",
+          "description": "Document revision number"
+        },
+        "revisionDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Revision date"
+        },
+        "pages": {
+          "type": "string",
+          "description": "Page numbering (e.g., 1/1)"
+        }
+      }
+    },
+    "Establishment": {
+      "type": "object",
+      "required": ["name", "establishmentNumber"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Establishment name"
+        },
+        "establishmentNumber": {
+          "type": "string",
+          "description": "Official establishment number"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Establishment address"
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": "Street address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country"
+        }
+      }
+    },
+    "Shipment": {
+      "type": "object",
+      "required": ["salesNumber", "destination", "totalBoxes", "netWeight"],
+      "properties": {
+        "salesNumber": {
+          "type": "string",
+          "description": "Sales order number"
+        },
+        "shippingMark": {
+          "type": "string",
+          "description": "Shipping mark identifier"
+        },
+        "containerNumber": {
+          "type": "string",
+          "description": "Container number"
+        },
+        "healthCertificateNumber": {
+          "type": "string",
+          "description": "Associated health certificate number"
+        },
+        "loadedDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Loading/shipment date"
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination country or region"
+        },
+        "totalBoxes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of boxes/cartons"
+        },
+        "netWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Net weight of shipment"
+        }
+      }
+    },
+    "Weight": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Weight value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["KGS", "LBS", "TONS"],
+          "description": "Weight unit"
+        }
+      }
+    },
+    "TestingScope": {
+      "type": "object",
+      "required": ["pathogens"],
+      "properties": {
+        "productType": {
+          "type": "string",
+          "description": "Type of product tested"
+        },
+        "pathogens": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["STEC_STX", "STEC_EAE", "E_COLI_O157H7", "SALMONELLA"]
+          },
+          "description": "Pathogens tested for"
+        },
+        "testingPeriod": {
+          "type": "string",
+          "description": "Production period covered by testing"
+        }
+      }
+    },
+    "Laboratory": {
+      "type": "object",
+      "required": ["name", "registrationNumber", "testTypes"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Laboratory name"
+        },
+        "registrationNumber": {
+          "type": "string",
+          "description": "Official registration number"
+        },
+        "registeringAuthority": {
+          "type": "string",
+          "description": "Authority that registered the lab"
+        },
+        "testTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Types of tests performed by this lab"
+        },
+        "methodology": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TestMethod"
+          },
+          "description": "Testing methodologies used"
+        }
+      }
+    },
+    "TestMethod": {
+      "type": "object",
+      "required": ["technique", "standard"],
+      "properties": {
+        "technique": {
+          "type": "string",
+          "enum": ["PCR", "MDS-AOAC", "ELISA", "CULTURE"],
+          "description": "Testing technique used"
+        },
+        "standard": {
+          "type": "string",
+          "description": "Standard or reference method"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target pathogen or parameter"
+        }
+      }
+    },
+    "TestingResults": {
+      "type": "object",
+      "required": ["productLots", "overallResult"],
+      "properties": {
+        "productLots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProductLot"
+          },
+          "minItems": 1,
+          "description": "Test results by product lot"
+        },
+        "overallResult": {
+          "type": "string",
+          "enum": ["NEGATIVE", "POSITIVE", "INCONCLUSIVE"],
+          "description": "Overall test result"
+        },
+        "testingSummary": {
+          "type": "string",
+          "description": "Summary of testing performed"
+        }
+      }
+    },
+    "ProductLot": {
+      "type": "object",
+      "required": ["lotNumber", "productionDate", "totalBoxes", "result"],
+      "properties": {
+        "lotNumber": {
+          "type": "string",
+          "description": "Product lot number"
+        },
+        "productionDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Production date"
+        },
+        "totalBoxes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of boxes in this lot"
+        },
+        "result": {
+          "type": "string",
+          "enum": ["NEGATIVE", "POSITIVE", "INCONCLUSIVE"],
+          "description": "Test result for this lot"
+        },
+        "testDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IndividualTest"
+          },
+          "description": "Individual test results"
+        },
+        "samplesCollected": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of samples collected from this lot"
+        }
+      }
+    },
+    "IndividualTest": {
+      "type": "object",
+      "required": ["pathogen", "result"],
+      "properties": {
+        "pathogen": {
+          "type": "string",
+          "description": "Specific pathogen tested"
+        },
+        "result": {
+          "type": "string",
+          "enum": ["NEGATIVE", "POSITIVE", "INCONCLUSIVE"],
+          "description": "Test result"
+        },
+        "method": {
+          "type": "string",
+          "description": "Testing method used"
+        },
+        "detectionLimit": {
+          "type": "string",
+          "description": "Detection limit of the test"
+        },
+        "testDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Date test was performed"
+        }
+      }
+    },
+    "ApprovalWorkflow": {
+      "type": "object",
+      "required": ["preparedBy", "verifiedBy", "approvedBy"],
+      "properties": {
+        "preparedBy": {
+          "$ref": "#/$defs/Person",
+          "description": "Person who prepared the certificate"
+        },
+        "verifiedBy": {
+          "$ref": "#/$defs/Person",
+          "description": "Person who verified the certificate"
+        },
+        "approvedBy": {
+          "$ref": "#/$defs/Person",
+          "description": "Person who approved the certificate"
+        },
+        "qualitySupervisor": {
+          "$ref": "#/$defs/Person",
+          "description": "Quality supervisor signature"
+        }
+      }
+    },
+    "Person": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Person's name"
+        },
+        "title": {
+          "type": "string",
+          "description": "Person's job title"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Digital signature reference"
+        },
+        "signatureDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of signature"
+        },
+        "licenseNumber": {
+          "type": "string",
+          "description": "Professional license number if applicable"
+        }
+      }
+    }
+  }
+}

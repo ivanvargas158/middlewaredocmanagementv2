@@ -17,5 +17,5 @@ __pycache__/
 # Ignore log files
 *.log
 
-# Ignore models
+# Ignore models - the directory will be created by docker
 models/

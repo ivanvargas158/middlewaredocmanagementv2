@@ -1,0 +1,518 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.example.com/health-certificate.json",
+  "title": "Health Certificate for Export of Fresh Beef",
+  "description": "Schema for veterinary health certificates for export of fresh beef (chilled or frozen)",
+  "type": "object",
+  "required": ["certificateNumber", "issueDate", "centralAuthority", "exporter", "consignee", "products"],
+  "properties": {
+    "certificateNumber": {
+      "type": "string",
+      "description": "Health certificate number"
+    },
+    "issueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of issue"
+    },
+    "issuePlace": {
+      "type": "string",
+      "description": "Place of issue"
+    },
+    "destinationCountry": {
+      "type": "string",
+      "description": "Destination country"
+    },
+    "centralAuthority": {
+      "$ref": "#/$defs/Authority",
+      "description": "Central competent authority"
+    },
+    "localVeterinaryAuthority": {
+      "$ref": "#/$defs/Authority",
+      "description": "Local veterinary authority"
+    },
+    "exporter": {
+      "$ref": "#/$defs/Company",
+      "description": "Exporter details"
+    },
+    "consignee": {
+      "$ref": "#/$defs/Company",
+      "description": "Consignee details"
+    },
+    "establishments": {
+      "$ref": "#/$defs/Establishments",
+      "description": "Origin establishments"
+    },
+    "transport": {
+      "$ref": "#/$defs/TransportDetails",
+      "description": "Transportation information"
+    },
+    "species": {
+      "$ref": "#/$defs/SpeciesInfo",
+      "description": "Species and product information"
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Product"
+      },
+      "minItems": 1,
+      "description": "List of products"
+    },
+    "healthCertification": {
+      "$ref": "#/$defs/HealthCertification",
+      "description": "Veterinary health declarations"
+    },
+    "officialValidation": {
+      "$ref": "#/$defs/OfficialValidation",
+      "description": "Official signatures and seals"
+    }
+  },
+  "$defs": {
+    "Authority": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Authority name"
+        },
+        "abbreviation": {
+          "type": "string",
+          "description": "Authority abbreviation"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Authority address"
+        }
+      }
+    },
+    "Company": {
+      "type": "object",
+      "required": ["name", "address"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Company name"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Company address"
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "ISO country code"
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "required": ["street", "city", "country"],
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": "Street address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country"
+        }
+      }
+    },
+    "Establishments": {
+      "type": "object",
+      "properties": {
+        "slaughterHouse": {
+          "$ref": "#/$defs/Establishment",
+          "description": "Slaughter establishment"
+        },
+        "processingPlant": {
+          "$ref": "#/$defs/Establishment",
+          "description": "Processing establishment"
+        },
+        "coldStorage": {
+          "$ref": "#/$defs/Establishment",
+          "description": "Cold storage establishment"
+        }
+      }
+    },
+    "Establishment": {
+      "type": "object",
+      "required": ["name", "address", "officialNumber"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Establishment name"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Establishment address"
+        },
+        "officialNumber": {
+          "type": "string",
+          "description": "Official establishment number"
+        }
+      }
+    },
+    "TransportDetails": {
+      "type": "object",
+      "properties": {
+        "portOfEntry": {
+          "type": "string",
+          "description": "Port of entry"
+        },
+        "meansOfTransport": {
+          "type": "string",
+          "description": "Means of transportation"
+        },
+        "vessel": {
+          "type": "string",
+          "description": "Vessel name"
+        },
+        "containerNumber": {
+          "type": "string",
+          "description": "Container number"
+        },
+        "sealNumbers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Seal numbers"
+        }
+      }
+    },
+    "SpeciesInfo": {
+      "type": "object",
+      "required": ["species", "productCondition"],
+      "properties": {
+        "species": {
+          "type": "string",
+          "enum": ["BOVINE", "PORCINE", "OVINE", "CAPRINE", "POULTRY"],
+          "description": "Animal species"
+        },
+        "ncmCode": {
+          "type": "string",
+          "description": "NCM classification code"
+        },
+        "productCondition": {
+          "type": "string",
+          "enum": ["FRESH", "CHILLED", "FROZEN"],
+          "description": "Product condition"
+        },
+        "humanConsumption": {
+          "type": "boolean",
+          "description": "Intended for human consumption"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "required": ["description", "slaughterDate", "productionDate", "lots", "quantity", "netWeight"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "category": {
+          "type": "string",
+          "description": "Product category"
+        },
+        "slaughterDate": {
+          "$ref": "#/$defs/DateRange",
+          "description": "Slaughter date range"
+        },
+        "productionDate": {
+          "$ref": "#/$defs/DateRange",
+          "description": "Production date range"
+        },
+        "lots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Lot numbers"
+        },
+        "shippingMarks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Shipping marks"
+        },
+        "containerMarks": {
+          "type": "string",
+          "description": "Container marks"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity",
+          "description": "Quantity details"
+        },
+        "netWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Net weight"
+        },
+        "grossWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Gross weight"
+        }
+      }
+    },
+    "DateRange": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date",
+          "description": "Start date"
+        },
+        "to": {
+          "type": "string",
+          "format": "date",
+          "description": "End date"
+        },
+        "single": {
+          "type": "string",
+          "format": "date",
+          "description": "Single date (if not a range)"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["from", "to"]
+        },
+        {
+          "required": ["single"]
+        }
+      ]
+    },
+    "Quantity": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Quantity value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["CARTONS", "PACKAGES", "PIECES", "UNITS"],
+          "description": "Unit of measurement"
+        }
+      }
+    },
+    "Weight": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Weight value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["KGS", "LBS", "TONS"],
+          "description": "Weight unit"
+        }
+      }
+    },
+    "HealthCertification": {
+      "type": "object",
+      "required": ["veterinarianCertification"],
+      "properties": {
+        "veterinarianCertification": {
+          "type": "object",
+          "required": ["animalOrigin", "diseaseStatus", "inspections"],
+          "properties": {
+            "animalOrigin": {
+              "type": "object",
+              "properties": {
+                "bornRaisedSlaughtered": {
+                  "type": "boolean",
+                  "description": "Animals born, raised and slaughtered in Paraguay"
+                },
+                "fmdFreeStatus": {
+                  "type": "boolean",
+                  "description": "No Foot and Mouth Disease diagnosed"
+                },
+                "bseFreeStatus": {
+                  "type": "boolean",
+                  "description": "BSE free status"
+                }
+              }
+            },
+            "diseaseStatus": {
+              "type": "object",
+              "properties": {
+                "fmdAbsent": {
+                  "type": "boolean",
+                  "description": "FMD has not been present during bovine lifetime"
+                },
+                "directTransport": {
+                  "type": "boolean",
+                  "description": "Direct transport from origin to slaughter"
+                },
+                "noContactWithOtherAnimals": {
+                  "type": "boolean",
+                  "description": "No contact with other animals during transport"
+                }
+              }
+            },
+            "inspections": {
+              "type": "object",
+              "properties": {
+                "antemortem": {
+                  "type": "boolean",
+                  "description": "Ante-mortem inspection performed"
+                },
+                "postmortem": {
+                  "type": "boolean",
+                  "description": "Post-mortem inspection performed"
+                },
+                "headAndFeetInspection": {
+                  "type": "boolean",
+                  "description": "Special attention to head and feet"
+                },
+                "noVesicularDisease": {
+                  "type": "boolean",
+                  "description": "No evidence of vesicular disease"
+                }
+              }
+            },
+            "productRequirements": {
+              "type": "object",
+              "properties": {
+                "standardParts": {
+                  "type": "boolean",
+                  "description": "Only standard bovine parts included"
+                },
+                "chillerMaturation": {
+                  "type": "boolean",
+                  "description": "Chiller maturation after slaughter"
+                },
+                "bonesAndTissueRemoved": {
+                  "type": "boolean",
+                  "description": "All bones and specified tissues removed"
+                },
+                "noContactWithRiskMeat": {
+                  "type": "boolean",
+                  "description": "No contact with meat from risk regions"
+                }
+              }
+            },
+            "temperatureRequirements": {
+              "type": "object",
+              "properties": {
+                "maturationTemperature": {
+                  "type": "object",
+                  "properties": {
+                    "range": {
+                      "type": "string",
+                      "description": "Temperature range during maturation"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "Duration of temperature maintenance"
+                    },
+                    "phRequirement": {
+                      "type": "string",
+                      "description": "pH requirements"
+                    }
+                  }
+                }
+              }
+            },
+            "regulatoryCompliance": {
+              "type": "object",
+              "properties": {
+                "bseCompliance": {
+                  "type": "boolean",
+                  "description": "BSE regulation compliance"
+                },
+                "feedingRestrictions": {
+                  "type": "boolean",
+                  "description": "Feeding restrictions compliance"
+                },
+                "cfr327Compliance": {
+                  "type": "boolean",
+                  "description": "CFR 327.2 regulation compliance"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "OfficialValidation": {
+      "type": "object",
+      "required": ["veterinarian"],
+      "properties": {
+        "veterinarian": {
+          "$ref": "#/$defs/OfficialVeterinarian",
+          "description": "Certifying veterinarian"
+        },
+        "officialSeal": {
+          "$ref": "#/$defs/OfficialSeal",
+          "description": "Official seal"
+        }
+      }
+    },
+    "OfficialVeterinarian": {
+      "type": "object",
+      "required": ["name", "title", "establishmentNumber"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Veterinarian name"
+        },
+        "title": {
+          "type": "string",
+          "description": "Official title"
+        },
+        "establishmentNumber": {
+          "type": "string",
+          "description": "Establishment number"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Digital signature reference"
+        },
+        "senacasaNumber": {
+          "type": "string",
+          "description": "SENACSA registration number"
+        }
+      }
+    },
+    "OfficialSeal": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string",
+          "description": "Sealing authority"
+        },
+        "sealNumber": {
+          "type": "string",
+          "description": "Official seal number"
+        },
+        "sealImage": {
+          "type": "string",
+          "description": "Seal image reference"
+        }
+      }
+    }
+  }
+}

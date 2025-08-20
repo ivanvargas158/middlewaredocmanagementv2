@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class DocumentType(str, Enum):
     air_waybill = "air_waybill"
     dangerous_goods = "dangerous_goods"         
@@ -12,12 +11,10 @@ class DocumentType(str, Enum):
     brasil_packing_list = "brasil_packing_list"
     brasil_certificate_of_origin = "brasil_certificate_of_origin"
     brasil_master  = "brasil_master"
-    ef_doc_type_ci_1  = "ef_doc_type_ci_1"
-    ef_pdf_invoice_1  = "ef_pdf_invoice_1"
-    ef_xls_type_4  = "ef_xls_type_4"
-    ef_xls_type_isf_3  = "ef_xls_type_isf_3"
-    ef_xlsx_type_ci_1  = "ef_xlsx_type_ci_1"
-    ef_xlsx_type_isf_2  = "ef_xlsx_type_isf_2"
+    paraguay_export_package = "pr_export_document_package"
+    paraguay_sea_waybill = "pr_sea_waybill"
+    paraguay_health_certificate = "pr_health_certificate"
+    paraguay_certificate_analysis = "pr_certificate_analysis"
 
 class Country(int, Enum):
     brasil = 3

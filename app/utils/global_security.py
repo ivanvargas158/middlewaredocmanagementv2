@@ -2,6 +2,7 @@ from pathlib import Path
 import onnxruntime as ort
 from transformers import AutoTokenizer
 import numpy as np
+import asyncio
 
 
 predictor_instance = None   
@@ -53,3 +54,10 @@ def get_predictor():
     if predictor_instance is None:
         raise RuntimeError("Predictor not initialized. Did the startup event run?")
     return predictor_instance
+
+
+# ✅ Async wrapper
+async def async_predict(text: str, threshold: float = 0.5):
+    predictor = get_predictor()
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, predictor.predict, text, threshold)
