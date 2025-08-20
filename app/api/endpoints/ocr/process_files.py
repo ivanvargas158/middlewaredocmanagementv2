@@ -1,5 +1,6 @@
 import json
 import uuid
+import asyncio
 from typing import Any
 from app.services.business_rule import validate_document
 from app.services.open_ai import extract_keywords_openAI
@@ -16,7 +17,7 @@ from app.services.gmini_service import refine_ocr_text
 from app.services.azure_ocr_service import azure_ocr_async
 from app.utils.global_resources import mime_type_to_extractor 
 from app.services.chat_gpt_service import create_request
-from app.utils.global_security import get_predictor
+from app.utils.global_security import async_predict
 router = APIRouter()
 
 settings = get_settings()
@@ -47,9 +48,10 @@ async def upload_file(file: UploadFile = File(...),countryId:int=3,process_extra
         else:
             ocrResult:dict = await azure_ocr_async(file_bytes)
             ocr_text = ocrResult['ocr_text']
-            result_text =  await refine_ocr_text(file_bytes,ocr_text)
-        model  = get_predictor()
-        result_scanner = model.predict(result_text)
+            result_text =  await refine_ocr_text(file_bytes,ocr_text)     
+            
+        result_scanner = await async_predict(result_text) 
+     
 
         if result_scanner["is_malicious"]:
              return {

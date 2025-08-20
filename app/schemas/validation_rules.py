@@ -214,184 +214,6 @@ general_rules = {
             "container_summary[].cartons": r"^.+$"
         }
     },
-    DocumentType.ef_doc_type_ci_1: {
-    "required_fields": {
-        "invoice_id": r"^.+$",                               # non-empty string
-        "invoice_date": r"^\d{4}-\d{2}-\d{2}$",             # date YYYY-MM-DD
-        "customer_details.billed_to": r"^.+$",               # non-empty string
-        "customer_details.address": r"^.+$",                 # non-empty string
-        "customer_details.contact_person": r"^.+$",          # non-empty string
-        "customer_details.phone": r"^\+?[\d\s\-\(\)]+$",     # phone number with optional +, digits, spaces, (), -
-        "customer_details.tax_id": r"^\w+$",                  # alphanumeric tax id
-        # For line_items array - each object must have these fields:
-        "line_items[].quantity": r"^\d+$",                   # integer digits only
-        "line_items[].description": r"^.+$",                 # non-empty string
-        "line_items[].unit_price": r"^\d+(\.\d+)?$",         # number with optional decimal part
-        "line_items[].line_total": r"^\d+(\.\d+)?$",         # number with optional decimal part
-        "total_amount": r"^\d+(\.\d+)?$",                     # number with optional decimal part
-        "total_amount_in_words": r"^.+$",                     # non-empty string
-            }
-        },
-    DocumentType.ef_pdf_invoice_1 : {
-        "required_fields": {
-            "invoice_number": r"^.+$",                    # non-empty string
-            "invoice_date": r"^\d{4}-\d{2}-\d{2}$",      # date YYYY-MM-DD (ISO format)
-            # Supplier object required fields
-            "supplier.name": r"^.+$",
-            "supplier.address": r"^.+$",
-            "supplier.gstin": r"^[0-9A-Z]{15}$",          # GSTIN: 15 alphanumeric uppercase (example pattern)
-            "supplier.state_code": r"^\d{2}$",             # state code: 2 digits
-            # Consignee object required fields (note consignee not required overall but included here)
-            "consignee.name": r"^.+$",
-            "consignee.address": r"^.+$",
-            # Items array required fields
-            "items[].hsn_code": r"^\d{4,8}$",              # HSN codes are numeric, length varies 4-8 digits
-            "items[].quantity": r"^\d+(\.\d+)?$",          # number, integer or decimal
-            "items[].uom": r"^.+$",                         # unit of measure non-empty string
-            "items[].rate_inr": r"^\d+(\.\d{1,2})?$",      # price decimal with 0-2 decimals
-            "items[].total_inr": r"^\d+(\.\d{1,2})?$",     # price decimal with 0-2 decimals
-            # Totals object required fields
-            "totals.taxable_total_inr": r"^\d+(\.\d{1,2})?$",
-            "totals.cgst_percent": r"^\d+(\.\d+)?$",
-            "totals.cgst_amount": r"^\d+(\.\d{1,2})?$",
-            "totals.sgst_percent": r"^\d+(\.\d+)?$",
-            "totals.sgst_amount": r"^\d+(\.\d{1,2})?$",
-            "totals.igst_percent": r"^\d+(\.\d+)?$",
-            "totals.igst_amount": r"^\d+(\.\d{1,2})?$",
-            "totals.round_off": r"^-?\d+(\.\d{1,2})?$",    # can be negative or positive
-            "totals.grand_total_inr": r"^\d+(\.\d{1,2})?$",
-            "totals.amount_in_words": r"^.+$",
-            # Remarks array items can be any string, no regex needed
-            # Declaration string (optional)
-            "declaration": r"^.*$",                         # optional but if present, any string including empty
-        }
-    },
-    DocumentType.ef_xls_type_4: {
-        "required_fields": {
-            "so_number": r"^.+$",                        # non-empty string
-            "vessel_voyage": r"^.+$",                    # non-empty string
-            "etd": r"^\d{4}-\d{2}-\d{2}$",               # date YYYY-MM-DD
-            "eta": r"^\d{4}-\d{2}-\d{2}$",               # date YYYY-MM-DD
-
-            # seller object
-            "seller.name": r"^.+$",                      # non-empty string
-            "seller.address": r"^.+$",                   # non-empty string
-
-            # buyer object
-            "buyer.name": r"^.+$",                       # non-empty string
-            "buyer.address": r"^.+$",                    # non-empty string
-            "buyer.house_bl_number": r"^.+$",            # non-empty string
-            "buyer.master_bl_number": r"^.+$",           # non-empty string
-            "buyer.scac_code_house": r"^.+$",            # non-empty string
-            "buyer.scac_code_master": r"^.+$",           # non-empty string
-
-            # manufacturer object
-            "manufacturer.name": r"^.+$",                # non-empty string
-            "manufacturer.address": r"^.+$",             # non-empty string
-
-            "hts_code": r"^\d{6}$",                      # exactly 6 digits
-            "country_of_origin": r"^.+$",                # non-empty string
-            "container_number": r"^.+$",                 # non-empty string
-        }
-    },
-
-    DocumentType.ef_xls_type_isf_3: {
-        "required_fields": {
-            # Seller
-            "seller.name": r"^.+$",       # non-empty string
-            "seller.address": r"^.+$",    # non-empty string
-
-            # Buyer
-            "buyer.name": r"^.+$",        # non-empty string
-            "buyer.address": r"^.+$",     # non-empty string
-
-            # Importer of record number (IRS/EIN/SSN/CBP number) - alphanumeric allowed
-            "importer_of_record_number": r"^[A-Za-z0-9\-]+$",  
-
-            # Consignee number (IRS/EIN/SSN/CBP number) - alphanumeric allowed
-            "consignee_number": r"^[A-Za-z0-9\-]+$",  
-
-            # Manufacturer or supplier
-            "manufacturer_or_supplier.name": r"^.+$",   
-            "manufacturer_or_supplier.address": r"^.+$",  
-
-            # Ship to party
-            "ship_to_party.name": r"^.+$",  
-            "ship_to_party.address": r"^.+$",  
-
-            # Country of origin
-            "country_of_origin": r"^.+$",   # could be ISO country code or full name
-
-            # Commodity HTS number - 6 to 10 digits
-            "commodity_hts_number": r"^\d{6,10}$",  
-
-            # Container stuffing location
-            "container_stuffing_location.name": r"^.+$",  
-            "container_stuffing_location.address": r"^.+$",  
-
-            # Consolidator
-            "consolidator.name": r"^.+$",  
-            "consolidator.address": r"^.+$",  
-
-            # Vessel stow plan (optional in schema, but if provided, must not be empty object)
-            "vessel_stow_plan": r"^.+$",
-
-            # Container status messages (optional array, but if present, each must be non-empty object)
-            "container_status_messages[]": r"^.+$",
-        }
-    },
-        DocumentType.ef_xlsx_type_ci_1: {
-            "required_fields": {
-                # Seller details
-                "seller.name": r"^.+$",               # Non-empty string
-                "seller.address": r"^.+$",            # Non-empty string
-                "seller.country": r"^.+$",            # Non-empty string
-
-                # Buyer details
-                "buyer.name": r"^.+$",                # Non-empty string
-                "buyer.address": r"^.+$",             # Non-empty string
-                "buyer.country": r"^.+$",             # Non-empty string
-
-                # Invoice information
-                "invoice_number": r"^.+$",            # Non-empty string
-                "invoice_date": r"^\d{4}-\d{2}-\d{2}$",  # Date YYYY-MM-DD
-
-                # Line items (array)
-                "line_items[].description": r"^.+$",       # Non-empty string
-                "line_items[].quantity_pcs": r"^\d+$",     # Integer (digits only)
-                "line_items[].unit_price_usd": r"^[\d.,\s]+$",  # Number format
-                "line_items[].amount_usd": r"^[\d.,\s]+$",      # Number format
-
-                # Totals
-                "total_amount_usd": r"^[\d.,\s]+$",      # Number format
-            }
-        },
-        DocumentType.ef_xlsx_type_isf_2: {
-        "required_fields": {
-            # Top-level required fields
-            "ams_hbl_number": r"^.+$",                     # non-empty string
-            "mbl_number": r"^.+$",                         # non-empty string
-            "container_numbers": r"^.+$",                  # each container number as non-empty string in array
- 
-            # Seller (required: name, address, city, country)
-            "seller.name": r"^.+$",
-            "seller.address": r"^.+$",
-            "seller.city": r"^.+$",
-            "seller.postal_code": r"^.*$",                 # optional in schema, so allow empty
-            "seller.state_province": r"^.*$",
-            "seller.country": r"^.+$",
- 
-   
-            "manufacturer.country": r"^.*$",
-
-            # Items array (required: item_number, country_of_origin, hts_code)
-            "items[].item_number": r"^.+$",                # non-empty string
-            "items[].country_of_origin": r"^.+$",          # non-empty string
-            "items[].hts_code": r"^\d{6,10}$",             # 6-10 digit HTS code
-
-       
-            }
-        },
     DocumentType.air_waybill: {
         "required_fields": ["mawb", "hawb", "gross_weight", "shipper"],
         "dangerous_goods": {
@@ -410,6 +232,31 @@ general_rules = {
             "FRAGILE", "PERISHABLE", "THIS_SIDE_UP"
         ]
     }, 
+    DocumentType.paraguay_export_package:{
+             "required_fields": {  
+                "documentNumber": r"^.+$",  
+                "issueDate": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format,   
+             }
+
+    },
+    DocumentType.paraguay_sea_waybill:{
+             "required_fields": {  
+                "seaWaybillNumber": r"^.+$",  
+                "issueDate": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format
+             }
+    },
+    DocumentType.paraguay_health_certificate:{
+             "required_fields": {  
+                "certificateNumber": r"^.+$",  
+                "issueDate": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format
+             }
+    },
+    DocumentType.paraguay_certificate_analysis:{
+             "required_fields": {  
+                "certificateNumber": r"^.+$",  
+                "issueDate": r"^\d{4}-\d{2}-\d{2}$",  # ISO date format
+             }
+    },
     DocumentType.dangerous_goods: {
         "required_fields": ["un_number", "proper_shipping_name", "emergency_contacts"],
         "packaging_standards": {

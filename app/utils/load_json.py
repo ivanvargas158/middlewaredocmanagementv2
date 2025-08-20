@@ -11,12 +11,10 @@ schema_files = {
     DocumentType.brasil_packing_list: "brasil_packing_list.json",
     DocumentType.brasil_certificate_of_origin: "brasil_certificate_of_origin.json",
     DocumentType.brasil_master: "brasil_master.json",  
-    DocumentType.ef_pdf_invoice_1: "ef_pdf_invoice_1.json",
-    DocumentType.ef_xls_type_4: "ef_xls_type_4.json",
-    DocumentType.ef_xls_type_isf_3: "ef_xls_type_isf_3.json",
-    DocumentType.ef_xlsx_type_ci_1: "ef_xlsx_type_ci_1.json",
-    DocumentType.ef_xlsx_type_isf_2: "ef_xlsx_type_isf_2.json",
-    DocumentType.ef_doc_type_ci_1: "ef_doc_type_ci_1.json",
+    DocumentType.paraguay_export_package: "paraguay_export_doc_package.json",
+    DocumentType.paraguay_sea_waybill: "paraguay_sea_waybill.json",
+    DocumentType.paraguay_health_certificate: "paraguay_health_certificate.json",
+    DocumentType.paraguay_certificate_analysis: "paraguay_certificate_analysis.json"
 }
 
 # Load all schemas into a dictionary at startup
@@ -24,7 +22,7 @@ schema_dir = Path.cwd() / "app/schemas/json_schemas"
 # Set up paths
 base_dir = Path.cwd() / "app/schemas/json_schemas"
 # Include main dir + specific subdirs
-directories_to_scan = [base_dir, base_dir / "brasil",base_dir / "exFreight"]
+directories_to_scan = [base_dir, base_dir / "brasil",base_dir / "paraguay"]
 
 loaded_schemas = {}
 

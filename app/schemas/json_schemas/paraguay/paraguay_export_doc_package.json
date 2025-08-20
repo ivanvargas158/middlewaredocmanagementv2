@@ -1,0 +1,648 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.example.com/export-document-package.json",
+  "title": "Export Document Package",
+  "description": "Schema for export/import documentation including commercial invoice, certificate of origin, packing list, and insurance certificate",
+  "type": "object",
+  "required": ["documentType", "documentNumber", "issueDate", "exporter", "importer"],
+  "properties": {
+    "documentNumber": {
+      "type": "string",
+      "description": "Primary document reference number"
+    },
+    "issueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the document package was issued"
+    },
+    "exporter": {
+      "$ref": "#/$defs/Company",
+      "description": "Exporting company details"
+    },
+    "importer": {
+      "$ref": "#/$defs/Company", 
+      "description": "Importing company details"
+    },
+    "commercialInvoice": {
+      "$ref": "#/$defs/CommercialInvoice",
+      "description": "Commercial invoice details"
+    },
+    "certificateOfOrigin": {
+      "$ref": "#/$defs/CertificateOfOrigin",
+      "description": "Certificate of origin details"
+    },
+    "packingList": {
+      "$ref": "#/$defs/PackingList",
+      "description": "Packing list details"
+    },
+    "insuranceCertificate": {
+      "$ref": "#/$defs/InsuranceCertificate",
+      "description": "Insurance certificate details"
+    },
+    "transport": {
+      "$ref": "#/$defs/TransportDetails",
+      "description": "Transportation information"
+    }
+  },
+  "$defs": {
+    "Company": {
+      "type": "object",
+      "required": ["name", "address"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Company name"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Company address"
+        },
+        "taxId": {
+          "type": "string",
+          "description": "Tax identification number"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number"
+        },
+        "fax": {
+          "type": "string",
+          "description": "Fax number"
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "required": ["street", "city", "country"],
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": "Street address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "Postal or ZIP code"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country"
+        }
+      }
+    },
+    "CommercialInvoice": {
+      "type": "object",
+      "required": ["invoiceNumber", "issueDate", "items", "totals"],
+      "properties": {
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number"
+        },
+        "issueDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Invoice issue date"
+        },
+        "issuePlace": {
+          "type": "string",
+          "description": "Place where invoice was issued"
+        },
+        "paymentTerms": {
+          "type": "string",
+          "description": "Payment terms and conditions"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InvoiceItem"
+          },
+          "minItems": 1,
+          "description": "List of invoice items"
+        },
+        "totals": {
+          "$ref": "#/$defs/InvoiceTotals",
+          "description": "Invoice totals"
+        },
+        "bankingDetails": {
+          "$ref": "#/$defs/BankingDetails",
+          "description": "Banking information for payment"
+        }
+      }
+    },
+    "InvoiceItem": {
+      "type": "object",
+      "required": ["articleNumber", "description", "quantity", "unitPrice"],
+      "properties": {
+        "articleNumber": {
+          "type": "string",
+          "description": "Article or product number"
+        },
+        "description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity",
+          "description": "Quantity details"
+        },
+        "unitPrice": {
+          "$ref": "#/$defs/Money",
+          "description": "Unit price"
+        },
+        "totalPrice": {
+          "$ref": "#/$defs/Money",
+          "description": "Total price for this item"
+        },
+        "hsCode": {
+          "type": "string",
+          "description": "HS commodity code"
+        },
+        "originCountry": {
+          "type": "string",
+          "description": "Country of origin"
+        }
+      }
+    },
+    "Quantity": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Quantity value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["KGS", "LBS", "CARTONS", "PIECES", "UNITS"],
+          "description": "Unit of measurement"
+        },
+        "netWeight": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Net weight in specified unit"
+        },
+        "grossWeight": {
+          "type": "number", 
+          "minimum": 0,
+          "description": "Gross weight in specified unit"
+        }
+      }
+    },
+    "Money": {
+      "type": "object",
+      "required": ["amount", "currency"],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Monetary amount"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "ISO 4217 currency code"
+        }
+      }
+    },
+    "InvoiceTotals": {
+      "type": "object",
+      "required": ["totalAmount"],
+      "properties": {
+        "totalAmount": {
+          "$ref": "#/$defs/Money",
+          "description": "Total invoice amount"
+        },
+        "freightValue": {
+          "$ref": "#/$defs/Money",
+          "description": "Freight charges"
+        },
+        "insuranceValue": {
+          "$ref": "#/$defs/Money",
+          "description": "Insurance charges"
+        },
+        "fobValue": {
+          "$ref": "#/$defs/Money",
+          "description": "FOB value"
+        }
+      }
+    },
+    "BankingDetails": {
+      "type": "object",
+      "properties": {
+        "intermediaryBank": {
+          "$ref": "#/$defs/BankInfo",
+          "description": "Intermediary bank details"
+        },
+        "beneficiaryBank": {
+          "$ref": "#/$defs/BankInfo",
+          "description": "Beneficiary bank details"
+        },
+        "beneficiaryAccount": {
+          "type": "string",
+          "description": "Beneficiary account number"
+        },
+        "beneficiaryName": {
+          "type": "string",
+          "description": "Beneficiary name"
+        }
+      }
+    },
+    "BankInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Bank name"
+        },
+        "swiftCode": {
+          "type": "string",
+          "pattern": "^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$",
+          "description": "SWIFT/BIC code"
+        },
+        "abaCode": {
+          "type": "string",
+          "description": "ABA routing number"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Bank address"
+        }
+      }
+    },
+    "CertificateOfOrigin": {
+      "type": "object",
+      "required": ["certificateNumber", "issueDate", "goods"],
+      "properties": {
+        "certificateNumber": {
+          "type": "string",
+          "description": "Certificate reference number"
+        },
+        "issueDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Certificate issue date"
+        },
+        "issuePlace": {
+          "type": "string",
+          "description": "Place of issue"
+        },
+        "goods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OriginGood"
+          },
+          "minItems": 1,
+          "description": "List of goods"
+        },
+        "certification": {
+          "$ref": "#/$defs/Certification",
+          "description": "Certification details"
+        }
+      }
+    },
+    "OriginGood": {
+      "type": "object",
+      "required": ["description", "quantity", "invoiceNumber"],
+      "properties": {
+        "productNumber": {
+          "type": "string",
+          "description": "Product number"
+        },
+        "description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity",
+          "description": "Quantity and weight details"
+        },
+        "marks": {
+          "type": "string",
+          "description": "Marks and numbers on packages"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Related invoice number"
+        },
+        "invoiceDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Related invoice date"
+        }
+      }
+    },
+    "Certification": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string",
+          "description": "Certifying authority"
+        },
+        "authorityAddress": {
+          "$ref": "#/$defs/Address",
+          "description": "Authority address"
+        },
+        "declarationText": {
+          "type": "string",
+          "description": "Certification declaration text"
+        },
+        "certifierName": {
+          "type": "string",
+          "description": "Name of certifying official"
+        },
+        "certifierTitle": {
+          "type": "string",
+          "description": "Title of certifying official"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Digital signature or reference"
+        },
+        "stamp": {
+          "type": "string",
+          "description": "Official stamp reference"
+        }
+      }
+    },
+    "PackingList": {
+      "type": "object",
+      "required": ["listNumber", "issueDate", "goods"],
+      "properties": {
+        "listNumber": {
+          "type": "string",
+          "description": "Packing list number"
+        },
+        "issueDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Packing list issue date"
+        },
+        "consignee": {
+          "$ref": "#/$defs/Company",
+          "description": "Consignee details"
+        },
+        "vessel": {
+          "type": "string",
+          "description": "Vessel name"
+        },
+        "marks": {
+          "type": "string",
+          "description": "Shipping marks"
+        },
+        "storageCondition": {
+          "type": "string",
+          "description": "Storage temperature or conditions"
+        },
+        "container": {
+          "$ref": "#/$defs/ContainerInfo",
+          "description": "Container information"
+        },
+        "goods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PackingGood"
+          },
+          "minItems": 1,
+          "description": "List of packed goods"
+        },
+        "productionDates": {
+          "$ref": "#/$defs/ProductionDates",
+          "description": "Production and expiry dates"
+        }
+      }
+    },
+    "ContainerInfo": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string",
+          "description": "Container number"
+        },
+        "seals": {
+          "type": "string",
+          "description": "Container seal numbers"
+        },
+        "type": {
+          "type": "string",
+          "description": "Container type"
+        }
+      }
+    },
+    "PackingGood": {
+      "type": "object",
+      "required": ["description", "cartons", "netWeight", "grossWeight"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "cartons": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of cartons"
+        },
+        "netWeight": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Net weight in kilograms"
+        },
+        "grossWeight": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Gross weight in kilograms"
+        },
+        "netWeightLbs": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Net weight in pounds"
+        },
+        "grossWeightLbs": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Gross weight in pounds"
+        }
+      }
+    },
+    "ProductionDates": {
+      "type": "object",
+      "properties": {
+        "slaughterDateFrom": {
+          "type": "string",
+          "format": "date",
+          "description": "Slaughter date range start"
+        },
+        "slaughterDateTo": {
+          "type": "string",
+          "format": "date",
+          "description": "Slaughter date range end"
+        },
+        "productionDateFrom": {
+          "type": "string",
+          "format": "date",
+          "description": "Production date range start"
+        },
+        "productionDateTo": {
+          "type": "string",
+          "format": "date",
+          "description": "Production date range end"
+        },
+        "expiryDateFrom": {
+          "type": "string",
+          "format": "date",
+          "description": "Expiry date range start"
+        },
+        "expiryDateTo": {
+          "type": "string",
+          "format": "date",
+          "description": "Expiry date range end"
+        }
+      }
+    },
+    "InsuranceCertificate": {
+      "type": "object",
+      "required": ["certificateNumber", "insurer", "insuredValue", "goods"],
+      "properties": {
+        "certificateNumber": {
+          "type": "string",
+          "description": "Insurance certificate number"
+        },
+        "policyNumber": {
+          "type": "string",
+          "description": "Insurance policy number"
+        },
+        "insurer": {
+          "$ref": "#/$defs/Company",
+          "description": "Insurance company details"
+        },
+        "insured": {
+          "$ref": "#/$defs/Company",
+          "description": "Insured party details"
+        },
+        "insuredValue": {
+          "$ref": "#/$defs/Money",
+          "description": "Insured value"
+        },
+        "goods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InsuredGood"
+          },
+          "minItems": 1,
+          "description": "List of insured goods"
+        },
+        "coverage": {
+          "$ref": "#/$defs/InsuranceCoverage",
+          "description": "Insurance coverage details"
+        },
+        "issueDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Certificate issue date"
+        },
+        "issuePlace": {
+          "type": "string",
+          "description": "Place of issue"
+        }
+      }
+    },
+    "InsuredGood": {
+      "type": "object",
+      "required": ["description", "quantity", "container"],
+      "properties": {
+        "marks": {
+          "type": "string",
+          "description": "Marks and numbers"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of insured goods"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity",
+          "description": "Quantity and weight"
+        },
+        "container": {
+          "type": "string",
+          "description": "Container number"
+        }
+      }
+    },
+    "InsuranceCoverage": {
+      "type": "object",
+      "properties": {
+        "risksCovered": {
+          "type": "string",
+          "description": "Description of risks covered"
+        },
+        "warClauseApplies": {
+          "type": "boolean",
+          "description": "Whether war clause applies"
+        },
+        "strikeClauseApplies": {
+          "type": "boolean",
+          "description": "Whether strike clause applies"
+        },
+        "deductible": {
+          "$ref": "#/$defs/Money",
+          "description": "Deductible amount"
+        }
+      }
+    },
+    "TransportDetails": {
+      "type": "object",
+      "properties": {
+        "meansOfTransport": {
+          "type": "string",
+          "enum": ["VESSEL", "AIRCRAFT", "TRUCK", "RAIL", "MULTIMODAL"],
+          "description": "Primary means of transport"
+        },
+        "vessel": {
+          "type": "string",
+          "description": "Vessel name"
+        },
+        "voyageNumber": {
+          "type": "string",
+          "description": "Voyage or flight number"
+        },
+        "portOfLoading": {
+          "type": "string",
+          "description": "Port of loading"
+        },
+        "portOfDischarge": {
+          "type": "string",
+          "description": "Port of discharge"
+        },
+        "countryOfOrigin": {
+          "type": "string",
+          "description": "Country of origin"
+        },
+        "countryOfDestination": {
+          "type": "string",
+          "description": "Country of destination"
+        },
+        "departureDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Departure date"
+        },
+        "arrivalDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Expected arrival date"
+        },
+        "shippingMarks": {
+          "type": "string",
+          "description": "Shipping marks"
+        }
+      }
+    }
+  }
+}

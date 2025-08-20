@@ -1,0 +1,506 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.example.com/sea-waybill.json",
+  "title": "Sea Waybill",
+  "description": "Schema for sea waybill transport documents",
+  "type": "object",
+  "required": ["seaWaybillNumber", "issueDate", "carrier", "shipper", "consignee"],
+  "properties": {    
+    "seaWaybillNumber": {
+      "type": "string",
+      "description": "Sea waybill number"
+    },
+    "issueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of issue"
+    },
+    "issuePlace": {
+      "type": "string",
+      "description": "Place of issue"
+    },
+    "carrier": {
+      "$ref": "#/$defs/Carrier",
+      "description": "Carrier information"
+    },
+    "shipper": {
+      "$ref": "#/$defs/Party",
+      "description": "Shipper details"
+    },
+    "consignee": {
+      "$ref": "#/$defs/Party",
+      "description": "Consignee details"
+    },
+    "notifyParty": {
+      "$ref": "#/$defs/Party",
+      "description": "Notify party details"
+    },
+    "alsoNotify": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Party"
+      },
+      "description": "Additional notify parties"
+    },
+    "vessel": {
+      "$ref": "#/$defs/Vessel",
+      "description": "Vessel information"
+    },
+    "portOfLoading": {
+      "type": "string",
+      "description": "Port of loading"
+    },
+    "portOfDischarge": {
+      "type": "string",
+      "description": "Port of discharge"
+    },
+    "placeOfReceipt": {
+      "type": "string",
+      "description": "Place of receipt"
+    },
+    "placeOfDelivery": {
+      "type": "string",
+      "description": "Place of delivery"
+    },
+    "carriersReference": {
+      "type": "string",
+      "description": "Carrier's reference number"
+    },
+    "exportReferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Export reference numbers"
+    },
+    "forwardingAgent": {
+      "$ref": "#/$defs/Party",
+      "description": "Forwarding agent details"
+    },
+    "consigneesReference": {
+      "type": "string",
+      "description": "Consignee's reference"
+    },
+    "containers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Container"
+      },
+      "minItems": 1,
+      "description": "Container details"
+    },
+    "cargo": {
+      "$ref": "#/$defs/Cargo",
+      "description": "Cargo information"
+    },
+    "freight": {
+      "$ref": "#/$defs/Freight",
+      "description": "Freight details"
+    },
+    "shipmentType": {
+      "type": "string",
+      "enum": ["FCL", "LCL", "FCL/FCL", "LCL/LCL", "FCL/LCL", "LCL/FCL"],
+      "description": "Type of shipment"
+    },
+    "movement": {
+      "type": "string",
+      "description": "Movement type"
+    },
+    "onBoardDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Shipped on board date"
+    },
+    "declaredValue": {
+      "$ref": "#/$defs/Money",
+      "description": "Shipper's declared value"
+    },
+    "totalContainers": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of containers"
+    },
+    "totalPackages": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of packages"
+    },
+    "freightPayableAt": {
+      "type": "string",
+      "description": "Location where freight is payable"
+    }
+  },
+  "$defs": {
+    "Carrier": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Carrier company name"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Carrier address"
+        },
+        "vatId": {
+          "type": "string",
+          "description": "VAT identification number"
+        },
+        "agent": {
+          "$ref": "#/$defs/Party",
+          "description": "Carrier agent"
+        }
+      }
+    },
+    "Party": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Party name"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Party address"
+        },
+        "contact": {
+          "$ref": "#/$defs/Contact",
+          "description": "Contact information"
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "required": ["street", "city"],
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": "Street address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country"
+        }
+      }
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number"
+        },
+        "attention": {
+          "type": "string",
+          "description": "Attention to person"
+        }
+      }
+    },
+    "Vessel": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Vessel name"
+        },
+        "voyageNumber": {
+          "type": "string",
+          "description": "Voyage number"
+        },
+        "imoNumber": {
+          "type": "string",
+          "description": "IMO number"
+        },
+        "callSign": {
+          "type": "string",
+          "description": "Call sign"
+        }
+      }
+    },
+    "Container": {
+      "type": "object",
+      "required": ["number", "type"],
+      "properties": {
+        "number": {
+          "type": "string",
+          "description": "Container number"
+        },
+        "type": {
+          "type": "string",
+          "description": "Container type and size"
+        },
+        "seals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Seal numbers"
+        },
+        "marks": {
+          "type": "string",
+          "description": "Marks and numbers"
+        },
+        "tareWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Tare weight"
+        },
+        "maxGrossWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Maximum gross weight"
+        },
+        "volume": {
+          "$ref": "#/$defs/Volume",
+          "description": "Container volume"
+        },
+        "temperatureSettings": {
+          "$ref": "#/$defs/TemperatureSettings",
+          "description": "Temperature control settings"
+        },
+        "loadingMethod": {
+          "type": "string",
+          "enum": ["SLAC", "CY", "CFS"],
+          "description": "Loading method (SLAC = Shipper's Load and Count)"
+        }
+      }
+    },
+    "Cargo": {
+      "type": "object",
+      "required": ["description", "quantity"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of goods"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity",
+          "description": "Quantity details"
+        },
+        "totalWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Total weight"
+        },
+        "totalVolume": {
+          "$ref": "#/$defs/Volume",
+          "description": "Total volume"
+        },
+        "netWeight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Net weight"
+        },
+        "packageType": {
+          "type": "string",
+          "description": "Type of packages"
+        },
+        "hsCode": {
+          "type": "string",
+          "description": "HS commodity code"
+        },
+        "specialInstructions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Special handling instructions"
+        },
+        "temperatureRecorder": {
+          "type": "string",
+          "description": "Temperature recorder number"
+        },
+        "shippingMarks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Shipping marks"
+        }
+      }
+    },
+    "Quantity": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Quantity value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["CARTONS", "PACKAGES", "PIECES", "UNITS", "CONTAINERS"],
+          "description": "Unit of measurement"
+        }
+      }
+    },
+    "Weight": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Weight value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["KGS", "LBS", "MT", "TON"],
+          "description": "Weight unit"
+        }
+      }
+    },
+    "Volume": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Volume value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["MTQ", "CBM", "CFT"],
+          "description": "Volume unit"
+        }
+      }
+    },
+    "TemperatureSettings": {
+      "type": "object",
+      "properties": {
+        "setTemperature": {
+          "type": "number",
+          "description": "Set temperature in Celsius"
+        },
+        "temperatureRange": {
+          "type": "object",
+          "properties": {
+            "min": {
+              "type": "number",
+              "description": "Minimum temperature"
+            },
+            "max": {
+              "type": "number",
+              "description": "Maximum temperature"
+            }
+          }
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["C", "F"],
+          "default": "C",
+          "description": "Temperature unit"
+        }
+      }
+    },
+    "Freight": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": ["PER_CONTAINER", "PER_WEIGHT", "PER_VOLUME", "LUMPSUM"],
+          "description": "Freight calculation basis"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "Freight currency"
+        },
+        "charges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FreightCharge"
+          },
+          "description": "Individual freight charges"
+        },
+        "totalPrepaid": {
+          "$ref": "#/$defs/Money",
+          "description": "Total prepaid freight"
+        },
+        "totalCollect": {
+          "$ref": "#/$defs/Money",
+          "description": "Total collect freight"
+        },
+        "totalFreight": {
+          "$ref": "#/$defs/Money",
+          "description": "Total freight amount"
+        },
+        "paymentTerms": {
+          "type": "string",
+          "enum": ["PREPAID", "COLLECT"],
+          "description": "Freight payment terms"
+        }
+      }
+    },
+    "FreightCharge": {
+      "type": "object",
+      "required": ["description", "amount"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Charge description"
+        },
+        "rate": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Charge rate"
+        },
+        "basis": {
+          "type": "string",
+          "description": "Rate basis"
+        },
+        "weight": {
+          "$ref": "#/$defs/Weight",
+          "description": "Chargeable weight"
+        },
+        "volume": {
+          "$ref": "#/$defs/Volume",
+          "description": "Chargeable volume"
+        },
+        "prepaidCollect": {
+          "type": "string",
+          "enum": ["P", "C"],
+          "description": "P = Prepaid, C = Collect"
+        },
+        "amount": {
+          "$ref": "#/$defs/Money",
+          "description": "Charge amount"
+        }
+      }
+    },
+    "Money": {
+      "type": "object",
+      "required": ["amount", "currency"],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Monetary amount"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "ISO 4217 currency code"
+        }
+      }
+    }
+  }
+}
