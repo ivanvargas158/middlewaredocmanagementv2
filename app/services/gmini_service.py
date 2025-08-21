@@ -53,9 +53,11 @@ async def verify_mbl_document(page_images: list) -> dict:
     2. Identify the issuer: An MBL is issued directly by the ocean carrier (e.g., Maersk, MSC, CMA CGM, Hapag-Lloyd). Look for a prominent carrier logo or name.
     3. Check the shipper/consignee: In an MBL for a consolidated shipment, the shipper is often the origin agent/forwarder and the consignee is the destination agent/forwarder.
     4. Rule out other types: Ensure it is NOT a "House Bill of Lading (HBL)", "Forwarder's Bill of Lading", "Arrival Notice", "Packing List", or "Commercial Invoice". An HBL is issued by a freight forwarder or NVOCC.
+    5. Extract and output the country of origin referenced at the top of the document (e.g. "Paraguay", "Brasil","Brazil").
     After your analysis, respond ONLY with a JSON object in the following format:
     {
         "document_type": "master_bill_of_lading",
+        "country_of_origin": "<country at the top of the document, or 'Unknown'>",
         "confidence_score": <a number between 0.0 and 1.0>,
         "issuer_identified": "<Name of the carrier identified, or 'N/A'>",
         "reasoning": "<A brief explanation of your conclusion>"
