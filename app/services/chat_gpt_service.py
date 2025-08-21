@@ -54,5 +54,15 @@ async def create_request(content: str, bearer: str, uuui: str,is_remove_yaml_blo
             else:
                 print("Error:", response.status_code)
     if is_remove_yaml_block:
-        agent_response = remove_yaml_block(agent_response)
+        result_clean = remove_yaml_block(agent_response)
+        result_clean = flatten_document_keep_variables(json.loads(result_clean))
+        agent_response = json.dumps(result_clean)
     return agent_response
+
+
+def flatten_document_keep_variables(data: dict) -> dict:
+    if "document" in data:
+        doc = data.pop("document")
+        # Move everything inside "document" into root
+        data.update(doc)
+    return data
