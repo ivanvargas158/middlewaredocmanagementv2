@@ -56,7 +56,6 @@ def get_predictor():
     return predictor_instance
 
 
-# ✅ Async wrapper
 async def async_predict(text: str, threshold: float = 0.5):
     predictor = get_predictor()
     loop = asyncio.get_running_loop()
