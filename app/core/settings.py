@@ -75,7 +75,7 @@ class Settings(BaseSettings):
     # --- Performance Tuning ---
     ocr_timeout: int = 30
 
-    max_file_size: int = 50
+    max_file_size: int = 10
 
     # Configurable settings
     max_file_size_mb:int = 10
