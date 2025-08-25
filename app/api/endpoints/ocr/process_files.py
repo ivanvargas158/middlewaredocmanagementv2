@@ -74,8 +74,6 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail= exc.args ,
                 )
-    finally:
-        await save_doc_logs(upload_file_id,file_name,is_processed,doc_type,json.dumps(result_scores),settings.cargologik_tenant)
 
 
 @router.post("/save_template", status_code=status.HTTP_200_OK,include_in_schema=True)
