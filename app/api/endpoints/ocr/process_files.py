@@ -1,20 +1,15 @@
 import json
 import uuid
-import asyncio
-from typing import Any
-from app.services.business_rule import validate_document
-from app.services.open_ai import extract_keywords_openAI
-from app.services.template_manager import register_template,match_template 
+from app.services.template_manager import register_template 
 from app.services.postgresql_db import save_doc_logs
 from app.services.handle_file import validate_file_type,validate_file_size
-from app.services.business_rule import check_if_contains_beef
-from app.schemas.general_enum import DocumentType,Country,ProcessExtractionType
+from app.schemas.general_enum import DocumentType
 from app.core.settings import get_settings
 from app.core.auth import get_api_key
-from app.schemas.validation_rules import RuleSet
 from fastapi import APIRouter, Depends, HTTPException, status,UploadFile,File
 from app.services.gmini_service import refine_ocr_text,call_verify_document
 from app.services.azure_ocr_service import azure_ocr_async
+from app.services.extract_special_fields_service import extract_mbl_shipment_details
 from app.utils.global_resources import mime_type_to_extractor 
 from app.services.chat_gpt_service import create_request
 from app.utils.global_security import async_predict
@@ -61,6 +56,8 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         
         result_json_schema:str =  await create_request(result_text,settings.fc_agent_api_key,settings.fc_agent_process_text_uuid,True)
         result_scores = json.loads(result_json_schema)
+        if result_verification['document_type'] == DocumentType.master_bill_of_lading:
+            result_scores = await extract_mbl_shipment_details(result_text,result_scores)
         result_scores["file_name"] = file_name
         result_scores["is_injection_document_risk"] = False
         result_scores["document_type"] = result_verification['document_type'] if 'document_type' in result_verification else 'Unknown'

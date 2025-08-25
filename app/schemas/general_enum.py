@@ -15,6 +15,7 @@ class DocumentType(str, Enum):
     paraguay_sea_waybill = "pr_sea_waybill"
     paraguay_health_certificate = "pr_health_certificate"
     paraguay_certificate_analysis = "pr_certificate_analysis"
+    master_bill_of_lading = "master_bill_of_lading"
 
 class Country(int, Enum):
     brasil = 3
