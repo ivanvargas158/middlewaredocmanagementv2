@@ -5,7 +5,7 @@ from typing import Optional,List
 
 
 async def extract_mbl_shipment_details(document_text: str,schema_json_mbl_doc):
-    details = await (extract_shipment_details_from_mbl(document_text))
+    details = await extract_shipment_details_from_mbl(document_text)
     if details.scac_code:
         schema_json_mbl_doc["scac_code"] = details.scac_code
     if details.mode:
@@ -29,7 +29,7 @@ async def extract_shipment_details_from_mbl(document_text: str) -> ShipmentDetai
     details.scac_code = await _extract_scac_code(document_text, text_upper)
     
     # Step 3: Determine service type for ocean shipments
-    if details.mode == 'OCEAN':
+    if details.mode == 'ship':
         details.service_type = await _extract_service_type(text_upper)
     
     # Step 4: Extract commodity information
@@ -43,9 +43,8 @@ async def extract_shipment_details_from_mbl(document_text: str) -> ShipmentDetai
     
     return details
 
-async def identify_transport_mode(text_upper: str) -> str:
-    """Identify if shipment is AIR or OCEAN based on document indicators."""
-    
+ 
+async def identify_transport_mode(text_upper: str) -> str: 
     # Ocean indicators (weighted by reliability)
     ocean_indicators = [
         ('SEA WAYBILL', 10),
@@ -60,7 +59,7 @@ async def identify_transport_mode(text_upper: str) -> str:
         ('SHIPPED ON BOARD', 6),
         ('MULTIMODAL TRANSPORT', 5),
     ]
-    
+ 
     # Air indicators
     air_indicators = [
         ('AIR WAYBILL', 10),
@@ -70,11 +69,30 @@ async def identify_transport_mode(text_upper: str) -> str:
         ('FLIGHT', 6),
         ('PIECE', 5),
     ]
-    
+ 
+    # Land indicators (road & rail)
+    land_indicators = [
+        ('CMR', 10),
+        ('ROAD CONSIGNMENT NOTE', 9),
+        ('TRUCK', 8),
+        ('TRUCKING', 8),
+        ('FTL', 7),
+        ('LTL', 7),
+        ('RAIL WAYBILL', 9),
+        ('RAIL CONSIGNMENT NOTE', 9),
+        ('INLAND BILL OF LADING', 8),
+        ('HAULAGE', 6),
+    ]
+ 
+    # Score calculation
     ocean_score = sum(weight for indicator, weight in ocean_indicators if indicator in text_upper)
     air_score = sum(weight for indicator, weight in air_indicators if indicator in text_upper)
-    
-    return 'OCEAN' if ocean_score > air_score else 'AIR'
+    land_score = sum(weight for indicator, weight in land_indicators if indicator in text_upper) 
+    # Decide based on max score
+    scores = {'ship': ocean_score, 'plane': air_score, 'land': land_score}
+    return max(scores.keys(), key=lambda k: scores[k])
+
+ 
 
 async def _extract_scac_code(document_text: str, text_upper: str) -> Optional[str]:
  
@@ -149,8 +167,7 @@ async def _validate_scac_code(code: str) -> bool:
     return code not in excluded_codes
 
 async def _extract_service_type(text_upper: str) -> Optional[str]:
-    """Extract FCL/LCL service type for ocean shipments."""
-    
+     
     if 'FCL/FCL' in text_upper or 'FCL' in text_upper:
         return 'FCL'
     elif 'LCL/LCL' in text_upper or 'LCL' in text_upper:
