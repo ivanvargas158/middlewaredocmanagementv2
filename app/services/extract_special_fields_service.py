@@ -99,9 +99,10 @@ async def _extract_scac_code(document_text: str, text_upper: str) -> Optional[st
     
     # Strategy 1: Look for explicit SCAC field
     scac_patterns = [
-        r'SCAC[:\s]*([A-Z]{4})',
+        r'SCAC.*([A-Z]{4})\b',
+        r'SCAC CODE[:\s]*([A-Z]{4})'
         r'CARRIER CODE[:\s]*([A-Z]{4})',
-        r'SCAC CODE[:\s]*([A-Z]{4})',
+        r'SCAC[:\s]*[A-Z]+\s*[:\-]?\s*([A-Z]{4})',
     ]
     
     for pattern in scac_patterns:
