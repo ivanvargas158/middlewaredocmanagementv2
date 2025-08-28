@@ -32,7 +32,7 @@ class Predictor:
         else:
             return np.array(tensor)
 
-    def predict(self, text, threshold=0.5):
+    def predict(self, text, threshold):
         encoded = self.tokenizer(
             text, return_tensors="np", padding=True, truncation=True, max_length=256
         )
@@ -56,7 +56,7 @@ def get_predictor():
     return predictor_instance
 
 
-async def async_predict(text: str, threshold: float = 0.5):
+async def async_predict(text: str, threshold: float = 0.8):
     predictor = get_predictor()
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(None, predictor.predict, text, threshold)

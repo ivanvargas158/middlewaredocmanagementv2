@@ -24,3 +24,9 @@ class ProcessExtractionType(int, Enum):
     process_and_validate = 1
     extract_text = 2
     
+
+class ThreatLevel(Enum):
+    safe = "safe"
+    suspicious = "suspicious"
+    malicious = "malicious"
+    quarantine = "quarantine"    

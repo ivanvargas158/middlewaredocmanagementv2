@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional,List
+from typing import Optional,List,Dict,Any
+from app.schemas.general_enum import ThreatLevel
 class Shipper(BaseModel):
     name: str
     
@@ -27,3 +28,12 @@ class ShipmentDetails:
     def __post_init__(self):
         if self.container_numbers is None:
             self.container_numbers = []
+ 
+class AnalysisResult:
+    content_type: str
+    score: float
+    is_malicious: bool
+    threat_level: ThreatLevel
+    details: Dict[str, Any]
+    file_hash: Optional[str] = None
+    file_size: Optional[int] = None            

@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 from pydantic_settings import BaseSettings
 from typing import List, Optional
 from pydantic import field_validator,fields,Field
@@ -90,6 +91,16 @@ class Settings(BaseSettings):
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # .docx
         "application/msword"  # .doc
     }
+
+    class AllowedMimeType(str, Enum):
+        PDF = "application/pdf"
+        PNG = "image/png"
+        JPEG = "image/jpeg"
+        TIFF = "image/tiff"
+        XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        XLS = "application/vnd.ms-excel"
+        DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        DOC = "application/msword"
 
     mime_types_office:set[str] = {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

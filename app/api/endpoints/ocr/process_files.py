@@ -35,24 +35,34 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         validate_file_type(str(file.filename), str(file.content_type))
         validate_file_size(file_bytes)         
         content_type = str(file.content_type)                 
-        if content_type in settings.mime_types_office:
-            extractor = mime_type_to_extractor.get(str(file.content_type))           
+        if content_type in settings.mime_types_office: #Office Files
+            extractor = mime_type_to_extractor.get(content_type)           
             if extractor:
                 result_text = await extractor(file_bytes, str(file.filename))
             else:
                 raise HTTPException(status_code=400, detail=f"Unsupported file type {file.content_type}")
         else:
-            ocrResult:dict = await azure_ocr_async(file_bytes)
-            ocr_text = ocrResult['ocr_text']
-            result_text =  await refine_ocr_text(file_bytes,ocr_text)             
-            result_verification = await call_verify_document(file_bytes)  
+            pdf_mime = next((mime for mime in settings.mime_types_office if mime == "application/pdf"), None)
+            if content_type == pdf_mime:
+                extractor = mime_type_to_extractor.get(content_type)
+                if extractor:
+                    result_text = await extractor(file_bytes, str(file.filename))
 
         result_scanner = await async_predict(result_text)
 
         if result_scanner["is_malicious"]:
-             return {
-                    "is_injection_document_risk": True                    
-                }
+            return {
+                "is_injection_document_risk": True                    
+            }
+
+        if content_type not in settings.mime_types_office:
+            result_text = ''
+            ocrResult:dict = await azure_ocr_async(file_bytes)
+            ocr_text = ocrResult['ocr_text']
+            result_text =  await refine_ocr_text(file_bytes,ocr_text)             
+        
+        result_verification = await call_verify_document(file_bytes,content_type)       
+      
         
         result_json_schema:str =  await create_request(result_text,settings.fc_agent_api_key,settings.fc_agent_process_text_uuid,True)
         result_scores = json.loads(result_json_schema)

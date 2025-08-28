@@ -9,6 +9,7 @@ from PIL import Image
 from app.utils.global_gmini import GeminiModegManager
 from app.core.settings import get_settings
 import google.generativeai as genai
+from app.utils.soffice_utils import convert_with_soffice
 
 settings = get_settings()
 
@@ -35,10 +36,10 @@ async def get_gemini_vision_review(page_images: list, full_raw_text: str) -> str
     response = await gmini_model.generate_content_async(content)
     return response.text
 
-async def call_verify_document(pdf_bytes: bytes) -> dict: 
+async def call_verify_document(file_bytes: bytes,content_type:str) -> dict: 
     page_images = []  
     # Step 1: Convert each page to an image and perform OCR
-    page_images = await asyncio.to_thread(create_images_from_pdf, pdf_bytes) 
+    page_images = await asyncio.to_thread(create_images_from_file, file_bytes,content_type) 
     # Step 2: Refine with Gemini using all page images
     return await verify_mbl_document(page_images)
  
@@ -102,3 +103,47 @@ def create_images_from_pdf(pdf_bytes: bytes) -> list:
         page_images.append(pil_image)
 
     return page_images
+ 
+
+
+def create_images_from_file(file_bytes: bytes, content_type: str) -> list[Image.Image]:
+    images = []
+
+    if content_type == settings.AllowedMimeType.PDF.value:
+        pdf_document = fitz.open(stream=file_bytes, filetype="pdf")
+        for page_num in range(len(pdf_document)):
+            page = pdf_document[page_num]
+            pix = page.get_pixmap()
+            img_bytes = pix.tobytes("png")
+            images.append(Image.open(io.BytesIO(img_bytes)))
+
+    elif content_type in {
+        settings.AllowedMimeType.PNG.value,
+        settings.AllowedMimeType.JPEG.value,
+        settings.AllowedMimeType.TIFF.value,
+    }:
+        img = Image.open(io.BytesIO(file_bytes))
+        img_converted = img.convert("RGB") if img.mode != "RGB" else img
+        images.append(img_converted)
+
+    elif content_type in {
+        settings.AllowedMimeType.DOC.value,
+        settings.AllowedMimeType.DOCX.value,
+        settings.AllowedMimeType.XLS.value,
+        settings.AllowedMimeType.XLSX.value,
+    }:
+        # Convert Office file → PDF
+        origin_ext = {
+            settings.AllowedMimeType.DOC.value: ".doc",
+            settings.AllowedMimeType.DOCX.value: ".docx",
+            settings.AllowedMimeType.XLS.value: ".xls",
+            settings.AllowedMimeType.XLSX.value: ".xlsx",
+        }[content_type]
+
+        pdf_bytes = convert_with_soffice(file_bytes, origin_ext, ".pdf")
+        return create_images_from_file(pdf_bytes, settings.AllowedMimeType.PDF.value)
+
+    else:
+        raise ValueError(f"Unsupported file type: {content_type}")
+
+    return images
