@@ -2,7 +2,7 @@ import io
 import PyPDF2
  
 
-def extract_text_from_pdf(file_content: bytes) -> str:
+async def extract_text_from_pdf(file_content: bytes) -> str:
     try:
         pdf_stream = io.BytesIO(file_content)
         reader = PyPDF2.PdfReader(pdf_stream)

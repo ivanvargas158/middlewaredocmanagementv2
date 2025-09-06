@@ -39,11 +39,11 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
             else:
                 raise HTTPException(status_code=400, detail=f"Unsupported file type {file.content_type}")
         else:
-            pdf_mime = next((mime for mime in settings.mime_types_office if mime == "application/pdf"), None)
+            pdf_mime = next((mime for mime in settings.allowed_mime_types if mime == "application/pdf"), None)
             if content_type == pdf_mime:
                 extractor = mime_type_to_extractor.get(content_type)
                 if extractor:
-                    result_text = await extractor(file_bytes, str(file.filename))
+                    result_text = await extractor(file_bytes)
 
         result_scanner = await async_predict(result_text)
 
