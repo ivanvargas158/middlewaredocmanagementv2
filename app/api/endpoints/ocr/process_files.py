@@ -20,11 +20,8 @@ settings = get_settings()
 
 
 @router.post("/upload", status_code=status.HTTP_200_OK,include_in_schema=True)
-async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):    
-    upload_file_id:str = str(uuid.uuid4())
+async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_api_key)):        
     file_name:str = ''
-    is_processed: bool = False
-    doc_type: DocumentType = DocumentType.air_waybill
     result_scores: dict = {}
     result_verification:dict = {}
     result_text: str = ''
@@ -72,7 +69,7 @@ async def upload_file(file: UploadFile = File(...),api_key: str = Depends(get_ap
         result_scores["is_injection_document_risk"] = False
         result_scores["document_type"] = result_verification['document_type'] if 'document_type' in result_verification else 'Unknown'
         result_scores["country_of_origin"] = result_verification['country_of_origin'] if 'country_of_origin' in result_verification else 'Unknown'
-
+        await save_doc_logs(file_name,result_scores["document_type"], json.dumps(result_scores,indent=2), "")
         return result_scores
     except HTTPException as exc:
         result_scores = {"error": exc.detail} 

@@ -70,13 +70,10 @@ async def get_templates(countryid: int) -> list[tuple[str, str, str, str, bool]]
         return [tuple(row.values()) for row in rows]
     
 
-async def save_doc_logs(
-    upload_file_id: str, file_name: str, is_processed: bool,
-    doc_type: str, content: str, p_tenant_id: str, load_id=None
-):
-    current_date = get_est_time()
+async def save_doc_logs(file_name: str,notes: str, content: str, doc_id: str):
+ 
     async with database_async() as conn:
         await conn.execute("""
-            CALL public.insert_doc_log($1, $2, $3, $4, $5, $6, $7)
-        """, upload_file_id, file_name, is_processed, doc_type, content, p_tenant_id, load_id) 
+            CALL public.insert_doc_log($1, $2, $3, $4)
+        """, file_name, notes, content, doc_id) 
 

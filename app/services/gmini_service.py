@@ -49,22 +49,54 @@ async def verify_mbl_document(page_images: list) -> dict:
  
     prompt = """
     You are an expert logistics document analyst. Your primary task is to identify if the provided document is a Master Bill of Lading (MBL).
+ 
     Analyze the document image and determine its type based on the following criteria:
-    1. Look for explicit titles: "Master Bill of Lading", "Bill of Lading", or "Ocean Bill of Lading".
-    2. Identify the issuer: An MBL is issued directly by the ocean carrier (e.g., Maersk, MSC, CMA CGM, Hapag-Lloyd). Look for a prominent carrier logo or name.
-    3. Check the shipper/consignee: In an MBL for a consolidated shipment, the shipper is often the origin agent/forwarder and the consignee is the destination agent/forwarder.
-    4. Rule out other types: Ensure it is NOT a "House Bill of Lading (HBL)", "Forwarder's Bill of Lading", "Arrival Notice", "Packing List", or "Commercial Invoice". An HBL is issued by a freight forwarder or NVOCC.
-    5. Extract and output the country of origin referenced at the top of the document (e.g. "Paraguay", "Brasil","Brazil").
-    After your analysis, respond ONLY with a JSON object in the following format:
+ 
+    **DEFINITIVE MBL IDENTIFIERS (Any ONE of these confirms MBL):**
+    1. **Ocean Carrier as Issuer**: Document issued by ocean vessel operating carriers such as:
+       - Maersk (SCAC: MAEU), MSC (MSCU), CMA CGM (CMDU), Hapag-Lloyd (HLCU)
+       - COSCO, Evergreen, ONE, Yang Ming, Zim, etc.
+       - Look for SCAC codes (4-letter carrier codes like "MAEU")
+    2. **"Signed for the Carrier [Ocean Carrier Name]"**: This phrase definitively indicates MBL
+    3. **Vessel Information Present**: MBLs always contain:
+       - Vessel name (e.g., "ROSA")
+       - Voyage number (e.g., "531S")
+       - Ocean ports for loading/discharge
+ 
+    **DOCUMENT STRUCTURE INDICATORS:**
+    - Title: "BILL OF LADING FOR OCEAN TRANSPORT OR MULTIMODAL TRANSPORT"
+    - Container numbers in ocean format (e.g., MNBU0557767)
+    - CY/CY (Container Yard to Container Yard) terms
+    - Ocean freight terms and conditions
+ 
+    **CRITICAL DISTINCTION RULES:**
+    - **MBL**: Issued BY ocean carriers (even if shipper/consignee are forwarders)
+    - **HBL**: Issued BY freight forwarders/NVOCCs referencing an underlying MBL
+    - The ISSUER determines the document type, NOT the shipper/consignee identities
+    **IGNORE THESE POTENTIAL CONFUSION FACTORS:**
+    - Don't be misled if shipper/consignee appear to be logistics companies
+    - Don't be confused by "As Agent" - this actually confirms MBL status
+    - Multiple similar documents with same vessel/voyage are normal for consolidated shipments
+    **NON-MBL DOCUMENTS:**
+    - Freight forwarder letterhead/logos
+    - "House Bill of Lading" in title
+    - No vessel information
+    - Trucking/rail bills of lading
+    - Commercial invoices, packing lists, arrival notices
+ 
+    Extract country of origin from the port of loading or shipper address.
+ 
+    Respond ONLY with this JSON object:
     {
-        "document_type": "master_bill_of_lading",
-        "country_of_origin": "<country at the top of the document, or 'Unknown'>",
-        "confidence_score": <a number between 0.0 and 1.0>,
-        "issuer_identified": "<Name of the carrier identified, or 'N/A'>",
-        "reasoning": "<A brief explanation of your conclusion>"
+        "document_type": "master_bill_of_lading" | "house_bill_of_lading" | "commercial_invoice" | "other",
+        "country_of_origin": "<country from port of loading/shipper, or 'Unknown'>",
+        "confidence_score": <0.0 to 1.0>,
+        "issuer_identified": "<Ocean carrier name or 'N/A'>",
+        "scac_code": "<4-letter SCAC if visible, or 'N/A'>", 
+        "vessel_voyage": "<vessel name and voyage if visible, or 'N/A'>",
+        "key_identifier": "<primary reason for MBL classification>",
+        "reasoning": "<Brief explanation focusing on the definitive MBL indicators found>"
     }
-    If the document is not an MBL, set "document_type" to "House Bill of Lading", "Commercial Invoice", or "Other" and provide your reasoning.
-
     """
     # Create the content list for the multimodal request
     content = [prompt]
