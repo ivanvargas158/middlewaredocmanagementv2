@@ -14,7 +14,7 @@ class GeminiModegManager:
                 if not cls._instance:
                     genai.configure(api_key=api_key)  # Safe to use
                     cls._instance = super().__new__(cls)
-                    cls._instance.model = genai.GenerativeModel('gemini-1.5-pro-latest')
+                    cls._instance.model = genai.GenerativeModel('gemini-2.0-flash')
         return cls._instance
 
     def get_model(self):
