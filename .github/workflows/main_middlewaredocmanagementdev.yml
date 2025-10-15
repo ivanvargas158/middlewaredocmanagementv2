@@ -30,7 +30,7 @@ jobs:
           file: ./Dockerfile
           push: true
           build-args: |
-            HF_TOKEN=${{ secrets.HF_TOKEN }}
+            HF_TOKEN=${{ secrets.HF_TOKEN_DEV }}
           tags: crdockercontainerdev.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_EBB5C95E3EBE40E4813107811E0ECDBB_DEV }}/fastapi-libreoffice:${{ github.sha }}
 
   deploy:
