@@ -19,9 +19,9 @@ jobs:
       - name: Log in to registry
         uses: docker/login-action@v2
         with:
-          registry: https://crdockercontainer.azurecr.io/
-          username: ${{ secrets.AzureAppService_ContainerUsername_ebb5c95e3ebe40e4813107811e0ecdbb }}
-          password: ${{ secrets.AzureAppService_ContainerPassword_4e6652e43e654304927ddb58a378ebd1 }}
+          registry: https://crdockercontainerdev.azurecr.io/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_EBB5C95E3EBE40E4813107811E0ECDBB_DEV }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_4E6652E43E654304927DDB58A378EBD1_DEV }}
 
       - name: Build and push container image with HF token
         uses: docker/build-push-action@v3
@@ -31,7 +31,7 @@ jobs:
           push: true
           build-args: |
             HF_TOKEN=${{ secrets.HF_TOKEN }}
-          tags: crdockercontainer.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ebb5c95e3ebe40e4813107811e0ecdbb }}/fastapi-libreoffice:${{ github.sha }}
+          tags: crdockercontainerdev.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_EBB5C95E3EBE40E4813107811E0ECDBB_DEV }}/fastapi-libreoffice:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,4 +48,4 @@ jobs:
           app-name: 'middlewaredocmanagement'
           slot-name: 'dev'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A0FA3ECBA9BF45E286F917E678C568A8_DEV }}
-          images: 'crdockercontainer.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ebb5c95e3ebe40e4813107811e0ecdbb }}/fastapi-libreoffice:${{ github.sha }}'
+          images: 'crdockercontainerdev.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_EBB5C95E3EBE40E4813107811E0ECDBB_DEV }}/fastapi-libreoffice:${{ github.sha }}'
