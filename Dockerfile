@@ -8,6 +8,7 @@
         libreoffice-writer \
         libreoffice-calc \
         fonts-dejavu \
+        libgomp1 \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
     # Add LibreOffice binaries to PATH for easy calling of soffice
